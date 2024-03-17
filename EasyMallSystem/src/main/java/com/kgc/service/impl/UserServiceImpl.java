@@ -1,12 +1,16 @@
 package com.kgc.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.kgc.dao.UserDao;
 import com.kgc.entity.Message;
 import com.kgc.entity.User;
 import com.kgc.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * @author: 欧洋宏
@@ -17,6 +21,8 @@ public class UserServiceImpl implements UserService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
 
     @Override
@@ -44,9 +50,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Message loginTo(String loginName, String password) {
-        logger.info("UserServiceImpl loginTo is start ===============");
+    public Message checkUserByNamePwd(String loginName, String password) {
+        logger.info("UserServiceImpl loginTo is start .......loginName:"+loginName+"password:"+password);
+        logger.info("UserServiceImpl userDao loginTo is start.......loginName:"+loginName+"password:"+password);
+        User user = userDao.checkUserByNamePwd(loginName,password);
 
-        return null;
+        Message message = new Message();
+        if(user==null){
+            message = new Message("201","用户名或密码错误！",null);
+        }else {
+            message = new Message("200","登录成功！",user);
+            String userString = JSON.toJSONString(user);
+            stringRedisTemplate.opsForValue().set(user.getLoginName(),userString);
+        }
+        return message;
     }
 }

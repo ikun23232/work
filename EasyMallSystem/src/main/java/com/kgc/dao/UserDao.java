@@ -1,9 +1,8 @@
 package com.kgc.dao;
 
-import com.kgc.entity.Message;
 import com.kgc.entity.User;
 
-import com.kgc.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserDao {
     /**
@@ -12,8 +11,12 @@ public interface UserDao {
      */
     public int addUser(User user);
 
-    //通过loginName找用户
-    public User searchUserById(String loginName);
+    /**
+     * 通过用户名，密码查用户
+     * @param loginName
+     * @return
+     */
+    public User checkUserByNamePwd(@Param("loginName")String loginName, @Param("password")String password);
     /**
      * 通过名字查用户
      */

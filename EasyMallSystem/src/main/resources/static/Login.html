@@ -67,24 +67,26 @@
               </tr>
               <tr height="70">
                 <td>用户名</td>
-                <td><input type="text" value="" class="l_user" v-model="loginName"/></td>
+                <td><input type="text" class="l_user" v-model="loginName"/></td>
               </tr>
               <tr height="70">
                 <td>密&nbsp; &nbsp; 码</td>
-                <td><input type="password" value="" class="l_pwd" v-model="password"/></td>
+                <td><input type="password" class="l_pwd" v-model="password"/></td>
               </tr>
               <tr>
               	<td>&nbsp;</td>
                 <td style="font-size:12px; padding-top:20px;">
                 	<span style="font-family:'宋体';" class="fl">
-                    	<label class="r_rad"><input type="checkbox" /></label><label class="r_txt">请保存我这次的登录信息</label>
+                    	<label class="r_rad">
+                            <input type="checkbox" />
+                        </label><label class="r_txt">请保存我这次的登录信息</label>
                     </span>
                     <span class="fr"><a href="#" style="color:#ff4e00;">忘记密码</a></span>
                 </td>
               </tr>
               <tr height="60">
               	<td>&nbsp;</td>
-                <td><input type="submit" value="登录" class="log_btn" @click="loginTo()" /></td>
+                <td><input type="button" value="登录" class="log_btn" @click="loginTo()" /></td>
               </tr>
             </table>
             </form>
@@ -111,23 +113,35 @@
 <script>
     new Vue({
         el:"#log_bg",
-        data:{
-            return:{
+        data(){
+            return {
                 loginName:'',
                 password:''
             }
         },
         methods: {
             loginTo() {
-
-                axios.get("/loginTo", {
+                if(this.loginName==''){
+                    alert("用户名不能为空！")
+                    return;
+                }
+                if(this.password==''){
+                    alert("密码不能为空！")
+                    return;
+                }
+                axios.get("/loginto", {
                     params: {
                         loginName: this.loginName,
                         password:this.password
                     }
                 }).then((respose) => {
                     console.log(respose);
-
+                    if(respose.data.code=="201"){
+                        alert(respose.data.message);
+                    }else {
+                        alert(respose.data.message);
+                        window.location.href="index.html"
+                    }
                 }).catch((err) => {
                     console.log("没成功");
                 });

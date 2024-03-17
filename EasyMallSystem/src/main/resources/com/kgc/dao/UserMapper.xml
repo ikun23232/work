@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kgc.dao.UserMapper">
+<mapper namespace="com.kgc.dao.UserDao">
     <select id="getUserList" resultType="com.kgc.entity.User">
         select id,
             loginName,
@@ -30,5 +30,20 @@
                type
         from easybuy_user
         where loginName = #{loginName}
+    </select>
+
+    <select id="checkUserByNamePwd" resultType="User">
+        select id,
+               loginName,
+               userName,
+               password,
+               sex,
+               identityCode,
+               email,
+               mobile,
+               type
+        from easybuy_user
+        where loginName = #{loginName}
+        and password = #{password}
     </select>
 </mapper>

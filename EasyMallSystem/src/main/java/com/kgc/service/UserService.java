@@ -17,6 +17,11 @@ public interface UserService {
      */
     public Message checkUserByName(String loginName);
 
-    //用户登录检查密码是否正确
-    public Message loginTo(String loginName,String password);
+    /**
+     * 用户登录检查密码是否正确
+     * @param loginName
+     * @param password
+     * @return
+     */
+    public Message checkUserByNamePwd(String loginName,String password);
 }
