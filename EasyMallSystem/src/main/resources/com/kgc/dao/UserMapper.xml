@@ -5,7 +5,7 @@
         insert into easybuy_user(loginName, userName, password, sex, identityCode, email, mobile, type)
         values (#{loginName}, #{loginName}, #{password}, #{sex}, #{identityCode}, #{email}, #{mobile}, #{type})
     </insert>
-    <select id="checkUserByName" resultType="User">
+    <select id="checkUserByName" resultType="com.kgc.entity.User">
         select id,
                loginName,
                userName,

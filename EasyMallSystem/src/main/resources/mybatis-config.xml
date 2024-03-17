@@ -6,5 +6,4 @@
     <typeAliases>
         <package name="com.kgc.entity"/>
     </typeAliases>
-
 </configuration>
