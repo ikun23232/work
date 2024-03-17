@@ -20,4 +20,13 @@ public class UserController {
     public String test() {
         return "test";
     }
+
+//    /**
+//     * 添加用户
+//     * @return
+//     */
+//    @RequestMapping("test")
+//    public String test() {
+//        return "test";
+//    }
 }
