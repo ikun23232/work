@@ -78,12 +78,11 @@ public class ProductServiceImpl implements ProductService {
         logger.info("ProductServiceImpl getProductListByPage is start.... id");
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         if (product != null && !product.getName().equals("")) {
-            queryBuilder.must(QueryBuilders.matchQuery("pname", product.getName()));
+            queryBuilder.must(QueryBuilders.matchQuery("name", product.getName()));
         }
 
-
         HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.field("pname");
+        highlightBuilder.field("name");
         highlightBuilder.preTags("<font style='color:red'>");
         highlightBuilder.postTags("</font>");
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();

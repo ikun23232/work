@@ -209,12 +209,12 @@
         	<div class="nav_t">全部商品分类</div>
             <div class="leftNav">
                 <ul>
-                    <li v-for="item in categoryList" :key="item.id">
+                    <li v-for="item in categoryList" :key="item.id" @mouseenter="initCategoryByIda(item.id)" >
                         <div class="fj">
                             <span class="n_img"><span></span><img src="images/nav1.png" /></span>
                             <span class="fl">{{item.name}}</span>
                         </div>
-                        <div class="zj" v-for="(subItem, index) in categorySecondList" :key="index">
+                        <div class="zj" v-for="(subItem, index) in categorySecondList"  :key="index" >
                             <div class="zj_l">
                                 <div class="zj_l_c">
                                     <h2>
