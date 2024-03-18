@@ -24,4 +24,5 @@ public interface UserService {
      * @return
      */
     public Message checkUserByNamePwd(String loginName,String password);
+
 }

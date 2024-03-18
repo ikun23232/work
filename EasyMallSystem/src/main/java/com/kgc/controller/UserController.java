@@ -1,13 +1,14 @@
 package com.kgc.controller;
 
 import com.kgc.entity.Message;
-import com.kgc.entity.Message;
+
 import com.kgc.entity.User;
 import com.kgc.service.UserService;
+import com.kgc.utils.EmaiCodelUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.Session;
@@ -64,25 +65,20 @@ public class UserController {
      */
     @RequestMapping("/sendEmailCode")
     public void sendEmailCode(String email) {
-        Session session = demo.until.EmaiCodelUtil.createSession();
+        Session session = EmaiCodelUtil.createSession();
         //	创建邮件对象
         MimeMessage message = new MimeMessage(session);
+        // 生成随机数
+        String sixNum = EmaiCodelUtil.getSixNum();
         try {
             message.setSubject("主题");
-            message.setText("112312");
+            message.setText(sixNum);
             message.setFrom(new InternetAddress("2358560084@qq.com"));
             message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(email));
             Transport.send(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
-    @RequestMapping("/aaa")
-
-    public Message aaa(String loginName){
-        Message message = userService.checkUserByName(loginName);
-        return message;
     }
 
     @RequestMapping("/loginto")
