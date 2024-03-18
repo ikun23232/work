@@ -1,5 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -32,81 +30,108 @@
 
     <script src="js/vue.js"></script>
     <script src="js/axious.js"></script>
-
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
     <title>尤洪</title>
+    <style>
+        .class {
+            position: absolute;
+            color: #e02d02;
+        }
+    </style>
 </head>
 <body>
 <!--Begin Header Begin-->
-<div class="soubg">
-    <div class="sou">
+<div id="app">
+    <div class="soubg">
+        <div class="sou">
         <span class="fr">
         	<span class="fl">你好，请<a href="Login.html">登录</a>&nbsp; <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp; </span>
             <span class="fl">|&nbsp;关注我们：</span>
             <span class="s_sh"><a href="#" class="sh1">新浪</a><a href="#" class="sh2">微信</a></span>
             <span class="fr">|&nbsp;<a href="#">手机版&nbsp;<img src="images/s_tel.png" align="absmiddle"/></a></span>
         </span>
+        </div>
     </div>
-</div>
-<!--End Header End-->
-<!--Begin Login Begin-->
-<div class="log_bg">
-    <div class="top">
-        <div class="logo"><a href="Index.html"><img src="images/logo.png"/></a></div>
-    </div>
-    <div class="regist">
-        <div class="log_img"><img src="images/l_img.png" width="611" height="425"/></div>
-        <div class="reg_c">
-            <form>
-                <table border="0" style="width:420px; font-size:14px; margin-top:20px;" cellspacing="0" cellpadding="0">
-                    <tr height="50" valign="top">
-                        <td width="95">&nbsp;</td>
-                        <td>
-                            <span class="fl" style="font-size:24px;">注册</span>
-                            <span class="fr">已有商城账号，<a href="Login.html" style="color:#ff4e00;">我要登录</a></span>
-                        </td>
-                    </tr>
-                    <tr height="50">
-                        <td align="right"><font color="#ff4e00">*</font>&nbsp;用户名 &nbsp;</td>
-                        <td><input type="text" value="" class="l_user"/></td>
-                    </tr>
-                    <tr height="50">
-                        <td align="right"><font color="#ff4e00">*</font>&nbsp;密码 &nbsp;</td>
-                        <td><input type="password" value="" class="l_pwd"/></td>
-                    </tr>
-                    <tr height="50">
-                        <td align="right"><font color="#ff4e00">*</font>&nbsp;确认密码 &nbsp;</td>
-                        <td><input type="password" value="" class="l_pwd"/></td>
-                    </tr>
-                    <tr height="50">
-                        <td align="right"><font color="#ff4e00">*</font>&nbsp;邮箱 &nbsp;</td>
-                        <td><input type="text" value="" class="l_email"/></td>
-                    </tr>
-                    <tr height="50">
-                        <td align="right"><font color="#ff4e00">*</font>&nbsp;手机 &nbsp;</td>
-                        <td><input type="text" value="" class="l_tel"/></td>
-                    </tr>
-                    <tr height="50">
-                        <td align="right"><font color="#ff4e00">*</font>&nbsp;验证码 &nbsp;</td>
-                        <td>
-                            <input type="text" value="" class="l_ipt"/>
-                            <a href="#" style="font-size:12px; font-family:'宋体';">换一张</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td style="font-size:12px; padding-top:20px;">
+    <!--End Header End-->
+    <!--Begin Login Begin-->
+    <div class="log_bg">
+        <div class="top">
+            <div class="logo"><a href="Index.html"><img src="images/logo.png"/></a></div>
+        </div>
+        <div class="regist">
+            <div class="log_img"><img src="images/l_img.png" width="611" height="425"/></div>
+            <div class="reg_c">
+                <form>
+                    <table border="0" style="font-size:14px; margin-top:20px; position: absolute" cellspacing="0"
+                           cellpadding="0">
+                        <tr height="50" valign="top">
+                            <td width="95">&nbsp;</td>
+                            <td>
+                                <span class="fl" style="font-size:24px;">注册</span>
+                                <span class="fr">已有商城账号，<a href="Login.html" style="color:#ff4e00;">我要登录</a></span>
+                            </td>
+                        </tr>
+                        <tr height="50">
+                            <td align="right"><font color="#ff4e00">*</font>&nbsp;用户名 &nbsp;</td>
+                            <td><input type="password" value="" v-model="User.loginName" @blur="checkLoginName"
+                                       class="l_user"/><span
+                                    class="error">{{Cue.loginNameCue}}</span></td>
+                            <td>
+                            </td>
+                            </el-form-item>
+                        </tr>
+                        <tr height="50">
+                            <td align="right"><font color="#ff4e00">*</font>&nbsp;密码 &nbsp;</td>
+                            <td><input type="password" value="" v-model="User.password" @blur="checkPassword"
+                                       class="l_pwd"/><span
+                                    class="error">{{Cue.passwordCue}}</span></td>
+                        </tr>
+                        <tr height="50">
+                            <td align="right"><font color="#ff4e00">*</font>&nbsp;确认密码 &nbsp;</td>
+                            <td><input type="password" value="" v-model="User.rePassword" @blur="checkRePassword"
+                                       class="l_pwd"/><span
+                                    class="error">{{Cue.rePasswordCue}}</span></td>
+                        </tr>
+                        <tr height="50">
+                            <td align="right"><font color="#ff4e00">*</font>&nbsp;邮箱 &nbsp;</td>
+                            <td><input type="text" value="" v-model="User.email" @blur="checkEmail"
+                                       class="l_email"/><span class="error">{{Cue.emailCue}}</span>
+                            </td>
+                        </tr>
+                        <tr height="50">
+                            <td align="right"><font color="#ff4e00">*</font>&nbsp;手机 &nbsp;</td>
+                            <td><input type="text" value="" v-model="User.mobile" @blur="checkMobile"
+                                       class="l_tel"/><span class="error">{{Cue.mobileCue}}</span>
+                            </td>
+                        </tr>
+                        <tr height="50">
+                            <td align="right"><font color="#ff4e00">*</font>&nbsp;验证码 &nbsp;</td>
+                            <td>
+                                <input type="password" class="ly_pwd" v-model="User.code"/>
+                                <!--              <input v-if="!sendMsgDisabled" type="button"  value="发送验证码" @click="count()">-->
+                                <button v-if="!sendMsgDisabled" @click="count()">发送验证码</button>
+                                <a v-if="sendMsgDisabled">{{time + '秒后获取'}}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td style="font-size:12px; padding-top:20px;">
                 	<span style="font-family:'宋体';" class="fl">
                     	<label class="r_rad"><input type="checkbox"/></label><label class="r_txt">我已阅读并接受《用户协议》</label>
                     </span>
-                        </td>
-                    </tr>
-                    <tr height="60">
-                        <td>&nbsp;</td>
-                        <td><input type="submit" value="立即注册" class="log_btn"/></td>
-                    </tr>
-                </table>
-            </form>
+                            </td>
+                        </tr>
+                        <tr height="60">
+                            <td>&nbsp;</td>
+                            <td><input type="button" value="立即注册" @click="add()" class="log_btn"/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -125,120 +150,206 @@
 
 </body>
 <script>
+
     new Vue({
-        el: '.bigBox',
-        data: {
-            User: {
-                id: '',
-                loginName: '',
-                userName: '',
-                password: '',
-                sex: 1,
-                identityCode: '',
-                email: '',
-                mobile: '',
-                type: 1
-            },
-            Falg: {
-                loginNameFalg: false,
-                emailFalg: false
+        el: '#app',
+        data() {
+
+            return {
+                User: {
+                    id: '',
+                    loginName: '',
+                    userName: '',
+                    password: '',
+                    rePassword: '',
+                    sex: 1,
+                    identityCode: '',
+                    email: '',
+                    mobile: '',
+                    type: 1,
+                    code: '',
+                },
+                Falg: {
+                    loginNameFalg: false,
+                    emailFalg: false,
+                    addFalg: false
+                },
+                Cue: {
+                    idCue: '',
+                    loginNameCue: '',
+                    userNameCue: '',
+                    passwordCue: '',
+                    rePasswordCue: '',
+                    sexCue: 1,
+                    identityCodeCue: '',
+                    emailCue: '',
+                    mobileCue: '',
+                    CodeCue: ''
+                },
+                Code: '',
+                time: 60,
+                sendMsgDisabled: false
             }
         },
         methods: {
-            add() {
-                axios.post('/getDepartmentList').then(function (resp) {
-                    console.log(resp)
-                    vm.Department = resp.data
-                })
-            },
-            initRoleList() {
-                axios.post('http://localhost:8080/work_war_exploded/getRoleList').then(function (resp) {
-                    console.log(resp)
-                    vm.roleList = resp.data
-                })
-            },
-            checkUserAccount() {
-                axios.get('http://localhost:8080/work_war_exploded/checkUserAcccount', {params: {userAccount: vm.UserInfo.userAccount}}).then(function (resp) {
-                    console.log(resp)
-                    if (resp.data.code === "200") {
-                        vm.LoginFalg.userAccountFalg = true;
-                        vm.Cue.userAccountInfo = '√'
-                    } else {
-                        vm.LoginFalg.userAccountFalg = false;
-                        vm.Cue.userAccountInfo = '用户已经存在'
+            count() {
+                if (this.User.email === '') {
+                    this.$message({
+                        message: '请输入邮箱哦!',
+                        type: 'error',
+                        center: 'true',
+                    })
+                    return;
+                }
+                var emailRel = /\w+@+.\w+.com/;
+                if (!emailRel.test(this.User.email)) {
+                    this.Cue.emailCue = "邮箱格式不正确"
+                    this.Falg.addFalg = false;
+                    return;
+                } else {
+                    this.Cue.emailCue = "√"
+                }
+
+                this.sendMsgDisabled = true
+                const interval = window.setInterval(()=> {
+                    if ((this.time--) <= 0) {
+                        this.time = 60
+                        this.sendMsgDisabled = false
+                        window.clearInterval(interval)
                     }
+                }, 1000)
+                axios.get("/sendEmailCode", {
+                    params: {
+                        email: this.User.email
+                    }
+                }).then((respones) => {
+                    console.log(respones)
+                    this.Code = respones.data;
                 })
             },
-            register() {
-
-                let file = document.getElementById("headPicPath").files[0];
-
-                if (vm.UserInfo.userAccount.trim() === "") {
-                    vm.Cue.userAccountInfo = '用户名不为空'
+            checkLoginName() {
+                if (this.User.loginName === '') {
+                    this.Cue.loginNameCue = "用户名不能为空"
+                    this.Falg.addFalg = false;
                     return;
                 } else {
-                    vm.Cue.userAccountInfo = '√'
+                    this.Cue.loginNameCue = "√"
                 }
-                this.checkUserAccount();
-                if (vm.LoginFalg.userAccountFalg == false) {
-                    return;
-                }
-                let rel1 = /^[a-zA-Z0-9]{6,12}$/
-                if (vm.UserInfo.repassword.trim() === "") {
-                    vm.Cue.passwordInfo = "密码为空"
-                    return;
-                } else {
-                    vm.Cue.passwordInfo = "√"
-                }
-                if (vm.UserInfo.password !== vm.UserInfo.repassword) {
-                    vm.Cue.repasswordInfo = "密码不一致"
-                    return;
-                } else {
-                    vm.Cue.repasswordInfo = "√"
-                }
-                let rel2 = /\w+@+.\w+.com/;
-                if (!rel2.test(vm.UserInfo.email)) {
-                    vm.Cue.emailInfo = "邮箱格式不对"
-                    return;
-                } else {
-                    vm.Cue.emailInfo = "√"
-
-                }
-                if (vm.UserInfo.deptId < 1) {
-                    vm.Cue.deptIdInfo = "请选择部门"
-                    return;
-                } else {
-                    vm.Cue.deptIdInfo = "√"
-                }
-                if (vm.UserInfo.roleId < 1) {
-                    vm.Cue.roleIdInfo = "请选择权限"
-                    return;
-                } else {
-                    vm.Cue.roleIdInfo = "√"
-                }
-
-                if (!file) {
-                    alert("请上传文件");
-                    return;
-                }
-                alert(file.type)
-                if (file.type !== "image/jpeg" && file.type !== "image/png") {
-                    alert("文件格式为jpg或png哦..")
-                    return;
-                }
-                let formData = new FormData(document.getElementById("form1"));
-                formData.get("")
-                axios.post('http://localhost:8080/work_war_exploded/doRegister', formData).then(function (resp) {
-                    if (resp.data.code == "200") {
-                        window.location.href = 'http://localhost:8080/work_war_exploded/login'
-                    }
+                axios.get('checkUserByName', {params: {loginName: this.User.loginName}}).then((resp) => {
+                    console.log(resp)
+                    this.Falg.addFalg = resp.data.code === "200";
                 })
+            },
+            checkPassword() {
+                if (this.User.password === '') {
+                    this.Cue.passwordCue = "密码不能为空"
+                    this.Falg.addFalg = false;
+                } else {
+                    this.Cue.passwordCue = "√"
+                }
+            },
+            checkRePassword() {
+                if (this.User.password === '') {
+                    this.Cue.rePasswordCue = "请再次输入密码"
+                    this.Falg.addFalg = false;
+                    return;
+                }
+                if (this.User.password !== this.User.rePassword) {
+                    this.Cue.rePasswordCue = "密码输入不一致"
+                    this.Falg.addFalg = false;
+                } else {
+                    this.Cue.rePasswordCue = "√"
+                }
+            },
+            checkEmail() {
+                if (this.User.email === '') {
+                    this.Cue.emailCue = "请输入邮箱"
+                    this.Falg.addFalg = false;
+                    return;
+                }
+                var emailRel = /\w+@+.\w+.com/;
+                if (!emailRel.test(this.User.email)) {
+                    this.Cue.emailCue = "邮箱格式不正确"
+                    this.Falg.addFalg = false;
+                } else {
+                    this.Cue.emailCue = "√"
+                }
+                // axios.get('checkUserByEmail', {params: {email: this.User.email}}).then((resp) => {
+                //     console.log(resp)
+                //     this.Falg.addFalg = resp.data.code === "200";
+                // })
+            },
+            checkMobile() {
+                if (this.User.mobile === '') {
+                    this.Cue.mobileCue = "请输入手机号"
+                    this.Falg.addFalg = false;
+                    return;
+                }
+                var emailRel = /^1[3456789]\d{9}$/;
+                if (!emailRel.test(this.User.mobile)) {
+                    this.Cue.mobileCue = "手机格式不正确"
+                    this.Falg.addFalg = false;
+                } else {
+                    this.Cue.mobileCue = "√"
+                }
+                // axios.get('checkUserPhone', {params: {email: this.User.mobile}}).then((resp) => {
+                //     console.log(resp)
+                //     this.Falg.addFalg = resp.data.code === "200";
+                // })
+            },
+            CheckCode() {
+                if (this.User.code === "") {
+                    this.Cue.CodeCue = "请输入验证码"
+                    this.Falg.addFalg = false;
+                    return;
+                } else {
+                    this.Cue.CodeCue = "√"
+                }
+                if (this.User.code != this.Code) {
+                    console.log(this.User.code)
+                    console.log(this.Code)
+                    this.Falg.addFalg = false;
+                    this.$message({
+                        message: '验证码错误!',
+                        type: 'error',
+                        center: 'true',
+                    })
+
+                } else {
+                    this.Falg.addFalg = true;
+                }
+            },
+            async add() {
+                await this.checkLoginName();
+                this.checkPassword()
+                this.checkRePassword()
+                this.checkEmail()
+                this.checkMobile()
+                this.CheckCode();
+                console.log(this.Falg.addFalg)
+                if (this.Falg.addFalg) {
+                    axios.post('/addUser', this.User).then((resp) => {
+                        console.log(resp)
+                        if (resp.data.code === "200") {
+                            this.$message({
+                                message: '注册成功!',
+                                type: 'success',
+                                center: 'true',
+                            })
+                            window.location.href = 'index.html'
+                        } else {
+                            this.$message({
+                                message: '注册失败!',
+                                type: 'error',
+                                center: 'true',
+                            })
+                        }
+                    })
+                }
 
             }
         },
         mounted() {
-            this.initDepartment()
-            this.initRoleList()
         }
     })
 </script>

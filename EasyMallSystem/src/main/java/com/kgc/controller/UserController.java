@@ -3,7 +3,7 @@ package com.kgc.controller;
 import com.kgc.entity.Message;
 import com.kgc.entity.User;
 import com.kgc.service.UserService;
-import demo.until.EmaiCodelUtil;
+import com.kgc.utils.EmaiCodelUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,7 +67,7 @@ public class UserController {
      */
     @RequestMapping("/sendEmailCode")
     public String sendEmailCode(String email) {
-        Session session = demo.until.EmaiCodelUtil.createSession();
+        Session session = EmaiCodelUtil.createSession();
         //	创建邮件对象
         MimeMessage message = new MimeMessage(session);
         String sixNum = EmaiCodelUtil.getSixNum();
