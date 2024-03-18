@@ -1,11 +1,14 @@
 package com.kgc.controller;
 
+import com.kgc.entity.Category;
 import com.kgc.entity.Message;
 import com.kgc.service.CategoryService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author: 欧洋宏
@@ -21,8 +24,24 @@ public class CategoryController {
     public Message getCategoryList() {
         logger.info("CategoryController getCategoryList is start......");
         Message categoryList = categoryService.getCategoryList();
-        logger.info("CategoryController getCategoryList is start......categoryList"+categoryList);
+        logger.info("CategoryController getCategoryList is start......categoryList" + categoryList);
         return Message.success(categoryList);
+    }
+
+    @RequestMapping("getCategorySecond")
+    public Message getCategorySecond(int id) {
+        logger.info("CategoryServiceImpl getCategorySecond is start....");
+        Message message = categoryService.getCategorySecond(id);
+        logger.info("CategoryServiceImpl getCategorySecond is start....message" + message);
+        return message;
+    }
+
+    @RequestMapping("getCategoryThrid")
+    public Message getCategoryThrid(int id) {
+        logger.info("CategoryServiceImpl getCategorySecond is start....");
+        Message message = categoryService.getCategoryThrid(id);
+        logger.info("CategoryServiceImpl getCategorySecond is start....message" + message);
+        return message;
     }
 
 }

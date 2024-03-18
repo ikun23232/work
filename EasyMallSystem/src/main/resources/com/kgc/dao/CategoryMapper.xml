@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kgc.dao.CategoryDao">
-  <select id="getCategoryList" resultType="Category">
-      SELECT id, name, parentId, type, iconClass, isDel, createTime  from easybuy_product_category where type=1
-  </select>
+    <select id="getCategoryList" resultType="Category">
+        SELECT id, name, parentId, type, iconClass, isDel, createTime
+        from easybuy_product_category
+        where type = 1
+    </select>
+
+    <select id="getCategorySecond" resultType="Category">
+        SELECT p2.*
+        FROM easybuy_product_category p1,
+             easybuy_product_category p2
+        WHERE p1.id = p2.parentId
+          AND p2.type = 2
+          AND p1.id = #{id}
+    </select>
+    <select id="getCategoryThrid" resultType="Category">
+        SELECT p2.*
+        FROM easybuy_product_category p1,
+             easybuy_product_category p2
+        WHERE p1.id = p2.parentId
+          AND p2.type = 3
+          AND p1.id = #{id}
+    </select>
+
 </mapper>

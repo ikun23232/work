@@ -11,4 +11,6 @@ import java.util.List;
  **/
 public interface CategoryService {
     public Message getCategoryList();
+    public Message getCategorySecond(int id);
+    public Message getCategoryThrid(int id);
 }

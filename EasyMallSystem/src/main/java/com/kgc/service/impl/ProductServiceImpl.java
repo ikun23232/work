@@ -1,10 +1,26 @@
 package com.kgc.service.impl;
 
 import com.kgc.dao.ProductDao;
+import com.kgc.entity.Message;
+import com.kgc.entity.Page;
+import com.kgc.entity.Product;
 import com.kgc.service.ProductService;
+import com.kgc.utils.ElsearchUtil;
 import org.apache.log4j.Logger;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: 欧洋宏
@@ -15,5 +31,76 @@ public class ProductServiceImpl implements ProductService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private ElsearchUtil elsearchUtil;
+    @Autowired
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
+    /**
+     * 查看所有的product
+     *
+     * @return
+     */
+    @Override
+    public Message getProductListAll() {
+        logger.info("ProductServiceImpl getProductListAll is start......");
+        List<Product> productList = productDao.getProductList();
+        logger.info("ProductServiceImpl getProductListAll is start......productList" + productList);
+        return Message.success(productList);
+    }
+
+    @Override
+    public Message addProductListByALL() {
+        logger.info("ProductServiceImpl addProductListByALL is start......");
+        List<Product> productList = productDao.getProductList();
+        Iterable<Product> productIterable = elsearchUtil.saveAll(productList);
+        logger.info("ProductServiceImpl addProductListByALL is start......productIterable" + productIterable);
+
+        if (productIterable != null && productIterable.iterator().hasNext()) {
+            return Message.success("添加成功");
+        }
+        return Message.error("同步失败");
+    }
+
+    /**
+     * es条件查询
+     *
+     * @param page
+     * @param product
+     * @return
+     */
+    public Message getProductListByPage(Page page, Product product) {
+        logger.info("ProductServiceImpl getProductListByPage is start.... id");
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        if (product != null && !product.getName().equals("")) {
+            queryBuilder.must(QueryBuilders.matchQuery("pname", product.getName()));
+        }
+
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.field("pname");
+        highlightBuilder.preTags("<font style='color:red'>");
+        highlightBuilder.postTags("</font>");
+        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
+        nativeSearchQueryBuilder.withQuery(queryBuilder);
+        nativeSearchQueryBuilder.withPageable(PageRequest.of(page.getCurrentPageNo() - 1, page.getPageSize()));
+        nativeSearchQueryBuilder.withSort(SortBuilders.fieldSort("price"));
+        nativeSearchQueryBuilder.withHighlightBuilder(highlightBuilder);
+
+        ArrayList<Product> productList = new ArrayList<>();
+        SearchHits<? extends Product> searchHits = elasticsearchRestTemplate.search(nativeSearchQueryBuilder.build(), product.getClass());
+        for (
+                SearchHit<? extends Product> searchHit : searchHits) {
+            Product productTemp = searchHit.getContent();
+            List<String> pname = searchHit.getHighlightField("pname");
+            if (pname.size() > 0) {
+                productTemp.setName(pname.get(0));
+            }
+            productList.add(productTemp);
+        }
+
+        long totalHits = searchHits.getTotalHits();
+        page.setTotalCount(new Long(totalHits).intValue());
+        page.setData(productList);
+        return Message.success(page);
+    }
 }

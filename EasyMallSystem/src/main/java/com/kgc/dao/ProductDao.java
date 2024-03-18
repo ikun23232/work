@@ -5,5 +5,5 @@ import com.kgc.entity.Product;
 import java.util.List;
 
 public interface ProductDao {
-    public List<Product> getProductDao();
+    public List<Product> getProductList();
 }
