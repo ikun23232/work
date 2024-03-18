@@ -52,11 +52,4 @@ public final class EmaiCodelUtil {
         return sixNum;
     }
 
-    public static String getSixNum() {
-        int intSixNum = 0;
-        intSixNum = ((int) ((Math.random() * 9 + 1) * 100000));
-        String sixNum = Integer.toString(intSixNum);
-        return sixNum;
-    }
-
 }

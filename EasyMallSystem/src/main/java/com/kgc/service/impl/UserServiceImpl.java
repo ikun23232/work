@@ -49,6 +49,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Message checkUserByLoginName(String loginName) {
+        logger.info("UserServiceImpl checkUserByName is start.......loginName " + loginName);
+        logger.info("UserServiceImpl userDao checkUserByName is start.......loginName " + loginName);
+        User user = userDao.checkUserByName(loginName);
+        logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
+        if (user!=null&&!user.getUserName().equals("")) {
+            return new Message("200","用户可用",null);
+        }
+        return Message.error("不存在该用户");
+    }
+
+    @Override
     public Message checkUserByNamePwd(String loginName, String password) {
         logger.info("UserServiceImpl loginTo is start .......loginName:"+loginName+"password:"+password);
         logger.info("UserServiceImpl userDao loginTo is start.......loginName:"+loginName+"password:"+password);
