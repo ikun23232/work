@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 /**
  * @author: 欧洋宏
@@ -50,27 +49,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Message checkUserByMobile(String mobile) {
-        logger.info("UserServiceImpl checkUserByName is start.......mobile " + mobile);
-        logger.info("UserServiceImpl userDao checkUserByName is start.......mobile " + mobile);
-        User user = userDao.checkUserByMobile(mobile);
+    public Message checkUserByLoginName(String loginName) {
+        logger.info("UserServiceImpl checkUserByName is start.......loginName " + loginName);
+        logger.info("UserServiceImpl userDao checkUserByName is start.......loginName " + loginName);
+        User user = userDao.checkUserByName(loginName);
         logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
         if (user!=null&&!user.getUserName().equals("")) {
-            return Message.success(user);
+            return new Message("200","用户可用",null);
         }
-        return Message.error("手机已被注册");
-    }
-
-    @Override
-    public Message checkUserByEmail(String email) {
-        logger.info("UserServiceImpl checkUserByName is start.......email " + email);
-        logger.info("UserServiceImpl userDao checkUserByName is start.......email " + email);
-        User user = userDao.checkUserByEmail(email);
-        logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
-        if (user!=null&&!user.getUserName().equals("")) {
-            return Message.success(user);
-        }
-        return Message.error("邮箱已被注册");
+        return Message.error("不存在该用户");
     }
 
     @Override
@@ -96,4 +83,28 @@ public class UserServiceImpl implements UserService {
         }
         return Message.success("修改成功！");
     }
+    @Override
+    public Message checkUserByMobile(String mobile) {
+        logger.info("UserServiceImpl checkUserByName is start.......mobile " + mobile);
+        logger.info("UserServiceImpl userDao checkUserByName is start.......mobile " + mobile);
+        User user = userDao.checkUserByMobile(mobile);
+        logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
+        if (user!=null&&!user.getUserName().equals("")) {
+            return Message.success(user);
+        }
+        return Message.error("手机已被注册");
+    }
+
+    @Override
+    public Message checkUserByEmail(String email) {
+        logger.info("UserServiceImpl checkUserByName is start.......email " + email);
+        logger.info("UserServiceImpl userDao checkUserByName is start.......email " + email);
+        User user = userDao.checkUserByEmail(email);
+        logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
+        if (user!=null&&!user.getUserName().equals("")) {
+            return Message.success(user);
+        }
+        return Message.error("邮箱已被注册");
+    }
+
 }
