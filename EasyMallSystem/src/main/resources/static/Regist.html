@@ -239,9 +239,10 @@
                     console.log(resp)
                     this.Falg.addFalg = resp.data.code === "200";
                     if (resp.data.code === "200"){
-                        this.Cue.loginNameCue = "√"
+                       this.Cue.loginNameCue="√"
                     }else {
-                        this.Cue.loginNameCue = "用户名已被注册!"
+                        this.Cue.loginNameCue="用户名已经存在"
+
                     }
                 })
             },
