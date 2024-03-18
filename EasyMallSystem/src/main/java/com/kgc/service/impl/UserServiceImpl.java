@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         if (user!=null&&!user.getUserName().equals("")) {
             return Message.error("用户已存在");
         }
-        return Message.success(user);
+        return Message.success("可以注册");
     }
 
     @Override

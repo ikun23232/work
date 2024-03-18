@@ -8,7 +8,8 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 
 public final class EmaiCodelUtil {
-    private EmaiCodelUtil() {}
+    private EmaiCodelUtil() {
+    }
 
     public static Session createSession() {
 
@@ -31,11 +32,11 @@ public final class EmaiCodelUtil {
         props.put("mail.smtp.auth", "true");//	是否需要用户认证
         props.put("mail.smtp.starttls.enale", "true");//	启用TlS加密
 
-        Session session = Session.getInstance(props,new Authenticator() {
+        Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 // TODO Auto-generated method stub
-                return new PasswordAuthentication(username,password);
+                return new PasswordAuthentication(username, password);
             }
         });
 
@@ -50,4 +51,12 @@ public final class EmaiCodelUtil {
         String sixNum = Integer.toString(intSixNum);
         return sixNum;
     }
+
+    public static String getSixNum() {
+        int intSixNum = 0;
+        intSixNum = ((int) ((Math.random() * 9 + 1) * 100000));
+        String sixNum = Integer.toString(intSixNum);
+        return sixNum;
+    }
+
 }
