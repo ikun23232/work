@@ -43,4 +43,28 @@ public class UserServiceImpl implements UserService {
         return Message.success(user);
     }
 
+    @Override
+    public Message checkUserByMobile(String mobile) {
+        logger.info("UserServiceImpl checkUserByName is start.......mobile " + mobile);
+        logger.info("UserServiceImpl userDao checkUserByName is start.......mobile " + mobile);
+        User user = userDao.checkUserByMobile(mobile);
+        logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
+        if (user!=null&&!user.getUserName().equals("")) {
+            return Message.success(user);
+        }
+        return Message.error("手机已被注册");
+    }
+
+    @Override
+    public Message checkUserByEmail(String email) {
+        logger.info("UserServiceImpl checkUserByName is start.......email " + email);
+        logger.info("UserServiceImpl userDao checkUserByName is start.......email " + email);
+        User user = userDao.checkUserByEmail(email);
+        logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
+        if (user!=null&&!user.getUserName().equals("")) {
+            return Message.success(user);
+        }
+        return Message.error("邮箱已被注册");
+    }
+
 }

@@ -16,4 +16,18 @@ public interface UserService {
      * @return
      */
     public Message checkUserByName(String loginName);
+
+    /**
+     * 校验手机号
+     * @param mobile
+     * @return
+     */
+    public Message checkUserByMobile(String mobile);
+
+    /**
+     * 校验email
+     * @param email
+     * @return
+     */
+    public Message checkUserByEmail(String email);
 }

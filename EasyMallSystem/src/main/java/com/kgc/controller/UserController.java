@@ -3,8 +3,10 @@ package com.kgc.controller;
 import com.kgc.entity.Message;
 import com.kgc.entity.User;
 import com.kgc.service.UserService;
+import demo.until.EmaiCodelUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,11 +32,12 @@ public class UserController {
 
     /**
      * 添加用户
+     *
      * @param user
      * @return
      */
     @RequestMapping("/addUser")
-    public Message addUser(User user) {
+    public Message addUser(@RequestBody User user) {
         logger.info("UserController addUser is start.....");
         logger.info("UserController userService addUser is start.....user" + user);
         Message message = userService.addUser(user);
@@ -44,6 +47,7 @@ public class UserController {
 
     /**
      * 检查重名
+     *
      * @param loginName
      * @return
      */
@@ -58,22 +62,54 @@ public class UserController {
 
     /**
      * 发送邮箱
+     *
      * @param email
      */
     @RequestMapping("/sendEmailCode")
-    public void sendEmailCode(String email) {
+    public String sendEmailCode(String email) {
         Session session = demo.until.EmaiCodelUtil.createSession();
         //	创建邮件对象
         MimeMessage message = new MimeMessage(session);
+        String sixNum = EmaiCodelUtil.getSixNum();
         try {
             message.setSubject("主题");
-            message.setText("112312");
+            message.setText(sixNum);
             message.setFrom(new InternetAddress("2358560084@qq.com"));
             message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(email));
             Transport.send(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return sixNum;
+    }
 
+    /**
+     * 校验用户手机
+     *
+     * @param mobile
+     * @return
+     */
+    @RequestMapping("/checkUserPhone")
+    public Message checkUserPhone(String mobile) {
+        logger.info("UserController addUser is start.....");
+        logger.info("UserController userService addUser is start.....mobile" + mobile);
+        Message message = userService.checkUserByMobile(mobile);
+        logger.debug("UserController userService addUser is start.....mobile" + mobile + "message" + message);
+        return message;
+    }
+
+    /**
+     * 校验用户邮箱
+     *
+     * @param email
+     * @return
+     */
+    @RequestMapping("/checkUserByEmail")
+    public Message checkUserByEmail(String email) {
+        logger.info("UserController addUser is start.....");
+        logger.info("UserController userService addUser is start.....email" + email);
+        Message message = userService.checkUserByEmail(email);
+        logger.debug("UserController userService addUser is start.....email" + email + "message" + message);
+        return message;
     }
 }
