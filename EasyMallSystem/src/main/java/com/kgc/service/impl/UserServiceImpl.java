@@ -1,5 +1,6 @@
 package com.kgc.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.kgc.dao.UserDao;
 import com.kgc.entity.Message;
 import com.kgc.entity.User;

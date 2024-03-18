@@ -65,7 +65,7 @@ public class UserController {
      * @param email
      */
     @RequestMapping("/sendEmailCode")
-    public String sendEmailCode(String email) {
+    public void sendEmailCode(String email) {
         Session session = EmaiCodelUtil.createSession();
         //	创建邮件对象
         MimeMessage message = new MimeMessage(session);
@@ -90,37 +90,9 @@ public class UserController {
     }
 
     @RequestMapping("/updatePassword")
-    public Message updatePassword(String loginName,String password){
-        logger.info("UserController loginTo is start......loginName:"+loginName+"password:"+password);
-        Message message = userService.updatePassword(loginName,password);
-        return message;
-    /**
-     * 校验用户手机
-     *
-     * @param mobile
-     * @return
-     */
-    @RequestMapping("/checkUserPhone")
-    public Message checkUserPhone(String mobile) {
-        logger.info("UserController addUser is start.....");
-        logger.info("UserController userService addUser is start.....mobile" + mobile);
-        Message message = userService.checkUserByMobile(mobile);
-        logger.debug("UserController userService addUser is start.....mobile" + mobile + "message" + message);
-        return message;
-    }
-
-    /**
-     * 校验用户邮箱
-     *
-     * @param email
-     * @return
-     */
-    @RequestMapping("/checkUserByEmail")
-    public Message checkUserByEmail(String email) {
-        logger.info("UserController addUser is start.....");
-        logger.info("UserController userService addUser is start.....email" + email);
-        Message message = userService.checkUserByEmail(email);
-        logger.debug("UserController userService addUser is start.....email" + email + "message" + message);
+    public Message updatePassword(String loginName,String password) {
+        logger.info("UserController loginTo is start......loginName:" + loginName + "password:" + password);
+        Message message = userService.updatePassword(loginName, password);
         return message;
     }
 }
