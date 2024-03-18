@@ -33,4 +33,10 @@
         where loginName = #{loginName}
         and password = #{password}
     </select>
+
+    <update id="updataePasswordByName">
+        update easybuy_user
+        set password = #{password}
+        where loginName = #{loginName}
+    </update>
 </mapper>

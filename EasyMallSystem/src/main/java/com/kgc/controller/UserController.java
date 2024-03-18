@@ -87,4 +87,12 @@ public class UserController {
         Message message = userService.checkUserByNamePwd(loginName,password);
         return message;
     }
+
+    @RequestMapping("/updatePassword")
+    public Message updatePassword(String loginName,String password){
+        logger.info("UserController loginTo is start......loginName:"+loginName+"password:"+password);
+        Message message = userService.updatePassword(loginName,password);
+        return message;
+    }
+
 }

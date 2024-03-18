@@ -46,10 +46,7 @@ public final class EmaiCodelUtil {
 
 
     public static String getSixNum(){
-        int intSixNum = 0;
-        for(int j = 0; j< 100; j++){
-            intSixNum=((int)((Math.random()*9+1)*100000));
-        }
+        int intSixNum = ((int)((Math.random()*9+1)*100000));
         String sixNum = Integer.toString(intSixNum);
         return sixNum;
     }

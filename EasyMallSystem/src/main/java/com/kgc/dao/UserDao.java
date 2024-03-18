@@ -22,4 +22,9 @@ public interface UserDao {
      */
     public User checkUserByName(String loginName);
 
+    /**
+     * 通过名字修改密码
+     */
+    public int updataePasswordByName(@Param("loginName")String loginName, @Param("password")String password);
+
 }

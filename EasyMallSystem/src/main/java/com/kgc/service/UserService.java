@@ -25,4 +25,14 @@ public interface UserService {
      */
     public Message checkUserByNamePwd(String loginName,String password);
 
+
+    /**
+     * 修改密码
+     * @param loginName
+     * @param password
+     * @return
+     */
+    public Message updatePassword(String loginName,String password);
+
+
 }

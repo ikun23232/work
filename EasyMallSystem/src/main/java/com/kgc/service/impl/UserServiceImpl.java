@@ -61,4 +61,15 @@ public class UserServiceImpl implements UserService {
         stringRedisTemplate.opsForValue().set(user.getLoginName(),userString);
         return Message.success("登录成功！");
     }
+
+    @Override
+    public Message updatePassword(String loginName, String password) {
+        logger.info("UserServiceImpl updatePassword is start .......loginName:"+loginName+"password:"+password);
+        logger.info("UserServiceImpl userDao loginTo is start.......loginName:"+loginName+"password:"+password);
+        int count = userDao.updataePasswordByName(loginName,password);
+        if(count<=0){
+            return Message.error("修改失败！");
+        }
+        return Message.success("修改成功！");
+    }
 }
