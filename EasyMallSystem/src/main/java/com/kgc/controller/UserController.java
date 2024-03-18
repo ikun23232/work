@@ -37,7 +37,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("/addUser")
-    public Message addUser(User user) {
+    public Message addUser(@RequestBody User user) {
         logger.info("UserController addUser is start.....");
         logger.info("UserController userService addUser is start.....user" + user);
         Message message = userService.addUser(user);
@@ -59,7 +59,14 @@ public class UserController {
         logger.debug("UserController userService addUser is start.....loginName" + loginName + "message" + message);
         return message;
     }
-
+    @RequestMapping("/checkUserByLoginName")
+    public Message checkUserByLoginName(String loginName) {
+        logger.info("UserController addUser is start.....");
+        logger.info("UserController userService addUser is start.....loginName" + loginName);
+        Message message = userService.checkUserByLoginName(loginName);
+        logger.debug("UserController userService addUser is start.....loginName" + loginName + "message" + message);
+        return message;
+    }
     /**
      * 发送邮箱
      *
