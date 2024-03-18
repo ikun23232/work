@@ -4,6 +4,9 @@ import com.kgc.dao.ProductDao;
 import com.kgc.entity.Message;
 import com.kgc.entity.Page;
 import com.kgc.entity.Product;
+import com.kgc.entity.Category;
+import com.kgc.entity.Product;
+import com.kgc.service.CategoryService;
 import com.kgc.service.ProductService;
 import com.kgc.utils.ElsearchUtil;
 import org.apache.log4j.Logger;
@@ -33,6 +36,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
     @Autowired
     private ElsearchUtil elsearchUtil;
+    @Autowired
+    private CategoryService categoryService;
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
@@ -76,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
             queryBuilder.must(QueryBuilders.matchQuery("pname", product.getName()));
         }
 
+
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field("pname");
         highlightBuilder.preTags("<font style='color:red'>");
@@ -102,5 +108,23 @@ public class ProductServiceImpl implements ProductService {
         page.setTotalCount(new Long(totalHits).intValue());
         page.setData(productList);
         return Message.success(page);
+    }
+
+    @Override
+    public List<Product> searchProductByCategoryName(String categoryName) {
+        logger.info("ProductServiceImpl searchProductByCategoryName is start....categoryName:"+categoryName);
+        List<Product> productList = new ArrayList<>();
+        logger.info("categoryService getThreeCategoryList is start....categoryName:"+categoryName);
+        List<Category> categoryList = categoryService.getThreeCategoryList(categoryName);
+        logger.info("categoryService getThreeCategoryList is start....categoryName:"+categoryName+"result:"+categoryList);
+        for(Category category:categoryList){
+            logger.info("productDao getProductBythreeCategoryName is start....categoryName:"+category);
+            List<Product> productBythreeCategoryName = productDao.getProductBythreeCategoryName(category.getName());
+            for(Product product:productBythreeCategoryName){
+                productList.add(product);
+            }
+            logger.info("productDao getProductBythreeCategoryName is start....categoryName:"+category+"result:"+productBythreeCategoryName);
+        }
+        return productList;
     }
 }

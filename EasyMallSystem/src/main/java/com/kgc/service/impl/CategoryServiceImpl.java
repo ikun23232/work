@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Message getCategoryList() {
         logger.info("CategoryServiceImpl getCategoryList is start....");
         List<Category> categoryList = categoryDao.getCategoryList();
-        logger.info("CategoryServiceImpl getCategoryList is start....categoryList" + categoryList);
+        logger.info("CategoryServiceImpl getCategoryList is start....categoryList"+categoryList);
 
         return Message.success(categoryList);
     }
@@ -44,5 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categoryList = categoryDao.getCategoryThrid(id);
         logger.info("CategoryServiceImpl getCategorySecond is start....categoryList" + categoryList);
         return Message.success(categoryList);
+    }
+
+    @Override
+    public List<Category> getThreeCategoryList(String categoryName) {
+        logger.info("CategoryServiceImpl getCategoryList is start....");
+        List<Category> categoryList = categoryDao.getThreeCategoryByCategoryName(categoryName);
+        logger.info("CategoryServiceImpl getThreeCategoryByCategoryName is start....categoryList"+categoryList);
+        return categoryList;
     }
 }

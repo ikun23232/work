@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kgc.dao.ProductDao">
+    <select id="getProductBythreeCategoryName" resultType="Product">
+        select
+            easybuy_product.id,
+            easybuy_product.name,
+            description,
+            price,
+            stock,
+            categoryLevelId,
+            fileId,
+            easybuy_product.isDel,
+            easybuy_product.createTime,
+            filePath
+        from easybuy_product,easybuy_product_category,easybuy_file
+        where categoryLevelId = easybuy_product_category.id
+          and easybuy_file.id = easybuy_product.fileId
+          and easybuy_product_category.name = #{categoryName}
+    </select>
+
+    <select id="getProductById" resultType="Product">
+        select
+            id,
+            name,
+            description,
+            price,
+            stock,
+            categoryLevelId,
+            fileId,
+            isDel,
+            createTime
+        from easybuy_product
+        where categoryLevelId = #{id}
+    </select>
 
     <select id="getProductList" resultType="Product">
         select

@@ -9,4 +9,9 @@ public interface CategoryDao {
     public List<Category> getCategorySecond(int id);
     public List<Category> getCategoryThrid(int id);
 
+
+    /**
+     * 通过一级类名查找三级类名
+     */
+    public List<Category> getThreeCategoryByCategoryName(String categoryName);
 }
