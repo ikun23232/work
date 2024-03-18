@@ -28,4 +28,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         return Message.success(categoryList);
     }
+
+    @Override
+    public List<Category> getThreeCategoryList(String categoryName) {
+        logger.info("CategoryServiceImpl getCategoryList is start....");
+        List<Category> categoryList = categoryDao.getThreeCategoryByCategoryName(categoryName);
+        logger.info("CategoryServiceImpl getThreeCategoryByCategoryName is start....categoryList"+categoryList);
+        return categoryList;
+    }
 }

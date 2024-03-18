@@ -25,5 +25,6 @@ public class Product {
     private Integer fileId;
     private Integer isDel;
     private Date createTime;
+    private String filePath;
 
 }

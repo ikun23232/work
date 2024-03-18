@@ -747,7 +747,7 @@
 	<!--Begin 进口 生鲜 Begin-->
     <div class="i_t mar_10">
     	<span class="floor_num">1F</span>
-    	<span class="fl">进口 <b>·</b> 生鲜</span>                
+    	<span class="fl"></span>
         <span class="i_mores fr"><a href="#">进口咖啡</a>&nbsp; &nbsp; &nbsp; <a href="#">进口酒</a>&nbsp; &nbsp; &nbsp; <a href="#">进口母婴</a>&nbsp; &nbsp; &nbsp; <a href="#">新鲜蔬菜</a>&nbsp; &nbsp; &nbsp; <a href="#">新鲜水果</a></span>
     </div>
     <div class="content">
@@ -1472,7 +1472,10 @@
         data(){
             return {
                NewsList:[],
-                categoryList:[]
+                categoryList:[],
+                productFriList:[],
+                productSecList:[],
+                productThList:[],
             }
         },
         methods: {
@@ -1488,11 +1491,46 @@
                     console.log(resp)
                     this.categoryList = resp.data.data.data;
                 })
+            },
+
+            //吴磊吴磊
+            initProductFri(categoryName){
+                axios.get("/getProductWithFileList",{
+                    params:{
+                        categoryName:categoryName
+                    }
+                }).then((respones)=>{
+                    console.log(respones)
+                    this.productFriList = respones.data.data;
+                })
+            },
+            initProductSec(categoryName){
+                axios.get("/getProductWithFileList",{
+                    params:{
+                        categoryName:categoryName
+                    }
+                }).then((respones)=>{
+                    console.log(respones)
+                    this.productSecList = respones.data.data;
+                })
+            },
+            initProductTh(categoryName){
+                axios.get("/getProductWithFileList",{
+                    params:{
+                        categoryName:categoryName
+                    }
+                    }).then((respones)=>{
+                    console.log(respones)
+                    this.productThList = respones.data.data;
+                })
             }
         },
         mounted(){
             this.initNews();
             this.initCategory();
+            this.initProductFri("进口食品,生鲜");
+            this.initProductSec("化妆品");
+            this.initProductTh("保健食品");
         }
     })
 </script>
