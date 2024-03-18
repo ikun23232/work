@@ -5,7 +5,7 @@
         insert into easybuy_user(loginName, userName, password, sex, identityCode, email, mobile, type)
         values (#{loginName}, #{loginName}, #{password}, #{sex}, #{identityCode}, #{email}, #{mobile}, #{type})
     </insert>
-    <select id="checkUserByName" resultType="User">
+    <select id="checkUserByName" resultType="com.kgc.entity.User">
         select id,
                loginName,
                userName,
@@ -39,4 +39,31 @@
         set password = #{password}
         where loginName = #{loginName}
     </update>
+    <select id="checkUserByMobile" resultType="com.kgc.entity.User">
+        select id,
+               loginName,
+               userName,
+               password,
+               sex,
+               identityCode,
+               email,
+               mobile,
+               type
+        from easybuy_user
+        where loginName = #{mobile}
+    </select>
+    <select id="checkUserByEmail" resultType="com.kgc.entity.User">
+        select id,
+               loginName,
+               userName,
+               password,
+               sex,
+               identityCode,
+               email,
+               mobile,
+               type
+        from easybuy_user
+        where email = #{email}
+    </select>
+
 </mapper>

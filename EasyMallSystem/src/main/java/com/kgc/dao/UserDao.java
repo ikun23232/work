@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserDao {
     /**
      * 添加用户
+     *
      * @return
      */
     public int addUser(User user);
@@ -26,5 +27,9 @@ public interface UserDao {
      * 通过名字修改密码
      */
     public int updataePasswordByName(@Param("loginName")String loginName, @Param("password")String password);
+
+    public User checkUserByMobile(String mobile);
+
+    public User checkUserByEmail(String email);
 
 }
