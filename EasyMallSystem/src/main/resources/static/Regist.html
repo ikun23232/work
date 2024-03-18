@@ -238,6 +238,11 @@
                 axios.get('checkUserByName', {params: {loginName: this.User.loginName}}).then((resp) => {
                     console.log(resp)
                     this.Falg.addFalg = resp.data.code === "200";
+                    if (resp.data.code === "200"){
+                        this.Cue.loginNameCue = "√"
+                    }else {
+                        this.Cue.loginNameCue = "用户名已被注册!"
+                    }
                 })
             },
             checkPassword() {
