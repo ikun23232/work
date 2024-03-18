@@ -18,6 +18,25 @@ public interface UserService {
     public Message checkUserByName(String loginName);
 
     /**
+     * 用户登录检查密码是否正确
+     * @param loginName
+     * @param password
+     * @return
+     */
+    public Message checkUserByNamePwd(String loginName,String password);
+
+
+    /**
+     * 修改密码
+     * @param loginName
+     * @param password
+     * @return
+     */
+    public Message updatePassword(String loginName,String password);
+
+
+
+    /**
      * 校验手机号
      * @param mobile
      * @return

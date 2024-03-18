@@ -1,6 +1,7 @@
 package com.kgc.utils;
 
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -42,7 +43,13 @@ public final class EmaiCodelUtil {
         //  控制台打印调试信息
         session.setDebug(true);
         return session;
+    }
 
+
+    public static String getSixNum(){
+        int intSixNum = ((int)((Math.random()*9+1)*100000));
+        String sixNum = Integer.toString(intSixNum);
+        return sixNum;
     }
 
     public static String getSixNum() {

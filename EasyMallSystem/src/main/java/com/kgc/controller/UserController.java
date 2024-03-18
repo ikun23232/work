@@ -37,7 +37,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("/addUser")
-    public Message addUser(@RequestBody User user) {
+    public Message addUser(User user) {
         logger.info("UserController addUser is start.....");
         logger.info("UserController userService addUser is start.....user" + user);
         Message message = userService.addUser(user);
@@ -83,33 +83,19 @@ public class UserController {
         return sixNum;
     }
 
-    /**
-     * 校验用户手机
-     *
-     * @param mobile
-     * @return
-     */
-    @RequestMapping("/checkUserPhone")
-    public Message checkUserPhone(String mobile) {
-        logger.info("UserController addUser is start.....");
-        logger.info("UserController userService addUser is start.....mobile" + mobile);
-        Message message = userService.checkUserByMobile(mobile);
-        logger.debug("UserController userService addUser is start.....mobile" + mobile + "message" + message);
+
+    @RequestMapping("/loginto")
+    public Message loginTo(String loginName,String password){
+        logger.info("UserController loginTo is start......loginName:"+loginName+"password:"+password);
+        Message message = userService.checkUserByNamePwd(loginName,password);
         return message;
     }
 
-    /**
-     * 校验用户邮箱
-     *
-     * @param email
-     * @return
-     */
-    @RequestMapping("/checkUserByEmail")
-    public Message checkUserByEmail(String email) {
-        logger.info("UserController addUser is start.....");
-        logger.info("UserController userService addUser is start.....email" + email);
-        Message message = userService.checkUserByEmail(email);
-        logger.debug("UserController userService addUser is start.....email" + email + "message" + message);
+    @RequestMapping("/updatePassword")
+    public Message updatePassword(String loginName,String password){
+        logger.info("UserController loginTo is start......loginName:"+loginName+"password:"+password);
+        Message message = userService.updatePassword(loginName,password);
         return message;
     }
+
 }

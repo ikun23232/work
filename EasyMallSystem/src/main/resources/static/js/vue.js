@@ -9347,7 +9347,7 @@
                       'https://github.com/vuejs/vue-devtools');
               }
           }
-          if (config.productionTip !== false &&
+          if (!config.productionTip  &&
               typeof console !== 'undefined') {
               // @ts-expect-error
               console[console.info ? 'info' : 'log']("You are running Vue in development mode.\n" +
