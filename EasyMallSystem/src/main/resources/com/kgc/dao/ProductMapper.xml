@@ -21,17 +21,19 @@
 
     <select id="getProductById" resultType="Product">
         select
-            id,
-            name,
+            easybuy_product.id,
+            easybuy_product.name,
             description,
             price,
             stock,
             categoryLevelId,
             fileId,
-            isDel,
-            createTime
-        from easybuy_product
-        where categoryLevelId = #{id}
+            easybuy_product.isDel,
+            easybuy_product.createTime,
+            filePath
+        from easybuy_product,easybuy_file
+        where easybuy_product.id = #{id}
+        and easybuy_file.productId = easybuy_product.id
     </select>
 
     <select id="getProductList" resultType="Product">
@@ -50,5 +52,23 @@
         where categoryLevelId = easybuy_product_category.id
           and easybuy_file.id = easybuy_product.fileId
     </select>
-
+    <select id="getProductByOrder" resultType="Product">
+        SELECT 	  easybuy_product.id,
+                    easybuy_product.`name`,
+                    description,
+                    price,
+                    stock,
+                    categoryLevelId,
+                    fileId,
+                    easybuy_product.isDel,
+                    easybuy_product.createTime,
+                    filePath
+        FROM easybuy_product,easybuy_file
+        WHERE     easybuy_product.id
+            IN(SELECT productId
+               FROM easybuy_order_detail
+               GROUP BY productId)
+          AND fileId = easybuy_file.id
+        LIMIT 0,4
+    </select>
 </mapper>

@@ -22,4 +22,9 @@ public interface ProductDao {
      * 通过id找product
      */
     public Product getProductById(int id);
+
+    /**
+     *通过销量查找product
+     */
+    public List<Product> getProductByOrder();
 }

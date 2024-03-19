@@ -56,13 +56,27 @@ public class ProductController {
     }
 
 
-
-
     @RequestMapping("/getProductWithFileList")
     public Message getProductWithFileList(String categoryName){
         logger.info("ProductController getProductList is start......categoryName:"+categoryName);
-        List<Product> productList = productService.searchProductByCategoryName(categoryName);
-        logger.info("ProductController getProductList is start......categoryName:"+categoryName+"result"+productList);
-        return Message.success(productList);
+        Message message = productService.searchProductByCategoryName(categoryName);
+        logger.info("ProductController getProductList is start......categoryName:"+categoryName+"result"+message);
+        return message;
+    }
+
+    @RequestMapping("/searchHotProduct")
+    public Message searchHotProduct(){
+        logger.info("ProductController getProductList is start......");
+        Message message = productService.searchHotProduct();
+        logger.info("ProductController getProductList is start......result"+message);
+        return message;
+    }
+
+    @RequestMapping("/getProductById")
+    public Message getProductById(int id){
+        logger.info("ProductController getProductById is start......");
+        Message message = productService.getProductById(id);
+        logger.info("ProductController getProductById is start......result"+message);
+        return message;
     }
 }
