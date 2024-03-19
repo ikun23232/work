@@ -123,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProductByCategoryName(String categoryName) {
+    public Message searchProductByCategoryName(String categoryName) {
         logger.info("ProductServiceImpl searchProductByCategoryName is start....categoryName:"+categoryName);
         List<Product> productList = new ArrayList<>();
         logger.info("categoryService getThreeCategoryList is start....categoryName:"+categoryName);
@@ -133,10 +133,51 @@ public class ProductServiceImpl implements ProductService {
             logger.info("productDao getProductBythreeCategoryName is start....categoryName:"+category);
             List<Product> productBythreeCategoryName = productDao.getProductBythreeCategoryName(category.getName());
             for(Product product:productBythreeCategoryName){
+                try {
+                    String picPath = URLEncoder.encode(product.getFilePath(), "utf-8");
+                    product.setFilePath(picPath);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
                 productList.add(product);
             }
             logger.info("productDao getProductBythreeCategoryName is start....categoryName:"+category+"result:"+productBythreeCategoryName);
         }
-        return productList;
+        return Message.success(productList);
+    }
+
+    @Override
+    public Message searchHotProduct() {
+        logger.info("ProductServiceImpl searchProductByCategoryName is start....");
+        List<Product> productList = productDao.getProductByOrder();
+        List<Product> products = new ArrayList<>();
+        for (Product product: productList){
+            try {
+                String picPath = URLEncoder.encode(product.getFilePath(),"utf-8");
+                product.setFilePath(picPath);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+            products.add(product);
+        }
+        logger.info("productDao getProductByOrder is start....");
+        return Message.success(products);
+    }
+
+    @Override
+    public Message getProductById(int id) {
+        logger.info("ProductServiceImpl getProductById is start....id:"+id);
+        Product product = productDao.getProductById(id);
+        try {
+            String picPath = null;
+            picPath = URLEncoder.encode(product.getFilePath(),"utf-8");
+            product.setFilePath(picPath);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        if(product!=null){
+            return Message.success(product);
+        }
+        return Message.error("没有该产品！");
     }
 }
