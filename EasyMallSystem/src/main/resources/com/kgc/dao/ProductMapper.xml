@@ -35,20 +35,26 @@
     </select>
 
     <select id="getProductList" resultType="Product">
-        select
-            easybuy_product.id,
-            easybuy_product.name,
+        SELECT
+            p.id,
+            p.name,
             description,
             price,
             stock,
             categoryLevelId,
             fileId,
-            easybuy_product.isDel,
-            easybuy_product.createTime,
-            filePath
-        from easybuy_product,easybuy_product_category,easybuy_file
-        where categoryLevelId = easybuy_product_category.id
-          and easybuy_file.id = easybuy_product.fileId
+            p.isDel,
+            p.createTime,
+            filePath,
+            b.name AS brandName
+        FROM
+            easybuy_product p
+                LEFT JOIN
+            easybuy_product_category c ON p.categoryLevelId = c.id
+                LEFT JOIN
+            easybuy_file f ON f.id = p.fileId
+                LEFT JOIN
+            easybuy_brand b ON b.id = p.brandId;
     </select>
 
 </mapper>
