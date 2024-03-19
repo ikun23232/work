@@ -42,5 +42,7 @@ public class Product {
     private Date createTime;
     @Field(type = FieldType.Text)
     private String filePath;
+    @Field(type = FieldType.Text)
+    private String brandName;
 
 }

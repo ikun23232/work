@@ -15,6 +15,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.codec.EncodingException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -76,16 +77,20 @@ public class ProductServiceImpl implements ProductService {
      * @param product
      * @return
      */
-    public Message getProductListByPage(Page page, Product product) {
+    public Message getProductListByPage(Page page, Product product,int minPrice,int maxPrice) {
         logger.info("ProductServiceImpl getProductListByPage is start.... id");
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        queryBuilder.filter(QueryBuilders.rangeQuery("price").gte(minPrice).lte(maxPrice));
         if (product != null && !product.getName().equals("")) {
-            queryBuilder.must(QueryBuilders.matchQuery("pname", product.getName()));
+            queryBuilder.must(QueryBuilders.matchQuery("name", product.getName()));
         }
 
+        if (product!=null&& !product.getBrandName().equals("")){
+            queryBuilder.must(QueryBuilders.matchQuery("brandName", product.getBrandName()));
+        }
 
         HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.field("pname");
+        highlightBuilder.field("name");
         highlightBuilder.preTags("<font style='color:red'>");
         highlightBuilder.postTags("</font>");
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -99,9 +104,14 @@ public class ProductServiceImpl implements ProductService {
         for (
                 SearchHit<? extends Product> searchHit : searchHits) {
             Product productTemp = searchHit.getContent();
-            List<String> pname = searchHit.getHighlightField("pname");
+            List<String> pname = searchHit.getHighlightField("name");
             if (pname.size() > 0) {
                 productTemp.setName(pname.get(0));
+            }
+            try {
+                productTemp.setFilePath(URLEncoder.encode(productTemp.getFilePath(),"utf-8"));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             productList.add(productTemp);
         }

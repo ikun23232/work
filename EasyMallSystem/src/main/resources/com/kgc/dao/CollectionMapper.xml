@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.dao.CollectionDao">
+    <!--    <resultMap id="collectionLst" type="com.kgc.entity.Collections" autoMapping="true">-->
+    <!--        <id property="id" column="id"/>-->
+    <!--        <collection property="products" ofType="Product" javaType="java.util.List">-->
+    <!--            <id property="id" column="id"/>-->
+    <!--            <result property="name" column="name"/>-->
+    <!--            <result property="stock" column="stock"/>-->
+    <!--            <result property="description" column="description"/>-->
+    <!--            <result property="price" column="price"/>-->
+    <!--            <result property="categoryLevelId" column="categoryLevelId"/>-->
+    <!--            <result property="filePath" column="filePath"/>-->
+    <!--        </collection>-->
+    <!--    </resultMap>-->
+    <!--    <select id="getConnectionById" resultType="collectionLst" >-->
+    <!--        SELECT c.id,-->
+    <!--               c.userId,-->
+    <!--               p.id,-->
+    <!--               p.name,-->
+    <!--               p.stock,-->
+    <!--               p.description,-->
+    <!--               p.price,-->
+    <!--               p.categoryLevelId,-->
+    <!--               f.filePath-->
+    <!--        FROM easybuy_product p,-->
+    <!--             easybuy_collections c,-->
+    <!--             easybuy_user u,-->
+    <!--             easybuy_file f-->
+    <!--        WHERE u.id = c.userId-->
+    <!--          AND p.id = c.productId-->
+    <!--          AND f.id = p.fileId-->
+    <!--          AND u.id = 22-->
+    <!--    </select>-->
+    <select id="getConnectionById" resultType="Product">
+        SELECT p.id,
+               p.name,
+               p.stock,
+               p.description,
+               p.price,
+               p.categoryLevelId,
+               f.filePath
+        FROM easybuy_product p,
+             easybuy_collections c,
+             easybuy_user u,
+             easybuy_file f
+        WHERE u.id = c.userId
+          AND p.id = c.productId
+          AND f.id = p.fileId
+          AND u.id = #{id}
+          AND isDel = 0
+    </select>
+    <update id="delProductInCarById">
+        update easybuy_collections
+        set isDel=1
+        where productId = #{productId}
+    </update>
+    <update id="UpdateProductInCarById">
+        update easybuy_collections
+        set quantity=#{quantity}
+        where productId = #{productId}
+    </update>
+    <insert id="addProductInCarById">
+        insert into easybuy_collections(userId, productId, isDel, createTime, quantity) values ('22',#{productId},0,NOW(),#{quantity})
+    </insert>
+
+</mapper>

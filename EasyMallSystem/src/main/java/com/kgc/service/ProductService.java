@@ -31,5 +31,5 @@ public interface ProductService {
     public Message getProductListAll();
 
     public Message addProductListByALL();
-    public Message getProductListByPage(Page page, Product product);
+    public Message getProductListByPage(Page page, Product product,int minPrice,int MaxPrice);
 }
