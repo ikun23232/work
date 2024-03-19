@@ -211,7 +211,7 @@
                 }
 
                 this.sendMsgDisabled = true
-                const interval = window.setInterval(()=> {
+                const interval = window.setInterval(() => {
                     if ((this.time--) <= 0) {
                         this.time = 60
                         this.sendMsgDisabled = false
@@ -238,10 +238,13 @@
                 axios.get('checkUserByName', {params: {loginName: this.User.loginName}}).then((resp) => {
                     console.log(resp)
                     this.Falg.addFalg = resp.data.code === "200";
-                    if (resp.data.code === "200"){
-                       this.Cue.loginNameCue="√"
-                    }else {
-                        this.Cue.loginNameCue="用户名已经存在"
+                    if (resp.data.code === "200") {
+                        this.Cue.loginNameCue = "√"
+                        this.Falg.loginNameFalg = true;
+                    } else {
+                        this.Cue.loginNameCue = "用户名已经存在"
+                        this.Falg.loginNameFalg = false;
+
 
                     }
                 })
@@ -333,6 +336,10 @@
                 this.checkMobile()
                 this.CheckCode();
                 console.log(this.Falg.addFalg)
+
+                if (!this.Falg.loginNameFalg) {
+                    return;
+                }
                 if (this.Falg.addFalg) {
                     axios.post('/addUser', this.User).then((resp) => {
                         console.log(resp)

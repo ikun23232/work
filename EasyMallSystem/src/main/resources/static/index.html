@@ -209,7 +209,7 @@
         	<div class="nav_t">全部商品分类</div>
             <div class="leftNav">
                 <ul>
-                    <li v-for="item in categoryList" :key="item.id">
+                    <li v-for="item in categoryList" :key="item.id" @mouseenter="initCategoryByIda(item.id)">
                         <div class="fj">
                             <span class="n_img"><span></span><img src="images/nav1.png" /></span>
                             <span class="fl">{{item.name}}</span>
@@ -540,11 +540,10 @@
                         <option value="20">20元</option>
                         <option value="10">10元</option>
                     </select>
-                    <span style="color:#ff4e00; font-size:14px;">￥99.5</span>
                 </td>
               </tr>
               <tr height="35">
-                <td colspan="2"><input type="submit" value="立即充值" class="c_btn" /></td>
+                <td colspan="2"><input type="button" value="立即充值" class="c_btn" @click="getPhoneChargesOrder()"/></td>
               </tr>
             </table>
             </form>
@@ -1031,8 +1030,8 @@
                         </ul>
                     </div>
                 </div>
-                <a class="l_prev" href="javascript:void();">Previous</a>
-                <a class="l_next" href="javascript:void();">Next</a>
+                <a class="l_prev" href="javascript:void(0);">Previous</a>
+                <a class="l_next" href="javascript:void(0);">Next</a>
             </div>
         </div>
     </div>
@@ -1200,7 +1199,8 @@
                 productSiList: {},
                 productHotList:{},
                 phoneNum:'',
-                phonePay:''
+                phonePay:'',
+                productName:''
             }
         },
         methods: {
@@ -1328,13 +1328,15 @@
         mounted(){
             this.initNews();
             this.initCategory();
-            // this.initProductFri("进口食品,生鲜");
-            // this.initProductSec("化妆品");
-            // this.initProductTh("保健食品");
-            // this.initProductFo("箱包");
-            // this.initProductFi("家用商品");
-            // this.initProductSi("电子商品");
-            // this.initproductHot();
+
+            //wulei
+            this.initProductFri("进口食品,生鲜");
+            this.initProductSec("化妆品");
+            this.initProductTh("保健食品");
+            this.initProductFo("箱包");
+            this.initProductFi("家用商品");
+            this.initProductSi("电子商品");
+            this.initproductHot();
         }
     })
 </script>
