@@ -51,10 +51,26 @@ public interface ProductDao {
     public List<Product> getProductPageList(@Param("productName") String productName,@Param("brandId") int brandId);
 
     /**
-     * 查找分页所有商品通过pid、brandid
+     * 添加product
      * @return
      */
     public int addProduct(Product product);
 
+    /**
+     * 添加file
+     * @return
+     */
+    public int addfile(Product product);
+
+    /**
+     * 补全文件表
+     * @return
+     */
+    public int upfile(Product product);
+    /**
+     * 补全产品表
+     * @return
+     */
+    public int upProduct(Product product);
 
 }

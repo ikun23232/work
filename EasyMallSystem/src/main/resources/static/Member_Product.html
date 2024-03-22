@@ -203,7 +203,6 @@
                 <ul>
                     <li><a href="Member_Product.html">商品显示</a></li>
                     <li><a href="Member_ProductAdd.html">商品添加</a></li>
-                    <li><a href="#">商品修改</a></li>
                 </ul>
             </div>
             <div class="left_m">
@@ -310,8 +309,8 @@
                             width="200">
                         <template slot-scope="scope">
                             <p>
-                                <el-button type="primary" style="width: 80px" icon="el-icon-edit" >修改</el-button>
-                                <el-button type="primary" style="width: 80px" icon="el-icon-delete" >删除</el-button>
+                                <el-button type="primary" style="width: 80px" @click="toUpdata(scope.row)" icon="el-icon-edit" >修改</el-button>
+                                <el-button type="primary" style="width: 80px" @click="del(scope.row)" icon="el-icon-delete" >删除</el-button>
                             </p>
                         </template>
                     </el-table-column>
@@ -459,6 +458,27 @@
                 this.input = ''
                 this.brandId = 0
                 this.getProductInit(1)
+            },
+            toUpdata(rows){
+                console.log(rows)
+                window.location.href="Member_ProductUpdate.html?id="+rows.id+"&categoryLevelId="+rows.categoryLevelId
+            },
+            del(rows){
+                console.log(rows)
+                axios.get("/delProduct",{
+                    params:{
+                        id:rows.id,
+                        fileId:rows.fileId
+                    }
+                }).then((respones)=>{
+                    console.log(respones)
+                    if(respones.data.code=="200"){
+                        alert("删除成功")
+                        location.reload();
+                    }else {
+                        alert("删除失败")
+                    }
+                })
             }
         },
         mounted(){

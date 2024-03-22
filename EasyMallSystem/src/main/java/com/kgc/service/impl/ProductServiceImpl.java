@@ -89,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
      * @param product
      * @return
      */
-    public Message getProductListByPage(Page page, Product product,int minPrice,int maxPrice) {
+    public Message getProductListByPage(Page page, Product product, int minPrice, int maxPrice) {
         logger.info("ProductServiceImpl getProductListByPage is start.... id");
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.filter(QueryBuilders.rangeQuery("price").gte(minPrice).lte(maxPrice));
@@ -97,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
             queryBuilder.must(QueryBuilders.matchQuery("name", product.getName()));
         }
 
-        if (product!=null&& !product.getBrandName().equals("")){
+        if (product != null && !product.getBrandName().equals("")) {
             queryBuilder.must(QueryBuilders.matchQuery("brandName", product.getBrandName()));
         }
 
@@ -121,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
                 productTemp.setName(pname.get(0));
             }
             try {
-                productTemp.setFilePath(URLEncoder.encode(productTemp.getFilePath(),"utf-8"));
+                productTemp.setFilePath(URLEncoder.encode(productTemp.getFilePath(), "utf-8"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -135,13 +135,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Message getProductPageList(int currentPageNo,int pageSize,String productName,int brandId) {
+    public Message getProductPageList(int currentPageNo, int pageSize, String productName, int brandId) {
         logger.info("ProductServiceImpl getProductPageList is start....");
-        PageHelper.startPage(currentPageNo,pageSize);
-        List<Product> productList = productDao.getProductPageList(productName,brandId);
+        PageHelper.startPage(currentPageNo, pageSize);
+        List<Product> productList = productDao.getProductPageList(productName, brandId);
         PageInfo<Product> pageInfo = new PageInfo<>(productList);
         List<Product> products = new ArrayList<>();
-        for(Product product:productList){
+        for (Product product : productList) {
             replayUtil.encodingFilePath(product);
             products.add(product);
         }
@@ -151,25 +151,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Message delProductById(int id) {
-        logger.info("ProductServiceImpl delProductById is start....id:"+id);
+        logger.info("ProductServiceImpl delProductById is start....id:" + id);
         int i = productDao.delProductById(id);
-        if(i>0){
+        if (i > 0) {
             return Message.success();
-        }else {
+        } else {
             return Message.error();
         }
     }
 
     @Override
-    public Message addProduct(Product product, @RequestParam(value = "filePath") MultipartFile mFile, Model model) {
-        logger.info("ProductServiceImpl addProduct is start....product:"+product);
+    public Message addProduct(Product product, @RequestParam(value = "picPath") MultipartFile picPath, Model model) {
+        logger.info("ProductServiceImpl addProduct is start....product:" + product);
         String extsion = null;
-        String picPath = null;
-        if (mFile != null) {
-            if (!mFile.isEmpty()) {
-                String originalFilename = mFile.getOriginalFilename();
+        String Path = null;
+        if (picPath != null) {
+            if (!picPath.isEmpty()) {
+                String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-                picPath = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
             }
 //            if (!extsion.equalsIgnoreCase("jpg") && !extsion.equalsIgnoreCase("png")) {
 //                model.addAttribute("error", "文件格式有误只能上传jpg或者png");
@@ -181,35 +181,33 @@ public class ProductServiceImpl implements ProductService {
 //            }
 
             try {
-                mFile.transferTo(new File(picPath));
+                picPath.transferTo(new File(Path));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        product.setFilePath(picPath);
-        int count = productDao.addProduct(product);
-        if (count > 1) {
-            return Message.success();
-        }else {
-            return Message.error();
-        }
+        product.setFilePath(Path);
+        int count = productDao.addfile(product);
+        int i = productDao.addProduct(product);
+        return Message.success();
     }
+
 
     @Override
     public Message searchProductByCategoryName(String categoryName) {
-        logger.info("ProductServiceImpl searchProductByCategoryName is start....categoryName:"+categoryName);
+        logger.info("ProductServiceImpl searchProductByCategoryName is start....categoryName:" + categoryName);
         List<Product> productList = new ArrayList<>();
-        logger.info("categoryService getThreeCategoryList is start....categoryName:"+categoryName);
+        logger.info("categoryService getThreeCategoryList is start....categoryName:" + categoryName);
         List<Category> categoryList = categoryService.getThreeCategoryList(categoryName);
-        logger.info("categoryService getThreeCategoryList is start....categoryName:"+categoryName+"result:"+categoryList);
-        for(Category category:categoryList){
-            logger.info("productDao getProductBythreeCategoryName is start....categoryName:"+category);
+        logger.info("categoryService getThreeCategoryList is start....categoryName:" + categoryName + "result:" + categoryList);
+        for (Category category : categoryList) {
+            logger.info("productDao getProductBythreeCategoryName is start....categoryName:" + category);
             List<Product> productBythreeCategoryName = productDao.getProductBythreeCategoryName(category.getName());
-            for(Product product:productBythreeCategoryName){
+            for (Product product : productBythreeCategoryName) {
                 product = replayUtil.encodingFilePath(product);
                 productList.add(product);
             }
-            logger.info("productDao getProductBythreeCategoryName is start....categoryName:"+category+"result:"+productBythreeCategoryName);
+            logger.info("productDao getProductBythreeCategoryName is start....categoryName:" + category + "result:" + productBythreeCategoryName);
         }
         return Message.success(productList);
     }
@@ -219,7 +217,7 @@ public class ProductServiceImpl implements ProductService {
         logger.info("ProductServiceImpl searchProductByCategoryName is start....");
         List<Product> productList = productDao.getProductByOrder();
         List<Product> products = new ArrayList<>();
-        for (Product product: productList){
+        for (Product product : productList) {
             product = replayUtil.encodingFilePath(product);
             products.add(product);
         }
@@ -229,10 +227,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Message getProductById(int id) {
-        logger.info("ProductServiceImpl getProductById is start....id:"+id);
+        logger.info("ProductServiceImpl getProductById is start....id:" + id);
         Product product = productDao.getProductById(id);
-        product = replayUtil.encodingFilePath(product);
-        if(product!=null){
+        if (product != null) {
+            product = replayUtil.encodingFilePath(product);
             return Message.success(product);
         }
         return Message.error("没有该产品！");
@@ -240,13 +238,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Message getSameFriCategoryProduct(int id) {
-        logger.info("ProductServiceImpl getSameFriCategoryProduct is start....id:"+id);
-        List<Product> products = new  ArrayList<>();
+        logger.info("ProductServiceImpl getSameFriCategoryProduct is start....id:" + id);
+        List<Product> products = new ArrayList<>();
         List<Product> productList = productDao.getSameFristCategoryProductByPid(id);
-        for(Product product:productList){
+        for (Product product : productList) {
             product = replayUtil.encodingFilePath(product);
             products.add(product);
         }
         return Message.success(products);
     }
+
 }

@@ -9,9 +9,12 @@ import com.kgc.service.ProductService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -103,13 +106,24 @@ public class ProductController {
 
     }
 
-//    @RequestMapping("/addProduct")
-//    public Message addProduct(Product product) {
-//        logger.info("ProductController addProduct is start.........");
-////        Message message = productService.getProductPageList(product);
-////        logger.info("ProductController addProduct is start.........Message" + message);
-//        return message;
-//
-//    }
+    @RequestMapping("/addProduct")
+    public Message addProduct(Product product, @RequestParam(value = "picPath") MultipartFile picPath, Model model) {
+        logger.info("ProductController addProduct is start.........");
+        Message message = productService.addProduct(product,picPath,model);
+        logger.info("ProductController addProduct is start.........Message" + message);
+        return message;
+
+    }
+    @RequestMapping("/delProduct")
+    public Message delProductById(int id) {
+        logger.info("ProductController addProduct is start.........");
+        Message message = productService.delProductById(id);
+        logger.info("ProductController addProduct is start.........Message" + message);
+        return message;
+
+    }
+
+
+
 
 }

@@ -18,4 +18,14 @@ public interface CategoryService {
      * 拿到某一级类下的三级类的集合
      */
     public  List<Category> getThreeCategoryList(String categoryName);
+
+    /**
+     * 拿一级类id 通过三级id
+     */
+    public Message getFristCategoryIdByThrid(int id);
+
+    /**
+     * 拿二级类id 通过三级id
+     */
+    public Message getSecondCategoryIdByThrid(int id);
 }

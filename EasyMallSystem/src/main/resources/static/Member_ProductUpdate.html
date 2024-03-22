@@ -249,7 +249,7 @@
         </div>
         <div class="m_right" id="m_right">
             <div style="width: 50px;height: 30px"></div>
-            <h2 style="font-weight: bolder">&nbsp;&nbsp;&nbsp;产品添加</h2>
+            <h2 style="font-weight: bolder">&nbsp;&nbsp;&nbsp;产品修改</h2>
             <div style="width: 50px;height: 30px"></div>
             <div style="width: 90%;height: 100%">
                 <el-form :model="product" :rules="rules" ref="product" id="product" label-width="100px" class="demo-ruleForm">
@@ -321,7 +321,7 @@
                                         v-model="product.createTime"
                                         type="datetime"
                                         placeholder="选择生产时间"
-                                        name="createTime"
+                                        name="creatTime"
                                 ></el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -340,13 +340,16 @@
                                 :on-remove="handleRemove"
                                 :multiple=false
                                 show-file-list
-                                name="picPath"
+                                name="filePath"
                         >
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <el-dialog :visible.sync="dialogVisible">
                             <img width="100%" :src="product.filePath" alt="产品图片">
                         </el-dialog>
+<!--                        <div>-->
+<!--                            <img width="200px" height="200px" :src='doImg(product.filePath)' alt="产品图片">-->
+<!--                        </div>-->
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm('product')">立即创建</el-button>
@@ -476,6 +479,7 @@
                 secondCategoryList: {},
                 secondValue: 0,
                 thridCategoryList: {},
+                thridValue: 0,
                 isDisabledThrid: false,
                 isDisabledSecond: false,
                 brandList:{},
@@ -510,33 +514,42 @@
             };
         },
         mounted() {
+            const Url = new URLSearchParams(window.location.search)
+            const id = Url.get("id");
+            const categoryLevelId = Url.get("categoryLevelId")
+            this.getProductById(id)
             this.getFristCategoryList()
             this.getBrandList()
+            this.getFristIdByThrid(id)
+            this.getSecondIdByThrid(id)
         },
         methods: {
             add(formdata){
-              axios.post('/addProduct',formdata).then((respones)=>{
-                  console.log(resp)
-                  if(respones.data.code=="200"){
-                      alert("添加成功！")
-                  }else {
-                      alert("添加失败！")
-                  }
-              })
+                axios.post('/addProduct',formdata).then((respones)=>{
+                    console.log(resp)
+                    if(respones.data.code=="200"){
+                        alert("添加成功！")
+                    }else {
+                        alert("添加失败！")
+                    }
+                })
             },
             submitForm(product) {
-               this.$refs[product].validate((valid)=>{
-                   if(valid){
-                       const formdata = new FormData(document.getElementById("product"))
-                       console.log(formdata)
-                       formdata.set("categoryLevelId",this.product.categoryLevelId)
-                       formdata.set("brandId",this.product.brandId)
-                       this.add(formdata)
-                   }else{
-                       console.log("error submit!!")
-                       return false;
-                   }
-               })
+                this.$refs[product].validate((valid)=>{
+                    if(valid){
+                        const formdata = new FormData(document.getElementById("product"))
+                        console.log(formdata)
+                        formdata.set("categoryLevelId",this.product.categoryLevelId)
+                        formdata.set("brandId",this.product.brandId)
+                        this.add(formdata)
+                    }else{
+                        console.log("error submit!!")
+                        return false;
+                    }
+                })
+            },
+            doImg(filePath) {
+                return "doImg?filePath=" + filePath
             },
             resetForm(product) {
                 this.$refs[product].resetFields();
@@ -546,8 +559,6 @@
                     console.log(respones)
                     this.fristCategoryList = respones.data.data.data
                 })
-                this.isDisabledSecond = true
-                this.isDisabledThrid = true
             },
             closeisDisbled(num) {
                 if (num == 1) {
@@ -575,12 +586,12 @@
                 this.getThridCategoryList(0)
                 this.closeisDisbled(num)
                 this.secondValue = 0
-                this.thridValue = 0
+                this.product.categoryLevelId = 0
             },
             blurSecond(num) {
                 this.getThridCategoryList(this.secondValue)
                 this.closeisDisbled(num)
-                this.thridValue = 0
+                this.product.categoryLevelId = 0
             },
             getSecondCategoryList(id) {
                 axios.get("/getCategorySecond", {
@@ -606,6 +617,48 @@
                 axios.get("/getBrandList").then((respones)=>{
                     console.log(respones)
                     this.brandList = respones.data.data
+                })
+            },
+            getProductById(id){
+                axios.get("/getProductById", {
+                    params: {
+                        id: id
+                    }
+                }).then((respones) => {
+                    console.log(respones)
+                    this.product.name = respones.data.data.name
+                    this.product.description = respones.data.data.description
+                    this.product.price = respones.data.data.price
+                    this.product.stock = respones.data.data.stock
+                    this.product.categoryLevelId = respones.data.data.categoryLevelId
+                    this.product.createTime = respones.data.data.createTime
+                    this.product.filePath = respones.data.data.filePath
+                    this.product.brandId = respones.data.data.brandId
+                    console.log(this.product)
+                })
+            },
+            getFristIdByThrid(id){
+                axios.get("/getFristIdByThrid",{
+                    params:{
+                        id:id
+                    }
+                }).then((respones)=>{
+                    console.log(respones)
+                    this.fristValue = respones.data.data
+                    this.getSecondCategoryList(this.fristValue)
+                })
+            },
+            getSecondIdByThrid(id){
+                axios.get("/getSecondIdByThrid",{
+                    params:{
+                        id:id
+                    }
+                }).then((respones)=>{
+                    console.log(respones)
+                    this.secondValue = respones.data.data
+                    this.getThridCategoryList(this.secondValue)
+                    console.log(this.product)
+
                 })
             },
             handleRemove(file) {

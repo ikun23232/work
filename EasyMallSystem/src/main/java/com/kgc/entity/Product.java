@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * @author: 欧洋宏
@@ -39,10 +40,12 @@ public class Product {
     @Field(type = FieldType.Integer)
     private Integer isDel;
     @Transient
-    private Date createTime;
+    private Timestamp createTime;
     @Field(type = FieldType.Text)
     private String filePath;
     @Field(type = FieldType.Text)
     private String brandName;
+    @Field(type = FieldType.Integer)
+    private Integer brandId;
 
 }

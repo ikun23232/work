@@ -48,12 +48,14 @@ public interface ProductService {
     public Message getProductPageList(int currentPageNo,int pageSize,String productName,int brandId);
 
     /**
-     * 分页显示产品
+     * 删除商品
      */
     public Message delProductById(int id);
 
     /**
      * 添加商品
      */
-    public Message addProduct(Product product, @RequestParam(value = "headPicPath") MultipartFile mFile, Model model);
+    public Message addProduct(Product product, @RequestParam(value = "picPath") MultipartFile picPath, Model model);
+
+
 }

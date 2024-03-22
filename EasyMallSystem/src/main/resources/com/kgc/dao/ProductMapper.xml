@@ -20,20 +20,28 @@
     </select>
 
     <select id="getProductById" resultType="Product">
-        select
-            easybuy_product.id,
-            easybuy_product.name,
-            description,
-            price,
-            stock,
-            categoryLevelId,
-            fileId,
-            easybuy_product.isDel,
-            easybuy_product.createTime,
-            filePath
-        from easybuy_product,easybuy_file
-        where easybuy_product.id = #{id}
-        and easybuy_file.productId = easybuy_product.id
+        SELECT p.id,
+               p.name,
+               description,
+               price,
+               stock,
+               categoryLevelId,
+               fileId,
+               p.isDel,
+               p.createTime,
+               filePath,
+               brandId,
+               b.name AS brandName
+        FROM easybuy_product p
+                 LEFT JOIN
+             easybuy_product_category c ON p.categoryLevelId = c.id
+                 LEFT JOIN
+             easybuy_file f ON f.id = p.fileId
+                 LEFT JOIN
+             easybuy_brand b ON b.id = p.brandId
+        WHERE p.isDel = 0
+          AND p.id = #{id}
+
     </select>
 
     <select id="getProductList" resultType="Product">
@@ -119,10 +127,11 @@
         limit 0,3
     </select>
 
-    <update id="delProductById">
-        update easybuy_product
-        set isDel = 1
-        where id = #{id}
+    <update id="delProductById" >
+        UPDATE easybuy_product p, easybuy_file f
+        SET isDel = 1 , isDelete = 1
+        WHERE p.fileId = f.id
+        and p.id = #{id}
     </update>
 
     <select id="getProductPageList" resultType="Product">
@@ -155,4 +164,27 @@
         </if>
         ORDER BY p.createTime DESC
     </select>
+
+    <update id="upfile">
+        update easybuy_file
+        set productId = #{id}
+        where id = #{fileId}
+    </update>
+
+    <update id="upProduct">
+        update easybuy_file
+        set productId = #{id}
+        where id = #{fileId}
+    </update>
+
+
+    <insert id="addProduct">
+        INSERT INTO easybuy_product (name, price, description, stock, categoryLevelId,fileId,createTime, brandId)
+        VALUES (#{name}, #{price}, #{description}, #{stock}, #{categoryLevelId},#{fileId},#{createTime}, #{brandId});
+    </insert>
+
+    <insert id="addfile" useGeneratedKeys="true" keyProperty="fileId">
+        INSERT INTO easybuy_file (filePath, userId, createTime)
+        VALUES (#{filePath},22,now());
+    </insert>
 </mapper>
