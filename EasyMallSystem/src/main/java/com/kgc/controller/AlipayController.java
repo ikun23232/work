@@ -19,7 +19,7 @@ import java.util.Map;
  * @Date: 2024/03/19/ 11:51
  * @Description
  */
-@Controller
+@Controller()
 public class AlipayController {
 
     private Logger logger = Logger.getLogger(AlipayController.class);

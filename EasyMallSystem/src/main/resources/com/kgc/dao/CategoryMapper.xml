@@ -47,39 +47,60 @@
                 where `name` = #{categoryName}))
     </select>
 
-    <select id="getFristCategoryIdByThrid" resultType="Category">
-        SELECT id,
-               name,
-               parentId,
-               type,
-               iconClass,
-               isDel,
-               createTime
-        FROM easybuy_product_category
-        WHERE id
-                  IN
-              (SELECT parentId
-               FROM easybuy_product_category
-               WHERE id
-                         IN
-                     (SELECT categoryLevelId
-                      FROM easybuy_product
-                      WHERE id = #{id}))
+    <select id="getCategoryListByALL" resultType="Category">
+        SELECT c1.*, c2.name categoryName
+        FROM easybuy_product_category c1
+                 LEFT JOIN easybuy_product_category c2 ON c2.id = c1.parentId
+        <where>
+            <if test="categoryName != null and categoryName != ''">
+                c1.name like concat('%',#{categoryName},'%')
+            </if>
+            and c1.isDel=0
+        </where>
+
+        ORDER BY c1.type
     </select>
 
-    <select id="getSecondCategoryIdByThrid" resultType="Category">
-        SELECT id,
-               name,
-               parentId,
-               type,
-               iconClass,
-               isDel,
-               createTime
-        FROM easybuy_product_category
-        WHERE id
-                  IN
-              (SELECT categoryLevelId
-               FROM easybuy_product
-               WHERE id = #{id})
+
+<select id="CheckCategoryName" resultType="Category">
+    select id, name, parentId, type, iconClass, isDel, createTime from easybuy_product_category where name=#{categoryName}
+</select>
+
+    <select id="CheckCategoryProductByid" resultType="int">
+        SELECT count(1) FROM easybuy_product p,easybuy_product_category c
+        WHERE p.categoryLevelId=c.id
+          AND c.id=#{id}
+          AND p.isDel=0
     </select>
+    <select id="CheckCategoryProductByType" resultType="Category">
+        select id, name, parentId, type, iconClass, isDel, createTime from easybuy_product_category where type=#{type} and isDel=0
+    </select>
+    <update id="delCategoryById">
+        update easybuy_product_category set isDel=1  where id=#{id}
+    </update>
+    <update id="updateCategoryById">
+        update easybuy_product_category set name=#{name},parentId=#{parentId},type=#{type} where id=#{id}
+    </update>
+    <insert id="addCategoryById">
+        insert into easybuy_product_category(name, parentId, type, isDel, createTime) VALUES (#{name},#{parentId},#{type},0,NOW());
+    </insert>
+    <select id="CheckChidrenCategoryByid" resultType="Category">
+        SELECT c2.* FROM easybuy_product_category c1,easybuy_product_category c2
+        WHERE c1.id=c2.parentId AND c1.id=#{id}
+    </select>
+    <select id="getCategoryListall" resultType="Category">
+        SELECT c1.*, c2.name categoryName
+        FROM easybuy_product_category c1
+        LEFT JOIN easybuy_product_category c2 ON c2.id = c1.parentId
+        ORDER BY c1.type
+    </select>
+
+    <select id="getTypeById" resultType="int">
+        select  type from easybuy_product_category where id=#{id}
+    </select>
+
+    <select id="getCategoryById" resultType="Category">
+        select id, name, parentId, type, iconClass, isDel, createTime from easybuy_product_category where id=#{id}
+    </select>
+
 </mapper>

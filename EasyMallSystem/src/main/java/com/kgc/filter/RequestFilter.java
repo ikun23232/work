@@ -1,69 +1,79 @@
-//package com.kgc.filter;
-//
-//import org.apache.log4j.Logger;
-//
-//import javax.servlet.*;
-//import javax.servlet.http.HttpServletRequest;
-//import java.io.IOException;
-//
-///**
-// * @author: 欧洋宏
-// * @create: 2024-03-18 22:59
-// **/
-//public class RequestFilter implements Filter {
-//    private Logger logger = Logger.getLogger(getClass());
-//    @Autowired
-//    private SignAuthProperties signAuthProperties;
-//
-//    @Override
-//    public void init(FilterConfig filterConfig) throws ServletException {
-//        logger.info("初始化 SignAuthFilter...");
-//    }
-//
-//    @Override
-//    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-//        HttpServletRequest request = (HttpServletRequest) servletRequest;
-//        // 过滤不需要签名验证的地址
-//        String requestUri = request.getRequestURI();
-//        for (String ignoreUri : signAuthProperties.getIgnoreUri()) {
-//            if (requestUri.contains(ignoreUri)) {
-//                log.info("当前URI地址：" + requestUri + "，不需要签名校验！");
-//                chain.doFilter(request, response);
-//                return;
-//            }
-//        }
-//
-//        // 获取签名和时间戳
-//        String sign = httpRequest.getHeader("Sign");
-//        String timestampStr = httpRequest.getHeader("Timestamp");
-//        if (StringUtils.isEmpty(sign)) {
-//            responseFail("签名不能为空", response);
-//            return;
-//        }
-//        if (StringUtils.isEmpty(timestampStr)) {
-//            responseFail("时间戳不能为空", response);
-//            return;
-//        }
-//
-//        // 重放时间限制
-//        long timestamp = Long.parseLong(timestampStr);
-//        if (System.currentTimeMillis() - timestamp >= signAuthProperties.getTimeout()*1000) {
-//            responseFail("签名已过期", response);
-//            return;
-//        }
-//
-//        // 校验签名
-//        Map<String, String[]> parameterMap = httpRequest.getParameterMap();
-//        if (SignUtils.verifySign(parameterMap, sign, timestamp)) {
-//            chain.doFilter(httpRequest, response);
-//        } else {
-//            responseFail("签名校验失败", response);
-//        }
-//
-//    }
-//
-//    @Override
-//    public void destroy() {
-//        logger.info("SignAuthFilter.....销毁了");
-//    }
-//}
+package com.kgc.filter;
+
+import com.kgc.utils.DateUtil;
+import com.kgc.utils.ReplayUtil;
+import com.sun.org.apache.bcel.internal.generic.I2F;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Date;
+
+/**
+ * @author: 欧洋宏
+ * @create: 2024-03-18 22:59
+ * 解决重放攻击
+ **/
+//@Component
+@WebFilter(urlPatterns = {"/*"})
+public class RequestFilter implements Filter {
+    private Logger logger = Logger.getLogger(getClass());
+
+    @Autowired
+    private ReplayUtil replayUtil;
+
+    private String[] urlStr = {"index.html", "/Login.html", "/js", "/images", "/css", "/commonJS", "/getUUID"};
+
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        logger.info("初始化 SignAuthFilter...");
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String timestamp = request.getHeader("timestamp");
+        String random = request.getHeader("signature");
+        String requestUri = request.getRequestURI();
+        for (int i = 0; i < urlStr.length; i++) {
+            if (requestUri.contains(urlStr[i])) {
+                filterChain.doFilter(request, servletResponse);
+                return;
+            }
+        }
+        if (StringUtils.isEmpty(timestamp)) {
+            logger.info("无时间戳");
+            return;
+        }
+        if (StringUtils.isEmpty(random)) {
+            logger.info("无签名");
+            return;
+        }
+        //验签
+        String randomTemp = replayUtil.checkRandom(random);
+        if (randomTemp == null) {
+            logger.info("验签不通过");
+            return;
+        }
+        boolean falg = DateUtil.checkReplaytimestamp(timestamp);
+        if (!falg){
+            logger.info("时间戳不通过");
+            return;
+        }
+        //验签通过删uuid
+        replayUtil.removeRandom(random);
+        filterChain.doFilter(request, servletResponse);
+
+    }
+
+    @Override
+    public void destroy() {
+        logger.info("SignAuthFilter.....销毁了");
+    }
+}

@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
             return Message.error("用户名或密码错误");
         }
         String userString = JSON.toJSONString(user);
-        stringRedisTemplate.opsForValue().set(user.getLoginName(),userString);
+//        stringRedisTemplate.opsForValue().set("userSession",userString);
         return Message.success("登录成功！");
     }
 

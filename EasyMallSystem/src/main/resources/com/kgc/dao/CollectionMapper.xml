@@ -39,7 +39,8 @@
                p.description,
                p.price,
                p.categoryLevelId,
-               f.filePath
+               f.filePath,
+               c.quantity
         FROM easybuy_product p,
              easybuy_collections c,
              easybuy_user u,
@@ -61,7 +62,15 @@
         where productId = #{productId}
     </update>
     <insert id="addProductInCarById">
-        insert into easybuy_collections(userId, productId, isDel, createTime, quantity) values ('22',#{productId},0,NOW(),#{quantity})
+        insert into easybuy_collections(userId, productId, isDel, createTime, quantity)
+        values ('22', #{productId}, 0, NOW(), #{quantity})
     </insert>
+    <select id="getProductAndQuantityById" resultType="Product">
+        SELECT p.*,c.quantity,f.filePath FROM easybuy_collections c,easybuy_product p,easybuy_file f WHERE
+        c.productId=p.id AND f.id=p.fileId AND c.userId=22
+        <foreach collection="ids" item="id" open="AND p.id IN (" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
 
 </mapper>
