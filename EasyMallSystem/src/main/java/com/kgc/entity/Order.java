@@ -9,19 +9,20 @@ import java.sql.Date;
 
 /**
  * @author: 欧洋宏
- * @create: 2024-03-18 14:47
+ * @create: 2024-03-20 10:23
+ * 订单类
  **/
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class Order {
     private Integer id;
-    private String name;
-    private Integer parentId;
-    private String categoryName;
-    private Integer type;
-    private Integer isDel;
+    private Integer userId;
+    private String loginName;
+    private String userAddress;
     private Date createTime;
-
+    private Double cost;
+    private String seriaNumber;
+    private Integer isDel;
 }

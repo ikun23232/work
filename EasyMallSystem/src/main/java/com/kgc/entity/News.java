@@ -9,19 +9,15 @@ import java.sql.Date;
 
 /**
  * @author: 欧洋宏
- * @create: 2024-03-18 14:47
+ * @create: 2024-03-18 13:51
  **/
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class News {
     private Integer id;
-    private String name;
-    private Integer parentId;
-    private String categoryName;
-    private Integer type;
-    private Integer isDel;
+    private String title;
+    private String content;
     private Date createTime;
-
 }

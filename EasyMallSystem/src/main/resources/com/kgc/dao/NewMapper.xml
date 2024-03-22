@@ -1,7 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kgc.dao.NewsDao">
-    <select id="getNewList" resultType="New">
-        select id, title, content, createTime from easybuy_news order by createTime DESC LIMIT 5
+    <select id="getNewList" resultType="News">
+        select id, title, content, createTime
+        from easybuy_news
+        order by createTime DESC
+        LIMIT 5
     </select>
+    <insert id="addNewList">
+        insert into easybuy_news (title, content, createTime, isDel)
+        values (#{title}, #{content}, NOW(), 0);
+    </insert>
+    <select id="getNewListByPage" resultType="News">
+        select id, title, content, createTime, isDel from easybuy_news
+                                                     where isDel=0
+
+            <if test="title!=null and title!=''">
+               and title like concat('%',#{title},'%')
+            </if>
+
+
+
+    </select>
+
+    <update id="updateNew">
+        update easybuy_news
+        set title=#{title},
+            content=#{content}
+        where id = #{id}
+    </update>
+    <select id="getNewById" resultType="News">
+        select id, title, content, createTime, isDel
+        from easybuy_news
+        where id = #{id}
+    </select>
+
+    <update id="delNew">
+        update easybuy_news
+        set isDel=1
+        WHERE id = #{id}
+    </update>
+
 </mapper>

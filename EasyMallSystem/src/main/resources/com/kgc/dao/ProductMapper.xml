@@ -77,4 +77,10 @@
           AND fileId = easybuy_file.id
         LIMIT 0,4
     </select>
+    <select id="getProductStockById" resultType="int">
+        select stock from easybuy_product where id=#{id}
+    </select>
+    <update id="updateProductStockById" >
+        update easybuy_product set stock=stock-#{delStock}  where id=#{id}
+    </update>
 </mapper>

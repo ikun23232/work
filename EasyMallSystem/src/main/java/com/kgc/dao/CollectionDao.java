@@ -12,9 +12,14 @@ public interface CollectionDao {
 
     public int delProductInCarById(int productId);
 
-    public int UpdateProductInCarById(@Param("productId") int productId,@Param("quantity") int quantity);
-
+    public int UpdateProductInCarById(@Param("productId") int productId, @Param("quantity") int quantity);
 
 
     public int addProductInCarById(@Param("productId") int productId, @Param("quantity") int quantity);
+
+    public List<Product>  getProductAndQuantityById(@Param("ids")int[] id);
+
+
+
+
 }

@@ -3,6 +3,7 @@ package com.kgc.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -10,6 +11,7 @@ import java.util.*;
  * @author: 欧洋宏
  * @create: 2024-03-18 22:50
  **/
+@Component
 public class ReplayUtil {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;

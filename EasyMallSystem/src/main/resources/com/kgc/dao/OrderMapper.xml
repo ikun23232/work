@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.dao.OrderDao">
+    <select id="getOrderProductByUserId" resultType="Product">
+        SELECT p.id,
+               p.name,
+               p.stock,
+               p.description,
+               p.price,
+               p.categoryLevelId,
+               f.filePath,
+               p.stock,
+               od.cost
+        FROM easybuy_product p,
+             easybuy_order_detail od,
+             easybuy_order o,
+             easybuy_file f
+        WHERE o.id = od.orderId
+          AND p.id = od.productId
+          AND f.id = p.fileId
+          AND o.userId = 22
+    </select>
+    <insert id="addOrderProductByList" parameterType="Order">
+        <selectKey resultType="int" keyProperty="id" order="BEFORE">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into easybuy_order(userId, loginName, userAddress, createTime, cost)
+        values (#{id}, #{loginName}, #{userAddress}, NOW(), cost)
+    </insert>
+    <insert id="addOrder" keyProperty="id" useGeneratedKeys="true">
+        insert into easybuy_order(userId, loginName, userAddress, createTime, cost,isDel)
+        values (#{userId}, #{loginName}, #{userAddress}, NOW(), #{cost}, 0);
+    </insert>
+    <insert id="addOrderProductBytwo">
+        insert into easybuy_order_detail(orderId, productId, quantity, cost, createTime)
+        values (#{orderId}, #{productId}, #{quantity}, #{cost}, NOW());
+    </insert>
+</mapper>

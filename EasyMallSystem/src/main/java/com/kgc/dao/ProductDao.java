@@ -1,6 +1,7 @@
 package com.kgc.dao;
 
 import com.kgc.entity.Product;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,4 +28,13 @@ public interface ProductDao {
      *通过销量查找product
      */
     public List<Product> getProductByOrder();
+
+    /**
+     * 根据产品id查看库存
+     * @return
+     */
+   public int getProductStockById(int id);
+
+
+    public int updateProductStockById(@Param("delStock")int delStock,@Param("id") int id);
 }

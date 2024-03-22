@@ -1,8 +1,12 @@
 package com.kgc.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.kgc.dao.CategoryDao;
 import com.kgc.entity.Category;
 import com.kgc.entity.Message;
+import com.kgc.entity.Page;
+import com.kgc.entity.User;
 import com.kgc.service.CategoryService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +56,101 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categoryList = categoryDao.getThreeCategoryByCategoryName(categoryName);
         logger.info("CategoryServiceImpl getThreeCategoryByCategoryName is start....categoryList"+categoryList);
         return categoryList;
+    }
+
+    @Override
+    public Message getCategoryListByALL(String name, Page page) {
+
+        PageHelper.startPage(page.getCurrentPageNo(),page.getPageSize());
+        List<Category> categoryList = categoryDao.getCategoryListByALL(name);
+        PageInfo<Category> pageInfo = new PageInfo<>(categoryList);
+        return Message.success(pageInfo);
+    }
+
+    @Override
+    public Message CheckCategoryName(String categoryName) {
+        Category category = categoryDao.CheckCategoryName(categoryName);
+        if (category!=null){
+            return Message.error("该分类名已经存在");
+        }
+        return Message.success();
+    }
+
+    @Override
+    public Message CheckCategoryProductByid(int id) {
+        int row = categoryDao.CheckCategoryProductByid(id);
+        if (row>0){
+            return Message.error("该分类名下存在商品");
+        }
+        return Message.success();
+    }
+
+    @Override
+    public Message CheckCategoryProductByType(int type) {
+        List<Category> categories = categoryDao.CheckCategoryProductByType(type);
+        return Message.success(categories);
+
+    }
+
+    @Override
+    public Message delCategoryById(int id) {
+        List<Category> categories = categoryDao.CheckChidrenCategoryByid(id);
+        if (categories.size()>0){
+            return Message.error("该分类下还有子分类添加失败!");
+        }
+        //判断该分类里面有无商品
+        int i = categoryDao.CheckCategoryProductByid(id);
+        if (i>0){
+            return Message.error("该分类下还有商品添加失败!");
+        }
+        int update = categoryDao.delCategoryById(id);
+        if (update>0){
+            return Message.success();
+        }
+        return Message.error("删除失败");
+    }
+
+    @Override
+    public Message updateCategoryById(Category category) {
+        //重名校验
+        Category category1 = categoryDao.CheckCategoryName(category.getCategoryName());
+        if (category1!=null&&!category1.getCategoryName().equals(category.getCategoryName())){
+            return Message.error("有重复的分类名,更新失败");
+        }
+        int update = categoryDao.updateCategoryById(category);
+
+        if (update>0){
+            return Message.success();
+        }
+        return Message.error("更新失败");
+    }
+
+    @Override
+    public Message addCategoryById(Category category) {
+
+        if (category.getParentId()==0){
+    category.setType(1);
+    }else {
+    int type= categoryDao.getTypeById(category.getParentId());
+    category.setType(type+1);
+}
+
+        int update = categoryDao.addCategoryById(category);
+        if (update>0){
+            return Message.success();
+        }
+        return Message.error("添加失败");
+    }
+
+    @Override
+    public Message getCategoryListall() {
+        List<Category> listall = categoryDao.getCategoryListall();
+        return Message.success(listall);
+    }
+
+    @Override
+    public Message getCategoryByid(int id) {
+        Category categoryById = categoryDao.getCategoryById(id);
+        return Message.success(categoryById);
     }
 }

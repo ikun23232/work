@@ -5,19 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.sql.Date;
-
 /**
  * @author: 欧洋宏
- * @create: 2024-03-18 13:51
+ * @create: 2024-03-21 22:39
  **/
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class New {
-    private Integer id;
-    private String title;
-    private String content;
-    private Date createTime;
+public class TreeCategory {
+    private Integer value;
+    private String label;
+    private Object[] change;
+
 }

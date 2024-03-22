@@ -2,6 +2,7 @@ package com.kgc.service;
 
 import com.kgc.entity.Category;
 import com.kgc.entity.Message;
+import com.kgc.entity.Page;
 
 import java.util.List;
 
@@ -18,4 +19,57 @@ public interface CategoryService {
      * 拿到某一级类下的三级类的集合
      */
     public  List<Category> getThreeCategoryList(String categoryName);
+
+    /**
+     *返回指定分类名的分页查询
+     * @param name
+     * @return
+     */
+    public Message getCategoryListByALL(String name, Page page);
+
+
+    /**
+     * 检查分类名不能有冲突
+     * @param categoryName
+     * @return
+     */
+    public  Message CheckCategoryName(String categoryName);
+
+    /**
+     * 检查指定分类下是否有其他产品
+     * @param id
+     * @return
+     */
+    public  Message CheckCategoryProductByid(int id);
+    /**
+     * 返回指定类型下的分类集合
+     * @param type
+     * @return
+     */
+    public  Message CheckCategoryProductByType(int type);
+
+
+    /**
+     * 删除指定id下的分类
+     * @param id
+     * @return
+     */
+    public  Message delCategoryById(int id);
+    /**
+     * 修改指定id下的分类
+     * @param category
+     * @return
+     */
+    public  Message updateCategoryById(Category category);
+    /**
+     * 增加分类
+     * @param category
+     * @return
+     */
+    public Message addCategoryById(Category category);
+
+    public Message getCategoryListall();
+
+    public Message getCategoryByid(int id);
+
 }

@@ -29,11 +29,11 @@
     
 	<script type="text/javascript" src="js/lrscroll_1.js"></script>
 
-    <script type="text/javascript" src="/js/axios.js"></script>
+
     <script type="text/javascript" src="/js/vue.js"></script>
     
     
-<title>尤洪</title>
+<title>尤洪1</title>
 </head>
 <body>  
 <!--Begin Header Begin-->
@@ -43,7 +43,7 @@
 <div class="soubg">
 	<div class="sou">
         <span class="fr">
-        	<span class="fl">你好，请<a href="Login.html">登录</a>&nbsp; <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp; </span>
+        	<span class="fl">你好2222222啊啊啊222，请<a href="Login.html">登录</a>&nbsp; <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp; </span>
             <span class="fl">|&nbsp;关注我们：</span>
             <span class="s_sh"><a href="#" class="sh1">新浪</a><a href="#" class="sh2">微信</a></span>
             <span class="fr">|&nbsp;<a href="#">手机版&nbsp;<img src="images/s_tel.png" align="absmiddle" /></a></span>
@@ -114,7 +114,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el:"#log_bg",
         data(){
@@ -124,7 +125,7 @@
             }
         },
         methods: {
-            loginTo() {
+            async loginTo() {
                 if(this.loginName==''){
                     alert("用户名不能为空！")
                     return;
@@ -133,22 +134,30 @@
                     alert("密码不能为空！")
                     return;
                 }
-                axios.get("/loginto", {
-                    params: {
-                        loginName: this.loginName,
-                        password:this.password
-                    }
-                }).then((respose) => {
-                    console.log(respose);
+              //   const {data} = await request.get('getUUID')
+              // let resp= request.get("/loginto", {
+              //       header: {
+              //          'signature' : data
+              //       },
+              //       params: {
+              //           loginName: this.loginName,
+              //           password:this.password
+              //       }
+              //   })
+                let resp= request.get("/loginto", {
+                      params: {
+                          loginName: this.loginName,
+                          password:this.password
+                      }
+                  })
+                    console.log(resp);
                     if(respose.data.code=="201"){
                         alert(respose.data.message);
                     }else {
                         alert(respose.data.message);
-                        window.location.href="index.html"
+                        window.location.href = "index.html"
+
                     }
-                }).catch((err) => {
-                    console.log("没成功");
-                });
             },
             toUpdatePassword(){
                 window.location.href="updatePassword.html";

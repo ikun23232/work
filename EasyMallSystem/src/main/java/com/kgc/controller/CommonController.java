@@ -1,8 +1,11 @@
 package com.kgc.controller;
 
+import com.kgc.utils.ReplayUtil;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletOutputStream;
@@ -18,6 +21,18 @@ import java.net.URLDecoder;
 @Controller
 public class CommonController {
     private Logger logger=Logger.getLogger(getClass());
+
+    @Autowired
+    private ReplayUtil replayUtil;
+
+    @RequestMapping("/getUUID")
+    @ResponseBody
+    public String getUUID(){
+        replayUtil.checkRandom("");
+        String random = replayUtil.getRandom();
+        logger.info(random);
+        return random;
+    }
     @RequestMapping("/doImg")
     public void doImg(String filePath, HttpServletResponse response) {
         logger.info("UserController doImg is start...filePath" + filePath);
