@@ -56,7 +56,8 @@
                 LEFT JOIN
             easybuy_file f ON f.id = p.fileId
                 LEFT JOIN
-            easybuy_brand b ON b.id = p.brandId;
+            easybuy_brand b ON b.id = p.brandId
+        ORDER BY p.createTime DESC
     </select>
     <select id="getProductByOrder" resultType="Product">
         SELECT 	  easybuy_product.id,
@@ -76,5 +77,82 @@
                GROUP BY productId)
           AND fileId = easybuy_file.id
         LIMIT 0,4
+    </select>
+
+    <select id="getSameFristCategoryProductByPid" resultType="Product">
+        SELECT p.id,
+               p.name,
+               description,
+               price,
+               stock,
+               categoryLevelId,
+               fileId,
+               p.isDel,
+               p.createTime,
+               c.name,
+               parentId,
+               type,
+               filePath
+        FROM easybuy_product p,
+             easybuy_file f,
+             easybuy_product_category c
+        WHERE p.id = f.productId
+          and p.categoryLevelId = c.id
+          and p.isDel = 0
+          AND parentId
+            IN
+              (SELECT id
+               FROM easybuy_product_category
+               WHERE parentId
+                         IN
+                     (SELECT parentId
+                      FROM easybuy_product_category c
+                      WHERE id
+                                IN
+                            (SELECT parentId
+                             FROM easybuy_product_category c
+                             WHERE id
+                                       IN
+                                   (SELECT p.categoryLevelId
+                                    FROM easybuy_product p
+                                    WHERE p.id = #{pid}))))
+        limit 0,3
+    </select>
+
+    <update id="delProductById">
+        update easybuy_product
+        set isDel = 1
+        where id = #{id}
+    </update>
+
+    <select id="getProductPageList" resultType="Product">
+        SELECT
+            p.id,
+            p.name,
+            description,
+            price,
+            stock,
+            categoryLevelId,
+            fileId,
+            p.isDel,
+            p.createTime,
+            filePath,
+            b.name AS brandName
+        FROM
+            easybuy_product p
+                LEFT JOIN
+            easybuy_product_category c ON p.categoryLevelId = c.id
+                LEFT JOIN
+            easybuy_file f ON f.id = p.fileId
+                LEFT JOIN
+            easybuy_brand b ON b.id = p.brandId
+        WHERE p.isDel = 0
+        <if test="productName!=null and productName!=''">
+            and p.name like CONCAT('%',#{productName},'%')
+        </if>
+        <if test="brandId>0">
+            and p.brandId = #{brandId}
+        </if>
+        ORDER BY p.createTime DESC
     </select>
 </mapper>

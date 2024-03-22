@@ -1,15 +1,20 @@
 package com.kgc.utils;
 
+import com.kgc.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
  * @author: 欧洋宏
  * @create: 2024-03-18 22:50
  **/
+@Component
 public class ReplayUtil {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -79,5 +84,19 @@ public class ReplayUtil {
         stringRedisTemplate.delete(random);
         useRandomMap.remove(random);
         createOneUUIDToRedis();
+    }
+
+    /**
+     * 编码图片地址
+     */
+    public Product encodingFilePath(Product product){
+        String picPath = null;
+        try {
+            picPath = URLEncoder.encode(product.getFilePath(),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        product.setFilePath(picPath);
+        return product;
     }
 }

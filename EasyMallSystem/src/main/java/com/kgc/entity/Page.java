@@ -38,7 +38,6 @@ public class Page {
             totalPageCount=totalCount/pageSize;
         }else {
             totalPageCount=(totalCount/pageSize)+1;
-
         }
     }
 

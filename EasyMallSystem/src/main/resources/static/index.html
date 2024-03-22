@@ -534,7 +534,7 @@
                 <td>面值</td>
                 <td>
                     <select name="city"  v-model="phonePay">
-                        <option value="100">100元</option>
+                        <option value="100" selected="selected">100元</option>
                         <option value="50">50元</option>
                         <option value="30">30元</option>
                         <option value="20">20元</option>
@@ -1321,7 +1321,18 @@
                 })
             },
             toProductinit(id){
-                window.location.href="Product.html?id="+id
+                axios.get("/addHistory",{
+                    params:{
+                        productId:id
+                    }
+                }).then((respones)=>{
+                    console.log(respones)
+                    if(respones.data.code=="201"){
+                        alert("访问失败！")
+                    }else {
+                        window.location.href="Product.html?id="+id
+                    }
+                })
             }
 
         },

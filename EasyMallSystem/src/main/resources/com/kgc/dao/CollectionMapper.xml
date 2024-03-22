@@ -48,7 +48,7 @@
           AND p.id = c.productId
           AND f.id = p.fileId
           AND u.id = #{id}
-          AND isDel = 0
+          AND c.isDel = 0
     </select>
     <update id="delProductInCarById">
         update easybuy_collections

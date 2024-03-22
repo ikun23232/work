@@ -86,5 +86,30 @@ public class ProductController {
         return message;
     }
 
+    @RequestMapping("/getSameFriCategoryProduct")
+    public Message getSameFriCategoryProduct(int id){
+        logger.info("ProductController getSameFriCategoryProduct is start......");
+        Message message = productService.getSameFriCategoryProduct(id);
+        logger.info("ProductController getSameFriCategoryProduct is start......result"+message);
+        return message;
+    }
+
+    @RequestMapping("/getProductPageList")
+    public Message getProductPageList(int currentPageNo,String productName,int brandId) {
+        logger.info("ProductController getProductPageList is start.........");
+        Message productListAll = productService.getProductPageList(currentPageNo,8,productName,brandId);
+        logger.info("ProductController getProductPageList is start.........Message" + productListAll);
+        return productListAll;
+
+    }
+
+//    @RequestMapping("/addProduct")
+//    public Message addProduct(Product product) {
+//        logger.info("ProductController addProduct is start.........");
+////        Message message = productService.getProductPageList(product);
+////        logger.info("ProductController addProduct is start.........Message" + message);
+//        return message;
+//
+//    }
 
 }
