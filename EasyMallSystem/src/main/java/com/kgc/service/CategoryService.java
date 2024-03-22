@@ -72,4 +72,14 @@ public interface CategoryService {
 
     public Message getCategoryByid(int id);
 
+
+    /**
+     * 拿一级类id 通过三级id
+     */
+    public Message getFristCategoryIdByThrid(int id);
+
+    /**
+     * 拿二级类id 通过三级id
+     */
+    public Message getSecondCategoryIdByThrid(int id);
 }

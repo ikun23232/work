@@ -79,4 +79,14 @@ public interface CategoryDao {
     public Category getCategoryList(int type);
 
 
+
+    /**
+     * 通过三级类Id找二级类Id
+     */
+    public Category getSecondCategoryIdByThrid(int id);
+
+    /**
+     * 通过三级类Id找一级类id
+     */
+    public Category getFristCategoryIdByThrid(int id);
 }

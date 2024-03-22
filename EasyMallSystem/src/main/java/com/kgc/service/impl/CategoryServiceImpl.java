@@ -153,4 +153,18 @@ public class CategoryServiceImpl implements CategoryService {
         Category categoryById = categoryDao.getCategoryById(id);
         return Message.success(categoryById);
     }
+
+    @Override
+    public Message getFristCategoryIdByThrid(int id) {
+        logger.info("CategoryServiceImpl getFristCategoryIdByThrid is start....");
+        Category category = categoryDao.getFristCategoryIdByThrid(id);
+        return Message.success(category.getParentId());
+    }
+
+    @Override
+    public Message getSecondCategoryIdByThrid(int id) {
+        logger.info("CategoryServiceImpl getSecondCategoryIdByThrid is start....");
+        Category category = categoryDao.getSecondCategoryIdByThrid(id);
+        return Message.success(category.getParentId());
+    }
 }
