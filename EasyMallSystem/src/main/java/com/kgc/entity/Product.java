@@ -40,7 +40,7 @@ public class Product {
     @Field(type = FieldType.Integer)
     private Integer isDel;
     @Transient
-    private String createTime;
+    private Timestamp createTime;
     @Field(type = FieldType.Text)
     //增加的
     private String filePath;
@@ -50,5 +50,7 @@ public class Product {
     private Integer quantity;
     @Field(type = FieldType.Double)
     private Double cost;
+    @Field(type = FieldType.Integer)
+    private Integer brandId;
 
 }

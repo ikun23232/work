@@ -120,4 +120,21 @@ public class CategoryController {
 
 
 
+    @RequestMapping("getFristIdByThrid")
+    public Message getFristIdByThrid(int id) {
+        logger.info("CategoryServiceImpl getFristCategoryIdByThrid is start....");
+        Message message = categoryService.getFristCategoryIdByThrid(id);
+        logger.info("CategoryServiceImpl getFristCategoryIdByThrid is start....message" + message);
+        return message;
+    }
+
+    @RequestMapping("getSecondIdByThrid")
+    public Message getSecondIdByThrid(int id) {
+        logger.info("CategoryServiceImpl getSecondCategoryIdByThrid is start....");
+        Message message = categoryService.getSecondCategoryIdByThrid(id);
+        logger.info("CategoryServiceImpl getSecondCategoryIdByThrid is start....message" + message);
+        return message;
+    }
+
+
 }

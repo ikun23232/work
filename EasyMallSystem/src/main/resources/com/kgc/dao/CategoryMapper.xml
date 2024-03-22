@@ -103,4 +103,40 @@
         select id, name, parentId, type, iconClass, isDel, createTime from easybuy_product_category where id=#{id}
     </select>
 
+
+    <select id="getFristCategoryIdByThrid" resultType="Category">
+        SELECT id,
+               name,
+               parentId,
+               type,
+               iconClass,
+               isDel,
+               createTime
+        FROM easybuy_product_category
+        WHERE id
+                  IN
+              (SELECT parentId
+               FROM easybuy_product_category
+               WHERE id
+                         IN
+                     (SELECT categoryLevelId
+                      FROM easybuy_product
+                      WHERE id = #{id}))
+    </select>
+
+    <select id="getSecondCategoryIdByThrid" resultType="Category">
+        SELECT id,
+               name,
+               parentId,
+               type,
+               iconClass,
+               isDel,
+               createTime
+        FROM easybuy_product_category
+        WHERE id
+                  IN
+              (SELECT categoryLevelId
+               FROM easybuy_product
+               WHERE id = #{id})
+    </select>
 </mapper>

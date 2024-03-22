@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.dao.HistoryDao">
+    <select id="getHistoryListById" resultType="Product">
+        SELECT p.id,
+               p.`name`,
+               description,
+               price,
+               stock,
+               categoryLevelId,
+               fileId,
+               p.isDel,
+               h.createTime,
+               brandId,
+               filePath
+        FROM easybuy_product p,
+             easybuy_file f,(SELECT productId,createTime
+                             FROM easybuy_history
+                             where userId = #{userId}
+                               AND isDel = 0) h
+        WHERE p.fileId = f.id
+          AND h.productId = p.id
+        ORDER BY h.createTime DESC
+        limit 0,5
+    </select>
+    <insert id="addHistoryById">
+        insert into easybuy_history(productId,userId,createTime)
+        value (#{pid},#{userId},now())
+    </insert>
+    <update id="delHistoryById">
+        update easybuy_history
+        set isDel = 1
+        where id = #{id}
+    </update>
+    <select id="getHistoryByPidUserId" resultType="History">
+        SELECT id,
+               userId,
+               productId,
+               isDel,
+               createTime
+        FROM easybuy_history
+        WHERE productId = #{pid}
+          AND userId = #{userId}
+        and isDel = 0
+    </select>
+
+</mapper>
