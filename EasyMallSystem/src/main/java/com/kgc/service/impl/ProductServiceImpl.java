@@ -169,8 +169,10 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
             }
+
 //            if (!extsion.equalsIgnoreCase("jpg") && !extsion.equalsIgnoreCase("png")) {
 //                model.addAttribute("error", "文件格式有误只能上传jpg或者png");
 //                return "regsiter";
@@ -190,7 +192,8 @@ public class ProductServiceImpl implements ProductService {
         int count = productDao.addfile(product);
         int i = productDao.addProduct(product);
         return Message.success();
-    }
+        }
+
 
 
     @Override
