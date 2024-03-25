@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.dao.ConcernDao">
+    <select id="getConcernPageListES" resultType="Concern">
+        SELECT
+            id,
+            userId,
+            productId,
+            createTime,
+            isDel
+        FROM easybuy_concern
+        WHERE userId = #{userId}
+    </select>
+
+    <select id="getConcernPageList" resultType="Product">
+        SELECT c.id         AS id,
+               c.createTime AS createTime,
+               c.isDel      AS isDel,
+               p.`name`,
+               description,
+               price,
+               stock,
+               categoryLevelId,
+               filePath,
+               b.`name`     AS brandName
+        FROM easybuy_concern c,
+             easybuy_product p,
+             easybuy_file f,
+             easybuy_brand b
+        WHERE c.productId = p.id
+          AND p.brandId = b.id
+          AND f.id = p.fileId
+          AND c.userId = 22
+          AND c.isDel = 0
+        ORDER BY p.createTime
+    </select>
+
+
+    <insert id="addConcern">
+        insert into easybuy_concern(userid, productid, createtime)
+        values (#{userId},#{productId},now())
+    </insert>
+
+    <update id="delConcern">
+        update easybuy_concern
+        set isDel = 1
+        where productId = #{id}
+    </update>
+</mapper>
