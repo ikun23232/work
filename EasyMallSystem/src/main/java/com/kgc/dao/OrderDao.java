@@ -12,9 +12,9 @@ public interface OrderDao {
 
     public int addOrderProductByList(Order order);
 
-    public int addOrderProductBytwo(@Param("orderId") int id, @Param("productId") int productId, @Param("quantity") int quantity, @Param("cost") double cost);
+    public int addOrderProductBytwo(@Param("orderId") int id,@Param("productId") int productId,@Param("quantity") int quantity,@Param("cost") double cost);
 
-    public int addOrder(Order order);
+public int addOrder(Order order);
 
     public List<Order> getOrderList();
 
@@ -51,4 +51,11 @@ public interface OrderDao {
     public  int updateOrderDetailByProductId(@Param("quantity")int quantity,@Param("productId")int productId,@Param("orderId") int orderId);
 
     public int delOrderProductByOrderId(int orderId);
+    /**
+     * 查看用户未付款的订单
+     * @param userId
+     * @return
+     */
+    public List<Order> getOrderByUserIdByStaus(int userId);
+
 }

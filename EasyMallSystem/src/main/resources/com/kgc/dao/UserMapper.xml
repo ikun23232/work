@@ -62,5 +62,63 @@
         set password = #{password}
         where loginName = #{loginName}
     </update>
+    <select id="getUserPage" resultType="User">
+        SELECT
+        u.id,
+        loginName,
+        userName,
+        `password`,
+        sex,
+        identityCode,
+        email,
+        mobile,
+        roleId,
+        isDel,
+        createTime,
+        roleName
+        FROM easybuy_user u , easybuy_role r
+        WHERE u.roleId = r.id
+        AND u.isDel = 0
+        <if test="userName!=null and userName!=''">
+            and u.userName like CONCAT('%',#{userName},'%')
+        </if>
+        <if test="rid==2">
+            AND roleId > 1
+        </if>
+        <if test="roleId>0">
+            AND roleId = #{roleId}
+        </if>
+        ORDER BY u.id
+    </select>
+
+    <update id="delUser">
+        UPDATE easybuy_user u
+        SET u.isDel = 1
+        WHERE u.id = #{id}
+    </update>
+    <select id="getUserById" resultType="User">
+        SELECT u.id,
+               loginName,
+               userName,
+               password,
+               sex,
+               identityCode,
+               email,
+               mobile,
+               roleId,
+               isDel,
+               createTime,
+               roleName
+        from easybuy_user u,
+             easybuy_role r
+        where u.id = #{id}
+          AND u.roleId = r.id
+    </select>
+
+    <update id="updateUser">
+        update easybuy_user
+        set loginName = #{loginName},userName=#{userName},password=#{password},roleId = #{roleId},sex = #{sex},email=#{email},mobile= #{mobile}
+        where id=#{id}
+    </update>
 
 </mapper>

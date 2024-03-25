@@ -255,13 +255,14 @@
                 <el-form :model="product" :rules="rules" ref="product" id="product" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="产品名称" prop="name">
                         <el-input v-model="product.name" name="name" style="width: 200px;"></el-input>
+                        <input type="hidden" v-model="product.id" name="id" style="width: 200px;"></input>
                     </el-form-item>
                     <el-form-item label="产品价格" prop="price">
                         <el-input v-model="product.price" name="price" style="width: 200px;"></el-input>
                     </el-form-item>
                     <el-form-item label="产品品牌" prop="brandId">
                         <el-select v-model="product.brandId" name="brandId" placeholder="请选择" @change="blurFrist(1)">
-                            <el-option label="--请选择--" :value="0"></el-option>
+<!--                            <el-option label="&#45;&#45;请选择&#45;&#45;" :value="0"></el-option>-->
                             <el-option
                                     v-for="item in brandList"
                                     :key="item.id"
@@ -301,7 +302,7 @@
                         <p>
                             <label>三级分类</label>
                             <el-select v-model="product.categoryLevelId" name="categoryLevelId" placeholder="请选择" :disabled="isDisabledThrid">
-                                <el-option label="--请选择--" :value="0"></el-option>
+<!--                                <el-option label="&#45;&#45;请选择&#45;&#45;" :value="0"></el-option>-->
                                 <el-option
                                         v-for="item in thridCategoryList"
                                         :key="item.id"
@@ -316,12 +317,12 @@
                     </el-form-item>
                     <el-form-item label="生产时间" required>
                         <el-col :span="11">
-                            <el-form-item prop="creatTime">
+                            <el-form-item prop="createTime">
                                 <el-date-picker
                                         v-model="product.createTime"
                                         type="datetime"
                                         placeholder="选择生产时间"
-                                        name="creatTime"
+                                        name="createTime"
                                 ></el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -340,7 +341,7 @@
                                 :on-remove="handleRemove"
                                 :multiple=false
                                 show-file-list
-                                name="filePath"
+                                name="picPath"
                         >
                             <i class="el-icon-plus"></i>
                         </el-upload>
@@ -463,23 +464,81 @@
     new Vue({
         el: "#m_right",
         data() {
+            //表单校验begin
+            var checkname = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入产品名'))
+                } else if (value.length > 10) {
+                    callback(new Error('长度在2-10之间'))
+                } else if (2 > value.length) {
+                    callback(new Error('长度在2-10之间'))
+                }
+                this.checkSameName();
+                if (this.falg.namefalg == false) {
+                    callback(new Error("该产品名已存在！"))
+                } else {
+                    callback();
+                }
+
+            }
+            var checkprice = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error("请输入价格！"))
+                } else if (isNaN(value)) {
+                    callback(new Error("请输入数字！"))
+                } else if (0 > value) {
+                    callback(new Error("不能小于0！"))
+                } else if (value.length > 5) {
+                    callback(new Error("不能超过五位数"))
+                }else {
+                    callback()
+                }
+            }
+            var checkCategoryLevelId = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error("请选择！"))
+                } else if (value === '0') {
+                    callback(new Error("请选择好分类！"))
+                }else {
+                    callback()
+                }
+            }
+            var checkBrandId = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error("请选择！"))
+                } else if (value === '0') {
+                    callback(new Error("请选择好品牌！"))
+                }else {
+                    callback()
+                }
+            }
+            var checkfilePath = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error("请选择文件！"))
+                }else {
+                    callback()
+                }
+            }
             return {
                 product: {
+                    id:'',
                     name: '',
                     description: '',
-                    creatTime: '',
-                    price: 0,
-                    stock: 0,
-                    categoryLevelId: 0,
+                    createTime: '',
+                    price: '',
+                    stock: '',
+                    categoryLevelId: '',
                     filePath: '',
-                    brandId: 0
+                    brandId: ''
+                },
+                falg: {
+                    namefalg: false
                 },
                 fristCategoryList: {},
                 fristValue: 0,
                 secondCategoryList: {},
                 secondValue: 0,
                 thridCategoryList: {},
-                thridValue: 0,
                 isDisabledThrid: false,
                 isDisabledSecond: false,
                 brandList:{},
@@ -487,28 +546,29 @@
 
                 rules: {
                     name: [
-
+                        {validator: checkname, trigger: 'blur'},
                     ],
                     description: [
-
+                        {required: true, message: '请填写商品描述', trigger: 'blur'}
                     ],
-                    creatTime: [
-
+                    createTime: [
+                        // {validator: checkTime, trigger: 'blur'},
+                        // {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                     price: [
-
+                        {validator: checkprice, trigger: 'blur'},
                     ],
                     stock: [
-
+                        {validator: checkprice, trigger: 'blur'},
                     ],
                     categoryLevelId: [
-
+                        {validator: checkCategoryLevelId, trigger: 'blur'},
                     ],
                     filePath: [
-
+                        // {validator: checkfilePath, trigger: 'blur'},
                     ],
                     brandId: [
-
+                        {validator: checkBrandId, trigger: 'blur'},
                     ]
                 }
             };
@@ -516,6 +576,7 @@
         mounted() {
             const Url = new URLSearchParams(window.location.search)
             const id = Url.get("id");
+            this.product.id = id
             const categoryLevelId = Url.get("categoryLevelId")
             this.getProductById(id)
             this.getFristCategoryList()
@@ -524,27 +585,43 @@
             this.getSecondIdByThrid(id)
         },
         methods: {
-            add(formdata){
-                axios.post('/addProduct',formdata).then((respones)=>{
-                    console.log(resp)
+            updateProduct(formdata){
+                axios.post('/updateProduct',formdata).then((respones)=>{
+                    console.log(respones)
                     if(respones.data.code=="200"){
-                        alert("添加成功！")
+                        alert("修改成功！")
+                        window.location.href="/Member_Product.html"
                     }else {
-                        alert("添加失败！")
+                        alert("修改失败！")
                     }
                 })
             },
             submitForm(product) {
-                this.$refs[product].validate((valid)=>{
+                this.$refs[product].validate((valid) => {
                     if(valid){
                         const formdata = new FormData(document.getElementById("product"))
                         console.log(formdata)
                         formdata.set("categoryLevelId",this.product.categoryLevelId)
                         formdata.set("brandId",this.product.brandId)
-                        this.add(formdata)
+                        this.updateProduct(formdata)
                     }else{
                         console.log("error submit!!")
                         return false;
+                    }
+                })
+            },
+            checkSameName() {
+                axios.get("/checkSameNameUpdate", {
+                    params: {
+                        name: this.product.name,
+                        id:this.product.id
+                    }
+                }).then((respones) => {
+                    console.log(respones)
+                    if (respones.data.code == "200") {
+                        this.falg.namefalg = true
+                    } else {
+                        this.falg.namefalg = false
                     }
                 })
             },

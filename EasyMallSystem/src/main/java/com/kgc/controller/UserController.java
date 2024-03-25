@@ -105,4 +105,67 @@ public class UserController {
         return message;
     }
 
+    @RequestMapping("/getUserPage")
+    public Message getUserPage(String userName,int roleId,int currentPageNo){
+        logger.info("UserController loginTo is start......userName:"+userName+"roleId:"+roleId);
+        Message message = userService.getUserPage(userName,roleId,currentPageNo,5);
+        return message;
+    }
+
+    @RequestMapping("/delUser")
+    public Message delUser(int id,int roleId){
+        logger.info("UserController loginTo is start......id:"+id);
+        Message message = userService.delUser(id,roleId);
+        return message;
+    }
+
+    @RequestMapping("/checkUserUpdate")
+    public Message checkUserUpdate(int id,int roleId){
+        logger.info("UserController loginTo is start......id:"+id);
+        Message message = userService.checkUserUpdate(id,roleId);
+        return message;
+    }
+
+    @RequestMapping("/getUserById")
+    public Message getUserById(int id){
+        logger.info("UserController loginTo is start......id:"+id);
+        Message message = userService.getUserById(id);
+        return message;
+    }
+
+    @RequestMapping("/getUser")
+    public Message getUser(){
+        logger.info("UserController loginTo is start......");
+        Message message = userService.getUser();
+        return message;
+    }
+    @RequestMapping("/updateUser")
+    public Message updateUser(User user){
+        logger.info("UserController loginTo is start......user:"+user);
+        Message message = userService.updateUser(user);
+        return message;
+    }
+
+    @RequestMapping("/checkUserByUpdateName")
+    public Message checkUserByUpdateName(String loginName,int id){
+        logger.info("UserController loginTo is start......loginName:"+loginName+"id"+id);
+        Message message = userService.checkUserByUpdateName(loginName,id);
+        return message;
+    }
+
+    @RequestMapping("/checkUserByUpdateMobile")
+    public Message checkUserByUpdateMobile(String mobile,int id){
+        logger.info("UserController loginTo is start......mobile:"+mobile+"id"+id);
+        Message message = userService.checkUserByUpdateMobile(mobile,id);
+        return message;
+    }
+
+    @RequestMapping("/checkEmail")
+    public Message checkEmail(String email,int id){
+        logger.info("UserController loginTo is start......mobile:"+email+"id"+id);
+        Message message = userService.checkEmail(email,id);
+        return message;
+    }
+
+
 }

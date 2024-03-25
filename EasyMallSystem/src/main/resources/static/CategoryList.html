@@ -572,7 +572,7 @@
                 <div class="list_c">
 
                     <ul class="cate_list">
-                        <li v-for="item in productList" :key="item.id">
+                        <li v-for="(item,index) in productList" :key="item.id">
                             <div class="img"><a href="#"><img :src="doImg(item.filePath)" width="210" height="185"/></a>
                             </div>
                             <div class="price">
@@ -582,15 +582,12 @@
                                 <div v-html="item.name"></div>
                             </a></div>
                             <div class="carbg">
-                                <a href="#" class="ss">收藏</a>
-                                <a href="#" class="j_car">加入购物车</a>
+                                <template>
+                                    <a  class="ss" :class="{'filled':item.concernFalg}" @click="toggleHeart(index)">收藏</a>
+                                    <a  class="j_car" @click="getToCar(item.id)">加入购物车</a>
+                                </template>
                             </div>
-                        </li>
-
-                    </ul>
-
-
-                    <div class="tips" v-if="productList">
+                        </li>    <div class="tips" v-if="productList">
                         暂无匹配的商品详情,请重新筛选哦!
                     </div>
                     <div class="block">
@@ -700,7 +697,15 @@
         <!--End Footer End -->
     </div>
 </div>
-
+<style>
+    a.ss.filled{
+        color:#888888;
+        background-color: transparent;
+        background:url(../static/images/heart_h.png) !important;
+        background-repeat:no-repeat;
+        background-position:10px center;
+    }
+</style>
 </body>
 
 <script>
@@ -735,7 +740,8 @@
                 },
                 minPrice: 0,
                 maxPrice: 1000,
-                isSort:0
+                isSort:0,
+                isFilled: false
             }
         },
         methods: {
@@ -812,7 +818,56 @@
                     this.isSort=0
                 }
                 this.searchBrandList(1);
-            }
+            },
+            toggleHeart(index) {
+                console.log(this.productList[index].concernFalg)
+                this.productList[index].concernFalg=!this.productList[index].concernFalg
+                const newStatus = this.productList[index].concernFalg
+                if(newStatus){
+                    this.addCercon(this.productList[index].id)
+                }else {
+                    this.delConcern(this.productList[index].id)
+                }
+            },
+            addCercon(id){
+                axios.get("/addCercon",{
+                    params:{
+                        productId:id
+                    }
+                }).then((response)=>{
+                    console.log(response)
+                    if(response.data.code=="200"){
+                        alert("删除成功！")
+                    }
+                })
+            },
+            delConcern(index){
+                axios.get("delConcern",{
+                    params:{
+                        id:index
+                    }
+                }).then((response)=>{
+                    console.log(response)
+                    if(response.data.code=="200"){
+                        alert("添加成功！")
+                    }
+                })
+            },
+            getToCar(id){
+                axios.get("/addProductInCarById", {
+                    params: {
+                        quantity:1,
+                        id:id
+                    }
+                }).then((respones) => {
+                    console.log(respones)
+                    if(respones.data.code=="200"){
+                        alert("添加成功")
+                    }else {
+                        alert("添加失败，暂无库存")
+                    }
+                })
+            },
         },
         mounted() {
             console.log(productName)
