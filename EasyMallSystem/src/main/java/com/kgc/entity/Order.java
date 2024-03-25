@@ -23,6 +23,7 @@ public class Order {
     private String userAddress;
     private Date createTime;
     private Double cost;
-    private String seriaNumber;
+    private String serialNumber;
     private Integer isDel;
+    private Integer status;
 }

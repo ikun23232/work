@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public interface AlipayService {
 
-    public Message createOrder(int amount,String orderName);
+    public Message createOrder(int amount,String orderName,String serialNumber);
 
     public Message backOrder(Map params);
 }

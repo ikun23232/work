@@ -28,7 +28,7 @@
                email,
                mobile
         from easybuy_user
-        where loginName = #{mobile}
+        where mobile = #{mobile}
     </select>
     <select id="checkUserByEmail" resultType="com.kgc.entity.User">
         select id,
@@ -62,4 +62,5 @@
         set password = #{password}
         where loginName = #{loginName}
     </update>
+
 </mapper>

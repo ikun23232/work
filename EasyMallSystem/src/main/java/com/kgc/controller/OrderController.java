@@ -1,10 +1,7 @@
 package com.kgc.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.kgc.entity.Address;
-import com.kgc.entity.Message;
-import com.kgc.entity.Order;
-import com.kgc.entity.Product;
+import com.kgc.entity.*;
 import com.kgc.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +48,32 @@ public class OrderController {
         }
 
         Message orderProductByUserId = orderService.addOrder(listProduct,address, Double.parseDouble(count),idS);
+        return orderProductByUserId;
+    }
+
+    @RequestMapping("/getOrderList")
+    public Message getOrderProductByUserId(@RequestBody Map map) {
+        Page page = JSON.parseObject(JSON.toJSONString(map.get("page")), Page.class);
+        Message orderProductByUserId = orderService.getOrderList(page);
+        return orderProductByUserId;
+    }
+
+    @RequestMapping("/delOrderById")
+    public Message getOrderProductByUserId(int id) {
+        Message orderProductByUserId = orderService.delOrderById(id);
+        return orderProductByUserId;
+    }
+
+    @RequestMapping("/getOrderListInPay")
+    public Message getOrderListInPay() {
+        int userId=22;
+        Message orderProductByUserId = orderService.getOrderListInPay(userId);
+        return orderProductByUserId;
+    }
+    @RequestMapping("/combineOrders")
+    public Message combineOrders(int masterOrderId,int childOrderId) {
+
+        Message orderProductByUserId = orderService.combineOrders(masterOrderId,childOrderId);
         return orderProductByUserId;
     }
 }

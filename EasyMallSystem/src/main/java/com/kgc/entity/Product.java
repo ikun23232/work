@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "productlstq")
+@Document(indexName = "productlstaa")
 public class Product {
     @Id
     private Integer id;
@@ -34,7 +34,7 @@ public class Product {
     @Field(type = FieldType.Integer)
     private Integer stock;
     @Field(type = FieldType.Integer)
-    private Integer categoryLevelId;
+    private Integer categoryId;
     @Field(type = FieldType.Integer)
     private Integer fileId;
     @Field(type = FieldType.Integer)
@@ -52,5 +52,9 @@ public class Product {
     private Double cost;
     @Field(type = FieldType.Integer)
     private Integer brandId;
+
+
+
+
 
 }

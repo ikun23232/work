@@ -40,7 +40,7 @@ public interface ProductService {
     public Message getProductListAll();
 
     public Message addProductListByALL();
-    public Message getProductListByPage(Page page, Product product,int minPrice,int MaxPrice);
+    public Message getProductListByPage(Page page, Product product,int minPrice,int MaxPrice,int isSort);
 
     /**
      * 分页显示产品

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.dao.AddressDao">
+    <insert id="addAddress">
+        insert into easybuy_user_address(userId, address, createTime, isDefault, remark, isDel, email, name, phone)
+      values (#{userId},#{address},now(),#{isDefault},#{remark},0,#{email},#{name},#{phone})
+    </insert>
+    <update id="setAddressDefault">
+        update easybuy_user_address set isDefault=1 where id=#{id}
+    </update>
+    <update id="delAddressById">
+        update  easybuy_user_address set isDel=1 WHERE id=#{id}
+    </update>
+    <update id="updateAddressById">
+        update easybuy_user_address set address=#{address},remark=#{remark},email=#{email},name=#{name},phone=#{phone}
+where id=#{id}
+    </update>
+    <update id="updateAddressIsDefaultAll">
+        update easybuy_user_address set isDefault=0 where userId=#{userId}
+    </update>
+
+    <select id="getAddressById" resultType="Address">
+        select id,
+               userId,
+               address,
+               createTime,
+               isDefault,
+               remark,
+               isDel,
+               email,
+               name,
+               phone
+        from easybuy_user_address
+        where userId = #{userId}
+          AND isDefault = 1
+    </select>
+    <select id="getAddresssList" resultType="Address">
+        select id,
+               userId,
+               address,
+               createTime,
+               isDefault,
+               remark,
+               isDel,
+               email,
+               name,
+               phone
+        from easybuy_user_address
+        where userId = #{userId}
+        and isDel=0
+    </select>
+    <select id="getAddressByid" resultType="Address">
+        SELECT id, userId, address, createTime, isDefault, remark, isDel, email, name, phone
+            from easybuy_user_address
+where  id=#{id}
+    </select>
+
+</mapper>

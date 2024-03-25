@@ -5,7 +5,10 @@ import com.kgc.service.AlipayService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,10 +31,10 @@ public class AlipayController {
     private AlipayService alipayService;
 
     @RequestMapping("/getOrder")
-    public void createOrder(HttpServletResponse response,int amount,String orderName){
+    public void createOrder(HttpServletResponse response,int amount,String orderName,@RequestParam(value = "serialNumber",required = false) String serialNumber){
         logger.info("AliPayController createOrder is start=========param:response:"+response);
         response.setContentType("text/html;charset=UTF-8");
-        Message message = alipayService.createOrder(amount,orderName);
+        Message message = alipayService.createOrder(amount,orderName,serialNumber);
         try {
             PrintWriter pw = response.getWriter();
             pw.print(message.getData());

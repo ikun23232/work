@@ -16,6 +16,18 @@ public interface CategoryDao {
      */
     public List<Category> getThreeCategoryByCategoryName(String categoryName);
 
+    /**
+     * 通过一级id查找二三级id集合
+     * @param categoryId
+     * @return
+     */
+    public List<Category> getThreeCategoryBycategoryId(int categoryId);
+
+    /**
+     * 根据二级查二三级id集合
+     */
+    public List<Category> getThreeCategoryBycategoryIdByTwo(int categoryId);
+
     public List<Category> getCategoryListByALL(@Param("categoryName") String categoryName);
 
     /**
@@ -89,4 +101,6 @@ public interface CategoryDao {
      * 通过三级类Id找一级类id
      */
     public Category getFristCategoryIdByThrid(int id);
+
+
 }

@@ -88,6 +88,7 @@ public class UserServiceImpl implements UserService {
         logger.info("UserServiceImpl checkUserByName is start.......mobile " + mobile);
         logger.info("UserServiceImpl userDao checkUserByName is start.......mobile " + mobile);
         User user = userDao.checkUserByMobile(mobile);
+
         logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
         if (user!=null&&!user.getUserName().equals("")) {
             return Message.success(user);

@@ -19,6 +19,7 @@ import java.util.List;
  * @create: 2024-03-18 14:58
  **/
 @Service
+
 public class CategoryServiceImpl implements CategoryService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired

@@ -560,8 +560,8 @@
                         <span class="i_up">销量从低到高显示</span>
                         <span class="i_down">销量从高到低显示</span>                                                     
                     </a>
-                    <a href="#">
-                    	<span class="fl">价格</span>                        
+                    <a  @click.prevent="isSortUp()">
+                    	<span class="fl" >价格</span>
                         <span class="i_up">价格从低到高显示</span>
                         <span class="i_down">价格从高到低显示</span>     
                     </a>
@@ -586,239 +586,10 @@
                                 <a href="#" class="j_car">加入购物车</a>
                             </div>
                         </li>
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_2.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_3.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_4.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_5.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_6.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_7.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_8.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_9.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_10.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_11.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_12.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_5.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_6.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_7.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_8.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_9.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_10.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_11.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <div class="img"><a href="#"><img src="images/per_12.jpg" width="210" height="185"/></a>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="price">-->
-                        <!--                                <font>￥<span>198.00</span></font> &nbsp; 26R-->
-                        <!--                            </div>-->
-                        <!--                            <div class="name"><a href="#">香奈儿邂逅清新淡香水50ml</a></div>-->
-                        <!--                            <div class="carbg">-->
-                        <!--                                <a href="#" class="ss">收藏</a>-->
-                        <!--                                <a href="#" class="j_car">加入购物车</a>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
+
                     </ul>
 
-                    <!--                    <div class="pages">-->
-                    <!--                        <a href="#" class="p_pre">上一页</a><a href="#" class="cur">1</a><a href="#">2</a><a href="#">3</a>...<a-->
-                    <!--                            href="#">20</a><a href="#" class="p_pre">下一页</a>-->
-                    <!--                    </div>-->
+
                     <div class="tips" v-if="productList">
                         暂无匹配的商品详情,请重新筛选哦!
                     </div>
@@ -933,8 +704,17 @@
 </body>
 
 <script>
-    let params = window.location.search.split("=");
-    let productName = decodeURIComponent(params[1])
+    // 获取当前页面的 URL 查询参数
+    let searchParams = new URLSearchParams(window.location.search);
+
+    // 获取名为 "productName" 的参数值
+    let productName = searchParams.get("productName");
+    let categoryId = searchParams.get("categoryId");
+
+    // 如果需要对参数值进行解码
+    let decodedProductName = decodeURIComponent(productName);
+    console.log(productName);
+    console.log(categoryId);
     new Vue({
         el: "#app",
         data() {
@@ -950,10 +730,12 @@
                 },
                 product: {
                     name: '',
-                    brandName: ''
+                    brandName: '',
+                    categoryId:'',
                 },
                 minPrice: 0,
-                maxPrice: 1000
+                maxPrice: 1000,
+                isSort:0
             }
         },
         methods: {
@@ -963,15 +745,23 @@
                     this.brandList = resp.data.data;
                 })
             },
-            searchBrandList(id) {
+            searchBrandList(id,categoryId) {
                 if (id != null) {
                     this.page.currentPageNo = 1;
+                }
+
+                if (categoryId!=null){
+                    this.product.categoryId=categoryId
+                }
+                if (productName){
+                    this.product.productName=productName
                 }
                 axios.post("/getProductByProductMap", {
                     product: this.product,
                     page: this.page,
                     minPrice: this.minPrice,
-                    maxPrice: this.maxPrice
+                    maxPrice: this.maxPrice,
+                    isSort:this.isSort
                 }).then((resp) => {
                     console.log(resp)
                     this.productList = resp.data.data.data;
@@ -987,6 +777,7 @@
                 this.searchBrandList()
             },
             searchOneBrandList(brandName) {
+                this.product
                 this.product.name = '';
                 this.product.brandName = brandName;
                 this.searchBrandList()
@@ -1013,15 +804,26 @@
                 }).catch((err)=>{
                     console.log("失败了")
                 });
+            },
+            isSortUp(){
+                if (this.isSort===0){
+                    this.isSort=1
+                }else {
+                    this.isSort=0
+                }
+                this.searchBrandList(1);
             }
         },
         mounted() {
             console.log(productName)
-            if (productName) {
-                this.product.name = productName;
+        if (productName){
+
+       }
+            if (categoryId){
+                this.searchBrandList(1,categoryId);
             }
             this.initBrandList();
-            this.searchBrandList();
+            // this.searchBrandList();
             this.getHistoryList();
         }
     })

@@ -82,4 +82,8 @@ public interface ProductDao {
      */
     public int upProduct(Product product);
 
+
+    public int addStockById(@Param("id")int id,@Param("stock") int stock);
+
+
 }

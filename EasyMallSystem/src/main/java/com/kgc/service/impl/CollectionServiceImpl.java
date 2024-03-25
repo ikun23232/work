@@ -92,9 +92,14 @@ public class CollectionServiceImpl implements CollectionService {
     public Message getProductById(int[] id, int count) {
         ArrayList<Product> Products = new ArrayList<>();
         for (int i = 0; i < id.length; i++) {
-            Product connectionByIds = productDao.getProductById(id[i]);
-            connectionByIds.setQuantity(count);
-            Products.add(connectionByIds);
+            Product product = productDao.getProductById(id[i]);
+            try {
+                product.setFilePath(URLEncoder.encode(product.getFilePath(),"utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            product.setQuantity(count);
+            Products.add(product);
         }
         return Message.success(Products);
     }

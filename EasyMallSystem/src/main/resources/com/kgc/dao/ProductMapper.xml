@@ -51,12 +51,13 @@
             description,
             price,
             stock,
-            categoryLevelId,
+            categoryLevelId as categoryId,
             fileId,
             p.isDel,
             p.createTime,
             filePath,
             b.name AS brandName
+
         FROM
             easybuy_product p
                 LEFT JOIN
@@ -193,4 +194,8 @@
         INSERT INTO easybuy_file (filePath, userId, createTime)
         VALUES (#{filePath},22,now());
     </insert>
+
+    <update id="addStockById">
+        update easybuy_product set stock=stock+#{stock} where id=#{id}
+    </update>
 </mapper>

@@ -57,8 +57,8 @@ public class ProductController {
         Page page = JSON.parseObject(JSON.toJSONString(map.get("page")), Page.class);
         Integer minPrice = JSON.parseObject(JSON.toJSONString(map.get("minPrice")), Integer.class);
         Integer maxPrice = JSON.parseObject(JSON.toJSONString(map.get("maxPrice")), Integer.class);
-
-        Message productListAll = productService.getProductListByPage(page, product, minPrice, maxPrice);
+        Integer isSort = JSON.parseObject(JSON.toJSONString(map.get("isSort")), Integer.class);
+        Message productListAll = productService.getProductListByPage(page, product, minPrice, maxPrice,isSort);
         logger.info("ProductController getProductList is start.........Message" + productListAll);
         return productListAll;
     }
@@ -122,8 +122,5 @@ public class ProductController {
         return message;
 
     }
-
-
-
 
 }

@@ -24,5 +24,8 @@ public class Address {
     private Integer isDefault;
     private String remark;
     private Integer isDel;
+    private String email;
+    private String name;
+    private String phone;
 
 }

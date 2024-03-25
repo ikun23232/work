@@ -2,6 +2,7 @@ package com.kgc.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.kgc.dao.CategoryDao;
 import com.kgc.dao.ProductDao;
 import com.kgc.entity.Message;
 import com.kgc.entity.Page;
@@ -18,6 +19,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.codec.EncodingException;
 import org.springframework.data.domain.PageRequest;
@@ -51,6 +53,8 @@ public class ProductServiceImpl implements ProductService {
     private ElsearchUtil elsearchUtil;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryDao categoryDao;
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
     @Autowired
@@ -89,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
      * @param product
      * @return
      */
-    public Message getProductListByPage(Page page, Product product, int minPrice, int maxPrice) {
+    public Message getProductListByPage(Page page, Product product, int minPrice, int maxPrice,int isSort) {
         logger.info("ProductServiceImpl getProductListByPage is start.... id");
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.filter(QueryBuilders.rangeQuery("price").gte(minPrice).lte(maxPrice));
@@ -100,7 +104,34 @@ public class ProductServiceImpl implements ProductService {
         if (product != null && !product.getBrandName().equals("")) {
             queryBuilder.must(QueryBuilders.matchQuery("brandName", product.getBrandName()));
         }
+        //新加的产品
+        if (product != null && product.getCategoryId()!=null) {
+            int typeById = categoryDao.getTypeById(product.getCategoryId());
+            if (typeById==1){
+                List<Category> threeCategoryBycategoryId = categoryDao.getThreeCategoryBycategoryId(product.getCategoryId());
+                if (threeCategoryBycategoryId==null){
+                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", product.getCategoryId())));
+                }
+                for (Category category : threeCategoryBycategoryId) {
+                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", category.getId())));
+                }
+            }else if (typeById==2){
+                List<Category> threeCategoryBycategoryIdByTwo = categoryDao.getThreeCategoryBycategoryIdByTwo(product.getCategoryId());
+                if (threeCategoryBycategoryIdByTwo==null){
+                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", product.getCategoryId())));
+                }
+                for (Category category : threeCategoryBycategoryIdByTwo) {
+                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", category.getId())));
+                }
+            }else {
+                queryBuilder.must(QueryBuilders.matchQuery("categoryId", product.getCategoryId()));
+            }
 
+        }
+        //
+
+
+        //
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field("name");
         highlightBuilder.preTags("<font style='color:red'>");
@@ -108,14 +139,23 @@ public class ProductServiceImpl implements ProductService {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
         nativeSearchQueryBuilder.withQuery(queryBuilder);
         nativeSearchQueryBuilder.withPageable(PageRequest.of(page.getCurrentPageNo() - 1, page.getPageSize()));
-        nativeSearchQueryBuilder.withSort(SortBuilders.fieldSort("price"));
         nativeSearchQueryBuilder.withHighlightBuilder(highlightBuilder);
 
+//默认降序
+        if (isSort==0){
+            nativeSearchQueryBuilder.withSort(SortBuilders.fieldSort("price").order(SortOrder.DESC));
+
+        }else {
+            nativeSearchQueryBuilder.withSort(SortBuilders.fieldSort("price").order(SortOrder.ASC));
+        }
+
+        //先拿出收藏表里面的
         ArrayList<Product> productList = new ArrayList<>();
         SearchHits<? extends Product> searchHits = elasticsearchRestTemplate.search(nativeSearchQueryBuilder.build(), product.getClass());
-        for (
-                SearchHit<? extends Product> searchHit : searchHits) {
+        for (SearchHit<? extends Product> searchHit : searchHits) {
             Product productTemp = searchHit.getContent();
+
+
             List<String> pname = searchHit.getHighlightField("name");
             if (pname.size() > 0) {
                 productTemp.setName(pname.get(0));

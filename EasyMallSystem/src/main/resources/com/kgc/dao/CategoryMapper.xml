@@ -139,4 +139,30 @@
                FROM easybuy_product
                WHERE id = #{id})
     </select>
+    <select id="getThreeCategoryBycategoryId" resultType="com.kgc.entity.Category">
+        SELECT  id,
+                name,
+                parentId,
+                type,
+                iconClass,
+                isDel,
+                createTime
+        FROM easybuy_product_category
+        where type = 3
+          AND parentid
+            IN(
+                  SELECT id
+                  FROM easybuy_product_category
+                  where type= 2
+                    AND parentId
+                      IN(
+                            SELECT id
+                            FROM easybuy_product_category
+                            where id = #{categoryId}))
+    </select>
+    <select id="getThreeCategoryBycategoryIdByTwo" resultType="com.kgc.entity.Category">
+        SELECT id, name, parentId, type, iconClass, isDel, createTime
+        FROM easybuy_product_category
+        WHERE parentId  =#{categoryId}
+    </select>
 </mapper>

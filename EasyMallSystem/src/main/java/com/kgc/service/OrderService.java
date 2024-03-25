@@ -1,13 +1,23 @@
 package com.kgc.service;
 
-import com.kgc.entity.Address;
-import com.kgc.entity.Message;
-import com.kgc.entity.Order;
-import com.kgc.entity.Product;
+import com.kgc.entity.*;
 
 import java.util.List;
 
 public interface OrderService {
     public Message getOrderProductByUserId(int userId);
     public Message addOrder(List<Product> productList,Address address,Double count,int[] ids);
+    public Message addOrder1(List<Product> productList,Address address,Double count);
+
+    public Message getOrderList(Page page);
+
+    public Message delOrderById(int id);
+
+    /**
+     * 拿到所有支付过的订单集合
+     * @return
+     */
+    public Message getOrderListInPay(int userId);
+
+    Message combineOrders(int masterOrder, int childOrder);
 }
