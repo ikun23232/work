@@ -42,6 +42,8 @@ public interface ProductService {
     public Message addProductListByALL();
     public Message getProductListByPage(Page page, Product product,int minPrice,int MaxPrice);
 
+    public Message getConcernListByPage(Page page, Product product, int minPrice, int maxPrice);
+
     /**
      * 分页显示产品
      */
@@ -56,6 +58,22 @@ public interface ProductService {
      * 添加商品
      */
     public Message addProduct(Product product, @RequestParam(value = "picPath") MultipartFile picPath, Model model);
+
+    /**
+     * 添加时查找是否有同名
+     */
+    public Message checkSameName(String name);
+
+    /**
+     * 添加时查找是否有同名
+     */
+    public Message checkSameNameUpdate(String name,int id);
+
+
+    /**
+     * 修改商品
+     */
+    public Message updateProduct(Product product, @RequestParam(value = "picPath") MultipartFile picPath, Model model);
 
 
 }

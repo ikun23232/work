@@ -35,4 +35,5 @@
         insert into easybuy_order_detail(orderId, productId, quantity, cost, createTime)
         values (#{orderId}, #{productId}, #{quantity}, #{cost}, NOW());
     </insert>
+
 </mapper>

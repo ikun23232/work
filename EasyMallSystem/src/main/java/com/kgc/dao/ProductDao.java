@@ -66,6 +66,17 @@ public interface ProductDao {
     public int addProduct(Product product);
 
     /**
+     * 修改product
+     * @return
+     */
+    public int updateProduct(Product product);
+
+    /**
+     * 修改file
+     * @return
+     */
+    public int updatefile(Product product);
+    /**
      * 添加file
      * @return
      */
@@ -81,5 +92,9 @@ public interface ProductDao {
      * @return
      */
     public int upProduct(Product product);
+    /**
+     * 通过pname查找是否有同名
+     */
+    public Product checkSameName(String name);
 
 }

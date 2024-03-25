@@ -58,7 +58,7 @@ public class ProductController {
         Integer minPrice = JSON.parseObject(JSON.toJSONString(map.get("minPrice")), Integer.class);
         Integer maxPrice = JSON.parseObject(JSON.toJSONString(map.get("maxPrice")), Integer.class);
 
-        Message productListAll = productService.getProductListByPage(page, product, minPrice, maxPrice);
+        Message productListAll = productService.getConcernListByPage(page, product, minPrice, maxPrice);
         logger.info("ProductController getProductList is start.........Message" + productListAll);
         return productListAll;
     }
@@ -123,7 +123,28 @@ public class ProductController {
 
     }
 
+    @RequestMapping("/checkSameName")
+    public Message checkSameName(String name) {
+        logger.info("ProductController checkSameName is start.........name:"+name);
+        Message message = productService.checkSameName(name);
+        logger.info("ProductController checkSameName is start.........Message" + message);
+        return message;
+    }
 
+    @RequestMapping("/checkSameNameUpdate")
+    public Message checkSameNameUpdate(String name,int id) {
+        logger.info("ProductController checkSameName is start.........name:"+name);
+        Message message = productService.checkSameNameUpdate(name,id);
+        logger.info("ProductController checkSameName is start.........Message" + message);
+        return message;
+    }
+    @RequestMapping("/updateProduct")
+    public Message updateProduct(Product product, @RequestParam(value = "picPath") MultipartFile picPath, Model model) {
+        logger.info("ProductController addProduct is start.........");
+        Message message = productService.updateProduct(product,picPath,model);
+        logger.info("ProductController addProduct is start.........Message" + message);
+        return message;
 
+    }
 
 }

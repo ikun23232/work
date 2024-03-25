@@ -2,13 +2,12 @@ package com.kgc.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.kgc.dao.ConcernDao;
 import com.kgc.dao.ProductDao;
-import com.kgc.entity.Message;
-import com.kgc.entity.Page;
-import com.kgc.entity.Product;
-import com.kgc.entity.Category;
+import com.kgc.entity.*;
 import com.kgc.entity.Product;
 import com.kgc.service.CategoryService;
+import com.kgc.service.ConcernService;
 import com.kgc.service.ProductService;
 import com.kgc.utils.ElsearchUtil;
 import com.kgc.utils.ReplayUtil;
@@ -52,6 +51,8 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryService categoryService;
     @Autowired
+    private ConcernDao concernDao;
+    @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
     @Autowired
     private ReplayUtil replayUtil;
@@ -81,6 +82,70 @@ public class ProductServiceImpl implements ProductService {
         }
         return Message.error("同步失败");
     }
+
+    /**
+     * es条件查询
+     *
+     * @param page
+     * @param product
+     * @return
+     */
+    @Override
+    public Message getConcernListByPage(Page page, Product product, int minPrice, int maxPrice) {
+        logger.info("ProductServiceImpl getProductListByPage is start.... id");
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        queryBuilder.filter(QueryBuilders.rangeQuery("price").gte(minPrice).lte(maxPrice));
+        if (product != null && !product.getName().equals("")) {
+            queryBuilder.must(QueryBuilders.matchQuery("name", product.getName()));
+        }
+
+        if (product != null && !product.getBrandName().equals("")) {
+            queryBuilder.must(QueryBuilders.matchQuery("brandName", product.getBrandName()));
+        }
+
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.field("name");
+        highlightBuilder.preTags("<font style='color:red'>");
+        highlightBuilder.postTags("</font>");
+        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
+        nativeSearchQueryBuilder.withQuery(queryBuilder);
+        nativeSearchQueryBuilder.withPageable(PageRequest.of(page.getCurrentPageNo() - 1, page.getPageSize()));
+        nativeSearchQueryBuilder.withSort(SortBuilders.fieldSort("price"));
+        nativeSearchQueryBuilder.withHighlightBuilder(highlightBuilder);
+
+        ArrayList<Product> productList = new ArrayList<>();
+        //拿到登录的userid
+        int userId = 22;
+        List<Concern> concernPageList = concernDao.getConcernPageListES(userId);
+
+        SearchHits<? extends Product> searchHits = elasticsearchRestTemplate.search(nativeSearchQueryBuilder.build(), product.getClass());
+        for (
+                SearchHit<? extends Product> searchHit : searchHits) {
+            Product productTemp = searchHit.getContent();
+            //遍历拿到concern
+            for (Concern concern : concernPageList) {
+                if (concern.getProductId()==productTemp.getId()){
+                    productTemp.setConcernFalg(true);
+                }
+            }
+            List<String> pname = searchHit.getHighlightField("name");
+            if (pname.size() > 0) {
+                productTemp.setName(pname.get(0));
+            }
+            try {
+                productTemp.setFilePath(URLEncoder.encode(productTemp.getFilePath(), "utf-8"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            productList.add(productTemp);
+        }
+
+        long totalHits = searchHits.getTotalHits();
+        page.setTotalCount(new Long(totalHits).intValue());
+        page.setData(productList);
+        return Message.success(page);
+    }
+
 
     /**
      * es条件查询
@@ -169,7 +234,7 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
 //                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
             }
 
@@ -194,6 +259,67 @@ public class ProductServiceImpl implements ProductService {
         return Message.success();
         }
 
+    @Override
+    public Message checkSameName(String name) {
+        logger.info("ProductServiceImpl checkSameName is start....name:" + name);
+        Product product = productDao.checkSameName(name);
+        if(product!=null){
+            return Message.error();
+        }else {
+            return Message.success();
+        }
+    }
+
+    @Override
+    public Message checkSameNameUpdate(String name, int id) {
+        logger.info("ProductServiceImpl checkSameName is start....name:" + name+"id:"+id);
+        Product product = productDao.checkSameName(name);
+        Product productMy = productDao.getProductById(id);
+        if(product!=null){
+            if(productMy.getName().equals(product.getName())){
+                return Message.success();
+            }
+            return Message.error();
+        }else {
+            return Message.success();
+        }
+    }
+
+    @Override
+    public Message updateProduct(Product product, MultipartFile picPath, Model model) {
+        logger.info("ProductServiceImpl updateProduct is start....product:" + product);
+        String extsion = null;
+        String Path = null;
+        if (picPath != null) {
+            if (!picPath.isEmpty()) {
+                String originalFilename = picPath.getOriginalFilename();
+                extsion = FilenameUtils.getExtension(originalFilename);
+                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+            }
+
+//            if (!extsion.equalsIgnoreCase("jpg") && !extsion.equalsIgnoreCase("png")) {
+//                model.addAttribute("error", "文件格式有误只能上传jpg或者png");
+//                return "regsiter";
+//            }
+//            if (mFile.getSize() > 5 * 1024 * 1024) {
+//                model.addAttribute("error", "文件大小不能超过5MB");
+//                return "regsiter";
+//            }
+
+            try {
+                picPath.transferTo(new File(Path));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Product productfileId = productDao.getProductById(product.getId());
+        product.setFilePath(Path);
+        product.setFileId(productfileId.getFileId());
+        int count = productDao.updateProduct(product);
+        int i = productDao.updatefile(product);
+        return Message.success();
+    }
 
 
     @Override

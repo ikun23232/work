@@ -193,4 +193,38 @@
         INSERT INTO easybuy_file (filePath, userId, createTime)
         VALUES (#{filePath},22,now());
     </insert>
+
+    <select id="checkSameName" resultType="Product">
+        SELECT id,
+               name,
+               description,
+               price,
+               stock,
+               categoryLevelId,
+               fileId,
+               isDel,
+               createTime,
+               brandId
+        FROM easybuy_product
+        WHERE name = #{name}
+    </select>
+
+    <update id="updateProduct">
+        update easybuy_product
+        set name            = #{name},
+            description     = #{description},
+            createTime      = #{createTime},
+            price           = #{price},
+            stock           = #{stock},
+            categoryLevelId = #{categoryLevelId},
+            brandId=#{brandId}
+        where id = #{id}
+    </update>
+
+    <update id="updatefile">
+        update easybuy_file
+        set productId = #{id}
+        where id = #{fileId}
+    </update>
+
 </mapper>

@@ -52,5 +52,7 @@ public class Product {
     private Double cost;
     @Field(type = FieldType.Integer)
     private Integer brandId;
+    @Field(type = FieldType.Boolean)
+    private Boolean concernFalg;
 
 }
