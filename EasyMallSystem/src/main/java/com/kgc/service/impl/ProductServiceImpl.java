@@ -334,7 +334,8 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
 //                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
             }
 

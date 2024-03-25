@@ -144,7 +144,7 @@
               //           password:this.password
               //       }
               //   })
-                let resp= request.get("/loginto", {
+                let resp= await request.get("/loginto", {
                       params: {
                           loginName: this.loginName,
                           password:this.password

@@ -54,6 +54,8 @@ public class Product {
     private Integer brandId;
     @Field(type = FieldType.Boolean)
     private Boolean concernFalg;
+    @Field(type = FieldType.Integer)
+    private Integer categoryLevelId;
 
 
 

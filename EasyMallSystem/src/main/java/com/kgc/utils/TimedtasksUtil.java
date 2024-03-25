@@ -34,6 +34,7 @@ public class TimedtasksUtil {
             // 在子线程中执行订单检查和删除逻辑
 
             System.out.println("定时器来呐");
+            //判断订单状态如果是1我就不执行
             orderService.delOrderById(Integer.parseInt(orderId));
 
 

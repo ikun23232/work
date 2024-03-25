@@ -871,9 +871,9 @@
         },
         mounted() {
             console.log(productName)
-        if (productName){
-
-       }
+            if (productName) {
+                this.product.name = productName;
+            }
             if (categoryId){
                 this.searchBrandList(1,categoryId);
             }
