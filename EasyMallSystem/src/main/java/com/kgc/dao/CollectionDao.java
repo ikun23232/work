@@ -19,7 +19,7 @@ public interface CollectionDao {
 
 
 
-    public int UpdateProductInCarById(@Param("productId") int productId, @Param("quantity") int quantity);
+    public int UpdateProductInCarById(@Param("productId") int productId, @Param("quantity") int quantity,@Param("userId")int userId);
 
 
     public int addProductInCarById(@Param("productId") int productId, @Param("quantity") int quantity,@Param("userId")int userId);

@@ -228,7 +228,7 @@ public class ProductServiceImpl implements ProductService {
         //先拿出收藏表里面的
         ArrayList<Product> productList = new ArrayList<>();
         //拿到登录的userid
-        int userId = 22;
+        int userId = UserSessionUtil.getUserId();
         List<Concern> concernPageList = concernDao.getConcernPageListES(userId);
 
         SearchHits<? extends Product> searchHits = elasticsearchRestTemplate.search(nativeSearchQueryBuilder.build(), product.getClass());
@@ -294,8 +294,8 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-//                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
-                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
             }
 
             try {
@@ -348,8 +348,8 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
-//                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
             }
             try {
                 picPath.transferTo(new File(Path));
@@ -361,7 +361,10 @@ public class ProductServiceImpl implements ProductService {
         product.setFilePath(Path);
         product.setFileId(productfileId.getFileId());
         int count = productDao.updateProduct(product);
-        int i = productDao.updatefile(product);
+        if (Path!=null){
+            int i = productDao.updatefile(product);
+
+        }
         return Message.success();
     }
 

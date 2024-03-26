@@ -425,7 +425,7 @@
                     category:this.category
                 })
                 console.log(resp)
-                if (resp.code=="200"){
+                if (resp.data.code=="200"){
                     this.$message({
                         message: '添加成功!',
                         type: 'success',
@@ -434,7 +434,7 @@
                     window.location.href='Member_CategoryManager1.html';
                 }else {
                     this.$message({
-                        message: resp.msg,
+                        message: resp.data.msg,
                         type: 'error',
                         center: 'true',
                     })
@@ -449,7 +449,7 @@
                     }
                 })
                 console.log(resp)
-                if (resp.code=="200"){
+                if (resp.data.code=="200"){
                     this.Falg.categoryNameFalg=true
                 }else {
                     this.Falg.categoryNameFalg=false
@@ -459,7 +459,7 @@
                 let resp=await request.post("/getCategoryListall", {
                 })
                 console.log(resp)
-                this.categoryList=resp.data
+                this.categoryList=resp.data.data
             },
             handleChange(val) {
                 console.log("我被点了我是" + val)
@@ -477,7 +477,7 @@
                     console.log('打印次数'+index);
                     console.log('打印次数'+item.id);
                     if (item.id==val){
-                        this.$set(item, 'children', resp.data);
+                        this.$set(item, 'children', resp.data.data);
 
                     }
                 })
@@ -516,10 +516,10 @@
                     categoryName:this.categoryName
                 })
                 console.log(resp)
-                this.categoryList=resp.data.list;
-                this.page.totalCount=resp.data.total;
-                this.page.pageSize=resp.data.pageSize
-                this.page.totalPageCount=resp.data.pages;
+                this.categoryList=resp.data.data.list;
+                this.page.totalCount=resp.data.data.total;
+                this.page.pageSize=resp.data.data.pageSize
+                this.page.totalPageCount=resp.data.data.pages;
 
             },
             handleSizeChange(val) {
@@ -536,7 +536,7 @@
                     }
                 })
                 console.log(resp)
-                if (resp.code=="200"){
+                if (resp.data.code=="200"){
                     this.$message({
                         message: '删除成功!',
                         type: 'success',
@@ -545,7 +545,7 @@
                     this.initBrandList();
                 }else {
                     this.$message({
-                        message: resp.message,
+                        message: resp.data.message,
                         type: 'error',
                         center: 'true',
                     })
@@ -560,13 +560,13 @@
                     }
                 });
                 console.log(resp)
-                this.categoryLists = resp.data;
+                this.categoryLists = resp.data.data;
 
             },
             async initCategoryOne(){
                 let resp=await request.get("/getCategoryList");
                 console.log(resp)
-                this.categoryLists = resp.data.data;
+                this.categoryLists = resp.data.data.data;
                 // if (item.id==val){
                 //     this.$set(item, 'children', resp.data);
                 // }

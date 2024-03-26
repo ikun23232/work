@@ -128,6 +128,7 @@
             async loginTo() {
                 if(this.loginName==''){
                     alert("用户名不能为空！")
+
                     return;
                 }
                 if(this.password==''){
@@ -152,9 +153,9 @@
                   })
                     console.log(resp);
                     if(resp.data.code=="201"){
-                        alert("登陆失败");
+                        alert(resp.data.message);
                     }else {
-                        alert("登陆成功！");
+                        alert(resp.data.message);
                         window.location.href = "index.html"
 
                     }

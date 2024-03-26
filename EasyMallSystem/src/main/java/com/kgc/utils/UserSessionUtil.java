@@ -8,8 +8,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import static com.kgc.constant.UserConstant.USER_SESSION;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 /**
  * @author: 欧洋宏
@@ -20,7 +24,11 @@ public class UserSessionUtil implements ApplicationContextAware {
     @Autowired
     private static RedisUtil redisUtil;
     public static User getUser(){
-        String valueByKey = redisUtil.getValueByKey(USER_SESSION);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpSession session = request.getSession();
+        String loginName =(String) session.getAttribute("userInfo");
+
+        String valueByKey = redisUtil.getValueByKey(loginName);
         User user = JSON.parseObject(valueByKey, User.class);
         return user;
     }
@@ -28,6 +36,10 @@ public class UserSessionUtil implements ApplicationContextAware {
     public static int getUserId(){
         User user = getUser();
         return user.getId();
+    }
+    public static String getLoginName(){
+        User user = getUser();
+        return user.getLoginName();
     }
 
     @Override

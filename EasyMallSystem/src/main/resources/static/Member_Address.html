@@ -241,7 +241,7 @@
                 <h1>地址管理</h1>
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
-                        <el-input v-model="addressDetail" placeholder="地址名称"></el-input>
+                       <el-input v-model="addressDetail" placeholder="地址名称"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="initAddressList(1)">查询</el-button>
@@ -314,7 +314,7 @@
                             @size-change="handleSizeChange"
                             @current-change="initAddressList"
                             :current-page="page.currentPageNo"
-                            :page-sizes="[5, 10, 15, 20]"
+                            :page-sizes="[1,2,3]"
                             :page-size="page.pageSize"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="page.totalCount" style="position: absolute">
@@ -471,7 +471,7 @@
                         currentPageNo:1,
                         totalCount:'',
                         totalPageCount:'',
-                        pageSize:10
+                        pageSize:3
                     },
                     addressList:[],
                     previousPage:'',
@@ -500,10 +500,10 @@
                         addressDetail:this.addressDetail
                     })
                     console.log(resp)
-                    this.addressList = resp.data.list;
-                    this.page.totalCount = resp.data.total;
-                    this.page.pageSize = resp.data.pageSize
-                    this.page.totalPageCount = resp.data.pages;
+                    this.addressList = resp.data.data.list;
+                    this.page.totalCount = resp.data.data.total;
+                    this.page.pageSize = resp.data.data.pageSize
+                    this.page.totalPageCount = resp.data.data.pages;
                 },
                 async setAddressDefault(id) {
                     let resp = await request.get("/setAddressDefault", {
@@ -511,7 +511,7 @@
                             id: id
                         }
                     })
-                    if (resp.code == "200") {
+                    if (resp.data.code == "200") {
                         this.$message({
                             message: '设置成功!',
                             type: 'success',
@@ -521,7 +521,7 @@
 
                     } else {
                         this.$message({
-                            message: resp.msg,
+                            message: resp.data.msg,
                             type: 'error',
                             center: 'true',
                         })
@@ -544,7 +544,7 @@
                         }
                     })
                     console.log(resp)
-                    if (resp.code == "200") {
+                    if (resp.data.code == "200") {
                         this.$message({
                             message: '删除成功!',
                             type: 'success',
@@ -553,7 +553,7 @@
                         this.initAddressList();
                     } else {
                         this.$message({
-                            message: resp.message,
+                            message: resp.data.message,
                             type: 'error',
                             center: 'true',
                         })
@@ -592,7 +592,7 @@
                     this.address.address=this.fullName
                     let resp = await request.post("/addAddress",this.address)
                     console.log(resp)
-                    if (resp.code == "200") {
+                    if (resp.data.code == "200") {
                         this.$message({
                             message: "添加成功",
                             type: 'success',

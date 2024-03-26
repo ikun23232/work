@@ -179,7 +179,7 @@ public class CategoryServiceImpl implements CategoryService {
             return Message.success();
         }
         Category category = categoryDao.CheckCategoryName(categoryName);
-        if (category==null&&category.getCategoryName().equals("")){
+        if (category==null){
             return Message.success();
         }
         return Message.error();

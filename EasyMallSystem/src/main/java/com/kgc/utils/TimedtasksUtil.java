@@ -26,12 +26,13 @@ public class TimedtasksUtil {
         this.executor = Executors.newScheduledThreadPool(1);
     }
     public void startOrderTimeoutTask(String orderId, long createTime) {
-        long delay = 30 * 6000 * 1000; // 30分钟的延迟时间
+        long delay = 10 * 1 * 1000; // 30分钟的延迟时间
         executor.schedule(() -> checkAndDeleteOrder(orderId, createTime), delay, TimeUnit.MILLISECONDS);
     }
     private void checkAndDeleteOrder(String orderId, long createTime) {
         // 在这里编写检查订单并删除的逻辑\
         //直接删除我的订单
+        System.out.println("我来了.................");
         int orderIdTemp = 0;
         if (!StringUtils.isEmpty(orderId)) {
             orderIdTemp = Integer.parseInt(orderId);

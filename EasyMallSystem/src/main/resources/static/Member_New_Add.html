@@ -242,7 +242,7 @@
                     <h1>添加咨询</h1>
                     <el-form ref="News" label-width="80px" :model="News" :rules="rules">
                         <el-form-item label="新闻标题" prop="title">
-                            <el-input v-model="News.title" maxlength="6"></el-input>
+                            <el-input v-model="News.title" ></el-input>
                         </el-form-item>
                         <el-form-item label="新闻内容" prop="content">
                             <el-input v-model="News.content" size="large"></el-input>
@@ -409,14 +409,14 @@
             },
 
             async add() {
-                if (!confirm("您确定要添加该分类吗")) {
+                if (!confirm("您确定要添加该咨询吗")) {
                     return;
                 }
                 let resp = await request.post("/addNewList", {
                     News: this.News
                 })
                 console.log(resp)
-                if (resp.code == "200") {
+                if (resp.data.code == "200") {
                     this.$message({
                         message: '添加成功!',
                         type: 'success',
@@ -425,7 +425,7 @@
                     window.location.href = 'Member_New_Manager.html';
                 } else {
                     this.$message({
-                        message: resp.msg,
+                        message: resp.data.msg,
                         type: 'error',
                         center: 'true',
                     })

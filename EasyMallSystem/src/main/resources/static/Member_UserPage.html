@@ -429,14 +429,12 @@
                 this.page.pageSize=val;
                 this.getUserPage(1);
             },
-            handleCurrentChange(val) {
-                this.page.pageSize=val;
-                this.getUserPage(this.page.pageSize);
-            },
+
             getUserPage(currentPageNo){
+                this.page.currentPageNo=currentPageNo;
                 axios.get("/getUserPage",{
                     params:{
-                        currentPageNo:currentPageNo,
+                        currentPageNo:this.page.currentPageNo,
                         roleId:this.roleValue,
                         userName:this.input,
                         pageSize:this.page.pageSize

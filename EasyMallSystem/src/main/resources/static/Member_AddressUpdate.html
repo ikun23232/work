@@ -459,15 +459,15 @@
                     }
                 })
                 console.log(resp.data)
-                this.address = resp.data.data;
+                this.address = resp.data.data.data;
             },
             async update() {
-                if (!confirm("您修改要添加该咨询吗")) {
+                if (!confirm("您确定要修改该地址吗?")) {
                     return;
                 }
                 let resp = await request.post("/updateAddressById", this.address)
                 console.log(resp)
-                if (resp.code == "200") {
+                if (resp.data.code == "200") {
                     this.$message({
                         message: '修改成功!',
                         type: 'success',
@@ -476,7 +476,7 @@
                     window.location.href = 'Member_Address.html';
                 } else {
                     this.$message({
-                        message: resp.msg,
+                        message: resp.data.msg,
                         type: 'error',
                         center: 'true',
                     })

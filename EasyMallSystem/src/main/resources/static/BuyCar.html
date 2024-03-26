@@ -788,7 +788,7 @@
             decreaseNumber(item) {
                 // 将输入值转换为数字并减少
                 if (!isNaN(item.quantity)) {
-                    item.quantity = Math.max(0, item.quantity - 1); // 确保不会小于0
+                    item.quantity = Math.max(1, item.quantity - 1); // 确保不会小于0
                 }
             },
 
@@ -800,7 +800,8 @@
                     this.selectedItems = [];
                 }
             },
-            toCartwo() {
+           async toCartwo() {
+               await this.updateProductInCarById()
                 if(this.selectedItems.length>0){
                     window.location.href = '/BuyCar_Two.html?ids=' + this.selectedItems.toString();
                 }else {
@@ -814,7 +815,14 @@
             },
             decrementQuantity(item) {
                 if (item.quantity > 1) {
-                    item.quantity--;
+
+                    if (item.quantity--==0){
+                        this.$message({
+                            message: '商品不能为0哦!',
+                            type: 'error',
+                            center: 'true',
+                        })
+                    }
                 } else {
                     item.quantity = 1; // 确保数量不会小于1
                 }

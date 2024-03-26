@@ -573,8 +573,8 @@
                 <div class="list_c">
 
                     <ul class="cate_list">
-                        <li v-for="(item,index) in productList" :key="item.id" @click="toProductinit(item.id)">
-                            <div class="img"><a href="#"><img :src="doImg(item.filePath)" width="210" height="185"/></a>
+                        <li v-for="(item,index) in productList" :key="item.id" >
+                            <div class="img"><a href="#"><img :src="doImg(item.filePath)" @click="toProductinit(item.id)" width="210" height="185"/></a>
                             </div>
                             <div class="price">
                                 <font>￥<span>{{item.price}}</span></font> &nbsp; 26R
@@ -589,7 +589,8 @@
                                     <a class="j_car" @click="getToCar(item.id)">加入购物车</a>
                                 </template>
                             </div>
-                        </li>    <div class="tips" v-if="productList">
+                        </li>    </ul>   <div class="tips" v-if="productList">
+
                         暂无匹配的商品详情,请重新筛选哦!
                     </div>
                     <div class="block">
@@ -604,7 +605,7 @@
                         </el-pagination>
                     </div>
 
-                </div>
+                </div>>
             </div>
         </div>
 

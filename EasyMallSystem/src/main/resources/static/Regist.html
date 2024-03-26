@@ -77,7 +77,7 @@
                         </tr>
                         <tr height="50">
                             <td align="right"><font color="#ff4e00">*</font>&nbsp;用户名 &nbsp;</td>
-                            <td><input type="password" value="" v-model="User.loginName" @blur="checkLoginName"
+                            <td><input type="text" value="" v-model="User.loginName" @blur="checkLoginName"
                                        class="l_user"/><span
                                     class="error">{{Cue.loginNameCue}}</span></td>
                             <td>
@@ -111,7 +111,7 @@
                         <tr height="50">
                             <td align="right"><font color="#ff4e00">*</font>&nbsp;验证码 &nbsp;</td>
                             <td>
-                                <input type="password" class="ly_pwd" v-model="User.code"/>
+                                <input type="text" class="ly_pwd" v-model.number="User.code"/>
                                 <!--              <input v-if="!sendMsgDisabled" type="button"  value="发送验证码" @click="count()">-->
                                 <input v-if="!sendMsgDisabled" @click="count()" value="发送验证码" style="background-color: #e02d02;width: 90px"></input>
                                 <a v-if="sendMsgDisabled">{{time + '秒后获取'}}</a>
@@ -189,11 +189,12 @@
                 },
                 Code: '',
                 time: 60,
-                sendMsgDisabled: false
+                sendMsgDisabled: false,
+                TempEmail:''
             }
         },
         methods: {
-            count() {
+            async count() {
                 if (this.User.email === '') {
                     this.$message({
                         message: '请输入邮箱哦!',
@@ -210,7 +211,10 @@
                 } else {
                     this.Cue.emailCue = "√"
                 }
-
+                await  this.checkEmail();
+                if (!this.Falg.emailFalg){
+                    return;
+                }
                 this.sendMsgDisabled = true
                 const interval = window.setInterval(() => {
                     if ((this.time--) <= 0) {
@@ -219,6 +223,7 @@
                         window.clearInterval(interval)
                     }
                 }, 1000)
+                this.TempEmail=this.User.email
                 axios.get("/sendEmailCode", {
                     params: {
                         email: this.User.email
@@ -252,8 +257,12 @@
                 if (this.User.password === '') {
                     this.Cue.passwordCue = "密码不能为空"
                     this.Falg.addFalg = false;
-                } else {
+                }else if (this.User.password.length > 10 || this.User.password.length < 6) {
+                    this.Cue.passwordCue = "密码长度6-10位"
+                }else {
                     this.Cue.passwordCue = "√"
+
+
                 }
             },
             checkRePassword() {
@@ -289,6 +298,7 @@
 
                     }else {
                         this.Cue.emailCue="邮箱已经被注册"
+                        this.Falg.emailFalg=false;
                     }
                 })
             },
@@ -340,10 +350,10 @@
             },
             async add() {
                 await this.checkLoginName();
-                this.checkPassword()
-                this.checkRePassword()
-               await  this.checkEmail()
-               await this.checkMobile()
+                await this.checkPassword()
+                await  this.checkRePassword()
+                await  this.checkEmail()
+                await this.checkMobile()
                 this.CheckCode();
                 console.log(this.Falg.addFalg)
 
@@ -354,6 +364,15 @@
                     return;
                 }
                 if (!this.Falg.emailFalg){
+                    this.$message({
+                        message: '你不要乱改哦!',
+                        type: 'error',
+                        center: 'true',
+                    })
+                    return;
+                }
+                if (this.TempEmail!=this.User.email){
+
                     return;
                 }
                 if (this.Falg.addFalg) {

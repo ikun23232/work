@@ -427,7 +427,7 @@
                     category: this.category
                 })
                 console.log(resp)
-                if (resp.code == "200") {
+                if (resp.data.code == "200") {
                     this.$message({
                         message: '修改成功!',
                         type: 'success',
@@ -436,7 +436,7 @@
                     window.location.href = 'Member_CategoryManager1.html';
                 } else {
                     this.$message({
-                        message: resp.message,
+                        message: resp.data.message,
                         type: 'error',
                         center: 'true',
                     })
@@ -451,7 +451,7 @@
                     }
                 })
                 console.log(resp)
-                if (resp.code == "200") {
+                if (resp.data.code == "200") {
                     this.Falg.categoryNameFalg = true
                 } else {
                     this.Falg.categoryNameFalg = false
@@ -460,7 +460,7 @@
             async initCategoryName() {
                 let resp = await request.post("/getCategoryListall", {})
                 console.log(resp)
-                this.categoryList = resp.data
+                this.categoryList = resp.data.data
             },
             async initCategory(id) {
                 let resp = await request.get("/getCategoryByid", {
@@ -469,7 +469,7 @@
                     }
                 })
                 console.log(resp)
-                this.category = resp.data;
+                this.category = resp.data.data;
             }
         }
     })

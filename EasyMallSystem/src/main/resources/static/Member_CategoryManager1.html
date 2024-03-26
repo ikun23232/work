@@ -276,8 +276,8 @@
 <!--            </table>-->
 
 
-            <div class="bigBox" style="background-color: yellow">
-                <h1>分类管理</h1>
+            <div class="bigBox" style="background-color: #FF4E00;text-align: center">
+                <h1  style="color: wheat">分类管理</h1>
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
                         <el-input v-model="categoryName" placeholder="分类名称" style="width: 200px" >分类名称</el-input>
@@ -511,7 +511,7 @@
                     console.log('打印次数'+index);
                     console.log('打印次数'+item.id);
                     if (item.id==val){
-                        this.$set(item, 'children', resp.data);
+                        this.$set(item, 'children', resp.data.data);
                     }
                 })
             },
@@ -523,8 +523,8 @@
                 });
                 console.log("3"+item.id)
                 if (item.id==val){
-                    if (resp.data!=null){
-                        this.$set(item, 'children', resp.data);
+                    if (resp.data.data!=null){
+                        this.$set(item, 'children', resp.data.data);
 
                     }
                 }
@@ -551,10 +551,10 @@
                     type:this.type
                 })
                 console.log(resp)
-                this.categoryList=resp.data.list;
-                this.page.totalCount=resp.data.total;
-                this.page.pageSize=resp.data.pageSize
-                this.page.totalPageCount=resp.data.pages;
+                this.categoryList=resp.data.data.list;
+                this.page.totalCount=resp.data.data.total;
+                this.page.pageSize=resp.data.data.pageSize
+                this.page.totalPageCount=resp.data.data.pages;
 
            },
             handleSizeChange(val) {
@@ -571,7 +571,7 @@
                     }
                 })
                 console.log(resp)
-               if (resp.code=="200"){
+               if (resp.data.code=="200"){
                    this.$message({
                        message: '删除成功!',
                        type: 'success',
@@ -580,7 +580,7 @@
                    this.initCategoryId();
                }else {
                    this.$message({
-                       message: resp.message,
+                       message: resp.data.message,
                        type: 'error',
                        center: 'true',
                    })
@@ -595,13 +595,13 @@
                     }
                 });
                 console.log(resp)
-                this.categoryLists = resp.data;
+                this.categoryLists = resp.data.data;
 
             },
            async initCategoryOne(){
                 let resp=await request.get("/getCategoryList");
                console.log(resp)
-               this.categoryLists = resp.data.data;
+               this.categoryLists = resp.data.data.data;
                // if (item.id==val){
                //     this.$set(item, 'children', resp.data);
                // }

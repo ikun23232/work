@@ -177,17 +177,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Message delOrderById(int id) {
         //删除订单
-        int order = orderDao.delOrder(id);
-        if (order<=0){
-            return Message.error("删除失败");
-        }
+
         //回我订单的库存
         //先拿我订单的商品集合
-        List<Product> productListByOrderId = orderDao.getProductListByOrderId(id);
+        System.out.println(UserSessionUtil.getUserId());
+        int userId = UserSessionUtil.getUserId();
+        List<Product> productListByOrderId = orderDao.getProductListByOrderId(id,userId);
         for (Product product : productListByOrderId) {
             int stock=product.getQuantity();
             //分别加库存
             productDao.addStockById(product.getId(),stock);
+        }
+        int order = orderDao.delOrder(id);
+        if (order<=0){
+            return Message.error("删除失败");
         }
         return Message.success("订单删除成功");
     }
@@ -206,9 +209,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Message combineOrders(int masterOrder, int childOrder) {
+
+        int userId = UserSessionUtil.getUserId();
         //通过子订单拿到商品集合
-        List<Product> MasterproductList = orderDao.getProductListByOrderId(masterOrder);
-        List<Product> ChildproductList = orderDao.getProductListByOrderId(childOrder);
+        List<Product> MasterproductList = orderDao.getProductListByOrderId(masterOrder,userId);
+        List<Product> ChildproductList = orderDao.getProductListByOrderId(childOrder,userId);
 
 
         //合并商品数量

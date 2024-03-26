@@ -1,8 +1,9 @@
 package com.kgc.service;
 
 import com.kgc.entity.Message;
-import com.kgc.entity.Product;
 import com.kgc.entity.User;
+
+import javax.servlet.http.HttpSession;
 
 public interface UserService {
     /**
@@ -33,11 +34,13 @@ public interface UserService {
 
     /**
      * 用户登录检查密码是否正确
+     *
      * @param loginName
      * @param password
+     * @param session
      * @return
      */
-    public Message checkUserByNamePwd(String loginName,String password);
+    public Message checkUserByNamePwd(String loginName, String password, HttpSession session);
 
 
     /**

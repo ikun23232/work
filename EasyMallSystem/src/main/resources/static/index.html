@@ -206,14 +206,13 @@
                                 <span class="n_img"><span></span><img src="images/nav1.png"/></span>
                                 <span class="fl">{{item.name}}</span>
                             </div>
-                            <div class="zj" v-for="(subItem, index) in categorySecondList" :key="index" @click.stop="toCategoryList(subItem.id)">
+                            <div class="zj" >
                                 <div class="zj_l">
-                                    <div class="zj_l_c">
+                                    <div class="zj_l_c" v-for="(subItem, index) in categorySecondList" :key="index" @click.stop="toCategoryList(subItem.id)">
                                         <h2>
                                             {{subItem.name}}
                                         </h2>
-                                        <a v-for="(subItem1, index1) in categoryThridList"
-                                           :key="index1" @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
+                                        <a v-show="subItem.id==subItem1.parentId" v-for="(subItem1, index1) in categoryThridList" :key="index1" @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
                                     </div>
                                 </div>
                                 <div class="zj_r">
@@ -353,7 +352,7 @@
                                 <input  type="text" value="" class="c_ipt" v-model="phoneNum" @input="validatePhoneNumber($event)"/>
                             </td>
                             <td>
-                                <span v-if="!validPhoneNumber">请输入有效的手机号码</span>
+                                <span v-if="!validPhoneNumber" style="position: absolute;right:165px; top:510px">请输入有效的手机号码</span>
                             </td>
                         </tr>
                         <tr height="35">
@@ -490,7 +489,7 @@
         </div>
         <!--End 限时特卖 End-->
         <div v-for="(frist,index) in categoryFristList" :key="index">
-            <div class="content mar_20">
+            <div class="content mar_20" @click="toCategoryList(frist.id)">
                 <img src="images/mban_1.jpg" width="1200" height="110"/>
             </div>
                 <!--Begin 进口 生鲜 Begin-->
@@ -498,7 +497,7 @@
                     <span class="floor_num">{{index + 1}}F</span>
                     <span class="fl">{{frist.name}}</span>
                     <span class="i_mores fr">
-                    <a href="#" v-for="second in frist.secondCategoryList" :key="second.id">{{second.name}}</a>&nbsp; &nbsp; &nbsp
+                    <a href="#" @click.prevent="toCategoryList(second.id)" v-for="second in frist.secondCategoryList" :key="second.id">{{second.name}}</a>&nbsp; &nbsp; &nbsp
                 </span>
                 </div>
                 <div class="content">
@@ -517,7 +516,7 @@
                         <div class="fresh_txt">
                             <div class="fresh_txt_c">
                                 <a href="#" v-for="second in frist.secondCategoryList"
-                                   :key="second.id">{{second.name}}</a>
+                                   :key="second.id" @click.prevent="toCategoryList(second.id)">{{second.name}}</a>
                             </div>
                         </div>
                     </div>

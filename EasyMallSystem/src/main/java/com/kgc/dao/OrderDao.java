@@ -22,7 +22,7 @@ public int addOrder(Order order);
     /**
      *根据我的orderId拿到所有商品集合
      */
-    public List<Product> getProductListByOrderId(int orderId);
+    public List<Product> getProductListByOrderId(@Param("orderId") int orderId,@Param("userId")int userId);
 
 
     public int updateStatusById(String serialNumber);

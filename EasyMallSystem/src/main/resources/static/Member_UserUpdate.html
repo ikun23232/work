@@ -463,16 +463,18 @@
                 }
             }
 
-            var checkPhone = (rule, value, callback) => {
+
+            var validatePass22 = async (rule, value, callback) => {
                 var emailRel = /^1[3456789]\d{9}$/;
                 if (value === '') {
                     callback(new Error("请填写电话！"))
-                }else if (!emailRel.test(value)) {
+                }
+                if (!emailRel.test(value)) {
                     callback(new Error("手机格式不正确！"))
                     this.Falg.mobilefalg = false;
                 }
-                this.checkMobile()
-                if(this.falg.mobilefalg == false){
+                await  this.checkMobile()
+                if(!this.falg.mobilefalg){
                     callback(new Error("该手机号不可用"))
                 }else {
                     callback();
@@ -524,14 +526,10 @@
                                 trigger: 'blur'
                             }
                         ],
-                        mobile: [
-                            { required: true, message: '请输入电话号码', trigger: 'blur' },
-                            { pattern: /^1[0-9]{10}$/, message: '请输入正确的手机号码', trigger: ['blur', 'change'] },
-                            {
-                                validator: this.checkMobileUnique,
-                                trigger: 'blur'
-                            }
-                        ]
+
+                    mobile: [
+                        {validator: validatePass22, trigger: 'blur'}
+                    ]
                 }
             };
         },
@@ -565,11 +563,11 @@
                 // 类似地，编写用于检查手机号码唯一性的异步函数
                 try {
                     // 模拟异步请求
-                    await this.checkmobile()
+                    await this.checkMobile()
                     if (this.falg.mobilefalg) {
                         callback(); // 邮箱唯一，验证通过
                     } else {
-                        callback(new Error('该邮箱已被使用')); // 邮箱重复，验证不通过
+                        callback(new Error('该手机已被使用')); // 邮箱重复，验证不通过
                     }
                 } catch (error) {
                     callback(new Error('验证失败，请重试')); // 验证出错
@@ -597,6 +595,7 @@
                         mobile:this.User.mobile
                     }
                 }).then((resp)=>{
+                    console.log(resp)
                     if (resp.data.code=="200"){
                         this.falg.mobilefalg=true;
 
@@ -633,7 +632,7 @@
             checkEmail() {
                 axios.get("/checkEmail", {
                     params: {
-                        name: this.User.email,
+                        email: this.User.email,
                         id:this.User.id
                     }
                 }).then((respones) => {
@@ -663,7 +662,7 @@
             checkMobile(){
                 axios.get("/checkUserByUpdateMobile", {
                     params: {
-                        name: this.User.mobile,
+                        mobile: this.User.mobile,
                         id:this.User.id
                     }
                 }).then((respones) => {

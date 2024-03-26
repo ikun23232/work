@@ -129,7 +129,8 @@ public class RequestFilter implements Filter {
      * @return
      */
     private boolean isUserLoggedIn() {
-        String valueByKey = redisUtil.getValueByKey(UserConstant.USER_SESSION);
+        String loginName = UserSessionUtil.getLoginName();
+        String valueByKey = redisUtil.getValueByKey(loginName);
         User user = JSON.parseObject(valueByKey, User.class);
         if (user!=null&&user.getUserName()!=null){
             return true;

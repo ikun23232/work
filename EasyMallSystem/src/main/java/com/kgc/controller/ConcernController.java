@@ -20,8 +20,8 @@ public class ConcernController {
     private ConcernService concernService;
 
     @RequestMapping("/getConcernPageList")
-    public Message getConcernPageList(int currentPageNo){
-        Message message = concernService.getConcernPageList(currentPageNo, 5);
+    public Message getConcernPageList(int currentPageNo,int pageSize){
+        Message message = concernService.getConcernPageList(currentPageNo, pageSize);
         return message;
     }
 

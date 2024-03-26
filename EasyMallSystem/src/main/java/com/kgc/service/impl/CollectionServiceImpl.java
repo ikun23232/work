@@ -57,7 +57,8 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Message UpdateProductInCarById(int id, int quantity) {
-        int updateRow = collectionDao.UpdateProductInCarById(id, quantity);
+        int userId = UserSessionUtil.getUserId();
+        int updateRow = collectionDao.UpdateProductInCarById(id, quantity,userId);
         if (updateRow > 0) {
             return Message.success();
         }
@@ -78,9 +79,10 @@ public class CollectionServiceImpl implements CollectionService {
     public Message UpdateProductInCarById(List<Product> productList) {
         int counts = productList.size();
         int sum = 0;
+        int userId = UserSessionUtil.getUserId();
         for (int i = 0; i < productList.size(); i++) {
             Product product = productList.get(i);
-            int updateRow = collectionDao.UpdateProductInCarById(product.getId(), product.getQuantity());
+            int updateRow = collectionDao.UpdateProductInCarById(product.getId(), product.getQuantity(),userId);
             if (updateRow > 0) {
                 sum++;
             }

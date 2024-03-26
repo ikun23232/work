@@ -591,9 +591,11 @@
             </div>
             <div class="des_join">
                 <div class="j_nums">
-                    <div @input="changeAmount($event)" ><input type="text" value="1" name="" class="n_ipt"  v-model="amount" @blur="sureZero()"/></div>
+                    <div @input="changeAmount($event)"><input type="text" value="1" name="" class="n_ipt"
+                                                              v-model="amount" @blur="sureZero()"/></div>
                     <input @click="amount++" type="button" value="" onclick="addUpdate(jq(this));" class="n_btn_1"/>
-                    <div @click="decreaseNumber()"><input  type="button" value="" onclick="jianUpdate(jq(this));" class="n_btn_2"/></div>
+                    <div @click="decreaseNumber()"><input type="button" value="" onclick="jianUpdate(jq(this));"
+                                                          class="n_btn_2"/></div>
                 </div>
                 <span class="fl"><a @click="getToCar()"><img src="images/j_car.png"/></a></span>
             </div>
@@ -850,7 +852,8 @@
 
 
                 <div class="pages">
-                    <a href="#" class="p_pre">上一页</a><a href="#" class="cur">1</a><a href="#">2</a><a href="#">3</a>...<a
+                    <a href="#" class="p_pre">上一页</a><a href="#" class="cur">1</a><a href="#">2</a><a
+                        href="#">3</a>...<a
                         href="#">20</a><a href="#" class="p_pre">下一页</a>
                 </div>
 
@@ -1043,7 +1046,7 @@
                 packPrice: 0,
                 packErr: '',
                 productIdList: '',
-                amount:1
+                amount: 1
             }
         },
         mounted() {
@@ -1101,7 +1104,7 @@
                 } else if (event.target.checked == false) {
                     this.reconmendPrice = this.reconmendPrice - price
                     this.packPrice = this.reconmendPrice * this.packNum
-                    let stringToRemove = id+","
+                    let stringToRemove = id + ","
                     this.productIdList = this.productIdList.replace(stringToRemove, '');
                 }
             },
@@ -1121,13 +1124,13 @@
                 this.packPrice = this.reconmendPrice * this.packNum
             },
             uptoAmount() {
-                if(this.packPrice==0){
-                    this.packErr="请勾选商品、填写数量"
+                if (this.packPrice == 0) {
+                    this.packErr = "请勾选商品、填写数量"
                     return;
                 }
-                window.location.href = "BuyCar_Two.html?ids="+this.productIdList+"&amount="+this.packNum
+                window.location.href = "BuyCar_Two.html?ids=" + this.productIdList + "&amount=" + this.packNum
             },
-            changeAmount(event){
+            changeAmount(event) {
                 this.amount = event.target.value.replace(/\D/g, '').substring(0, 3)
             },
             decreaseNumber() {
@@ -1138,37 +1141,34 @@
                     this.amount = num.toString();
                 }
             },
-            getToCar(){
-                axios.get("/addProductInCarById", {
+            getToCar() {
+                axios.get("/addtoCar", {
                     params: {
-                        quantity:this.amount,
-                        id:this.product.id
+                        quantity: this.amount,
+                        id: this.product.id
                     }
                 }).then((respones) => {
                     console.log(respones)
-                    if(respones.data.code=="200"){
+                    if (respones.data.code == "200") {
                         alert("添加成功")
-                    }else {
+                    } else {
                         alert("添加失败，暂无库存")
                     }
                 })
             },
-            toProductinit(id){
-                axios.get("/addHistory",{
-                    params:{
-                        productId:id
+            toProductinit(id) {
+                axios.get("/addHistory", {
+                    params: {
+                        productId: id
                     }
-                }).then((respones)=>{
+                }).then((respones) => {
                     console.log(respones)
-                    if(respones.data.code=="201"){
+                    if (respones.data.code == "201") {
                         alert("访问失败！")
-                    }else {
-                        window.location.href="Product.html?id="+id
+                    } else {
+                        window.location.href = "Product.html?id=" + id
                     }
                 })
-            },
-            addConcern(){
-
             }
         }
     })

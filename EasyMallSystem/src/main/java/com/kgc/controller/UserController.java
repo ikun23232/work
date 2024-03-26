@@ -6,6 +6,7 @@ import com.kgc.entity.User;
 import com.kgc.service.UserService;
 import com.kgc.utils.EmaiCodelUtil;
 import com.kgc.utils.RedisUtil;
+import com.kgc.utils.UserSessionUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +17,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
 
-import static com.kgc.constant.UserConstant.USER_SESSION;
 
 /**
  * @author: 欧洋宏
@@ -98,19 +99,20 @@ public class UserController {
 
 
     @RequestMapping("/loginto")
-    public Message loginTo(String loginName,String password){
+    public Message loginTo(String loginName, String password, HttpSession session){
         logger.info("UserController loginTo is start......loginName:"+loginName+"password:"+password);
-        Message message = userService.checkUserByNamePwd(loginName,password);
+        Message message = userService.checkUserByNamePwd(loginName,password,session);
         return message;
     }
 
     @RequestMapping("/loginOut")
-    public Message loginOut(){
-        boolean Falg = redisUtil.removeKey(USER_SESSION);
+    public Message loginOut(HttpSession Session){
+        String loginName = UserSessionUtil.getLoginName();
+        Session.removeAttribute("userInfo");
+        boolean Falg = redisUtil.removeKey(loginName);
         if (!Falg){
             return Message.error("注销失败");
         }
-        USER_SESSION=null;
         return Message.success();
     }
 

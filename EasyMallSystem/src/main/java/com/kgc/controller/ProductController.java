@@ -139,7 +139,7 @@ public class ProductController {
         return message;
     }
     @RequestMapping("/updateProduct")
-    public Message updateProduct(Product product, @RequestParam(value = "picPath") MultipartFile picPath, Model model) {
+    public Message updateProduct(Product product, @RequestParam(value = "picPath",required = false) MultipartFile picPath, Model model) {
         logger.info("ProductController addProduct is start........."+picPath);
         Message message = productService.updateProduct(product,picPath,model);
         logger.info("ProductController addProduct is start.........Message" + message);

@@ -5,21 +5,20 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kgc.dao.UserDao;
 import com.kgc.entity.Message;
-import com.kgc.entity.Product;
 import com.kgc.entity.User;
 import com.kgc.service.UserService;
 import com.kgc.utils.RedisUtil;
+import com.kgc.utils.UserSessionUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.UUID;
 
-import static com.kgc.constant.UserConstant.USER_SESSION;
 
 
 /**
@@ -95,7 +94,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Message checkUserByNamePwd(String loginName, String password) {
+    public Message checkUserByNamePwd(String loginName, String password, HttpSession session) {
         logger.info("UserServiceImpl loginTo is start .......loginName:" + loginName + "password:" + password);
         logger.info("UserServiceImpl userDao loginTo is start.......loginName:" + loginName + "password:" + password);
         User user = userDao.checkUserByNamePwd(loginName, password);
@@ -103,9 +102,9 @@ public class UserServiceImpl implements UserService {
             return Message.error("用户名或密码错误");
         }
         String userInfo = JSON.toJSONString(user);
+        session.setAttribute("userInfo",user.getLoginName());
         //设置30分钟失效
-        USER_SESSION=UUID.randomUUID().toString();
-        redisUtil.setKey(USER_SESSION,userInfo,30);
+        redisUtil.setKey(user.getLoginName(),userInfo,30);
         return Message.success("登录成功！");
     }
 
@@ -181,9 +180,10 @@ public class UserServiceImpl implements UserService {
     public Message getUserPage(String userName, int roleId, int currentPageNo, int pageSize) {
         logger.info("UserServiceImpl getUserPage is start....");
         //此处拿到登录的用户的权限
-        int rid = 2;
+        User user = UserSessionUtil.getUser();
+
         PageHelper.startPage(currentPageNo, pageSize);
-        List<User> userPage = userDao.getUserPage(userName, roleId, rid);
+        List<User> userPage = userDao.getUserPage(userName, roleId, user.getRoleId());
         PageInfo<User> pageInfo = new PageInfo<>(userPage);
         pageInfo.setList(userPage);
         return Message.success(pageInfo);
@@ -192,8 +192,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Message delUser(int id,int roleId) {
         //此处拿到登录用户的rid
-        int rid = 2;
-        if(rid==roleId){
+        User user = UserSessionUtil.getUser();
+
+        if(user.getRoleId()==roleId){
             return Message.error("删除失败，您没有权限");
         }
         int i = userDao.delUser(id);
@@ -207,11 +208,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Message checkUserUpdate(int id, int roleId) {
         //此处拿到登录用户的rid
-        int rid = 2;
-        if(rid==roleId){
+        User user = UserSessionUtil.getUser();
+
+        if(user.getRoleId()==roleId){
             return Message.error();
         }
-        return Message.success(rid);
+        return Message.success(user.getRoleId());
     }
 
     @Override
@@ -223,7 +225,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Message getUser() {
         //此出通过redis拿到信息
-        String valueByKey = redisUtil.getValueByKey(USER_SESSION);
+        String loginName = UserSessionUtil.getLoginName();
+        String valueByKey = redisUtil.getValueByKey(loginName);
         if (valueByKey==null){
             return Message.error("无登录信息");
         }

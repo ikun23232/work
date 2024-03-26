@@ -534,19 +534,19 @@
                         <td class="p_td" width="160">商品名称</td>
                         <td width="395">好吃的商品</td>
                         <td class="p_td" width="160">电子邮件</td>
-                        <td width="395"><el-input v-model="address.email"></el-input></td>
+                        <td width="395"><el-input v-model="address.email" readonly></el-input></td>
                     </tr>
                     <tr>
                         <td class="p_td">详细信息</td>
-                        <td><el-input v-model="address.address"></el-input></td>
+                        <td><el-input v-model="address.address" readonly></el-input></td>
                         <td class="p_td">收获人</td>
-                        <td><el-input v-model="address.name"></el-input></td>
+                        <td><el-input v-model="address.name" readonly></el-input></td>
                     </tr>
                     <tr>
                         <td class="p_td">电话</td>
-                        <td><el-input v-model="address.phone"></el-input></td>
+                        <td><el-input v-model="address.phone" readonly></el-input></td>
                         <td class="p_td">标记</td>
-                        <td><el-input v-model="address.remark"></el-input></td>
+                        <td><el-input v-model="address.remark" readonly></el-input></td>
                     </tr>
                 </table>
 
@@ -981,10 +981,13 @@
 
 
         mounted() {
-            if (amount==null){
+            if (amount!=null){
+                this.initProductList2(ids,amount)
+
+            }else {
                 this.initProductList1(ids);
+
             }
-            this.initProductList2(ids,amount)
             this.initAddress()
 
         }

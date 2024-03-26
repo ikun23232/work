@@ -10,6 +10,7 @@
             isDel
         FROM easybuy_concern
         WHERE userId = #{userId}
+        and isDel=0
     </select>
 
     <select id="getConcernPageList" resultType="Product">
@@ -44,6 +45,6 @@
     <update id="delConcern">
         update easybuy_concern
         set isDel = 1
-        where productId = #{id}
+        where id = #{id}
     </update>
 </mapper>

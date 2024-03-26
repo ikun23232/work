@@ -235,7 +235,7 @@
                 </ul>
             </div>
         </div>
-		<div class="m_right">
+		<div class="m_right" style="text-align: center">
 <!--            <p></p>-->
 <!--            <div class="mem_tit">我的订单</div>-->
 <!--            <table border="0" class="order_tab" style="width:930px; text-align:center; margin-bottom:30px;" cellspacing="0" cellpadding="0">-->
@@ -299,15 +299,9 @@
 
             <h1>订单管理</h1>
             <el-form :inline="true" class="demo-form-inline">
-                <el-form-item>
-                    <el-input v-model="title" placeholder="订单"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="initOrderList(1)">查询</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="text" @click="toAdd()">添加咨询</el-button>
-                </el-form-item>
+
+
+
             </el-form>
             <el-table
                     :data="orderList"
@@ -320,15 +314,16 @@
                         {{ scope.$index + 1 }}
                     </template>
                 </el-table-column>
+
                 <el-table-column
-                        prop="createTime"
-                        label="下单时间"
+                        prop="serialNumber"
+                        label="订单号"
                         width="180">
 
                 </el-table-column>
                 <el-table-column
-                        prop="serialNumber"
-                        label="订单号"
+                        prop="createTime"
+                        label="下单时间"
                         width="180">
 
                 </el-table-column>
@@ -549,10 +544,10 @@
                     page: this.page
                 })
                 console.log(resp)
-                this.orderList = resp.data.list;
-                this.page.totalCount = resp.data.total;
-                this.page.pageSize = resp.data.pageSize
-                this.page.totalPageCount = resp.data.pages;
+                this.orderList = resp.data.data.list;
+                this.page.totalCount = resp.data.data.total;
+                this.page.pageSize = resp.data.data.pageSize
+                this.page.totalPageCount = resp.data.data.pages;
 
             },
             handleSizeChange(val) {
@@ -572,7 +567,7 @@
                     }
                 })
                 console.log(resp)
-                if (resp.code == "200") {
+                if (resp.data.code == "200") {
                     this.$message({
                         message: '取消成功!',
                         type: 'success',
@@ -581,7 +576,7 @@
                     await this.initOrderList();
                 } else {
                     this.$message({
-                        message: resp.message,
+                        message: resp.data.message,
                         type: 'error',
                         center: 'true',
                     })
@@ -594,7 +589,7 @@
                     News:this.form.news
                 })
                 console.log(resp)
-                if (resp.code=="200"){
+                if (resp.data.code=="200"){
                     this.$message({
                         message: "添加成功",
                         type: 'success',
@@ -611,11 +606,12 @@
             },  async initOrderInPay() {
                 let resp = await request.post("/getOrderListInPay")
                 console.log(resp)
-                this.OrderListInPay=resp.data;
+                this.OrderListInPay=resp.data.data;
 
             },
             async creatOrder(counts,serialNumber) {
-                let resp= await  axios.get("/getOrder", {
+
+                let resp= await request.get("/getOrder", {
                     params:{
                         amount:counts,
                         orderName:'购物车购买',
@@ -627,7 +623,7 @@
             }
             ,
             async  combineOrders(){
-                let resp= await  axios.get("/combineOrders", {
+                let resp= await request.get("/combineOrders", {
                     params:{
                         masterOrderId:this.MasterId,
                         childOrderId:this.ChildId

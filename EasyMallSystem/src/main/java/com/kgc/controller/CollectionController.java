@@ -102,7 +102,7 @@ public class CollectionController {
 
     @RequestMapping("/addtoCar")
     public Message addtoCar(int id ,int quantity) {
-        int userId = 22;
+        int userId = UserSessionUtil.getUserId();
         Message productById = collectionService.addtoCar(userId,id,quantity);
         return productById;
     }

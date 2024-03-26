@@ -524,10 +524,10 @@
                     title: this.title
                 })
                 console.log(resp)
-                this.NewsList = resp.data.list;
-                this.page.totalCount = resp.data.total;
-                this.page.pageSize = resp.data.pageSize
-                this.page.totalPageCount = resp.data.pages;
+                this.NewsList = resp.data.data.list;
+                this.page.totalCount = resp.data.data.total;
+                this.page.pageSize = resp.data.data.pageSize
+                this.page.totalPageCount = resp.data.data.pages;
 
             },
             handleSizeChange(val) {
@@ -547,7 +547,7 @@
                     }
                 })
                 console.log(resp)
-                if (resp.code == "200") {
+                if (resp.data.code == "200") {
                     this.$message({
                         message: '删除成功!',
                         type: 'success',
@@ -556,7 +556,7 @@
                     this.initNewsList();
                 } else {
                     this.$message({
-                        message: resp.message,
+                        message: resp.data.message,
                         type: 'error',
                         center: 'true',
                     })
@@ -593,7 +593,7 @@
                   News:this.form.news
                 })
                 console.log(resp)
-               if (resp.code=="200"){
+               if (resp.data.code=="200"){
                    this.$message({
                        message: "添加成功",
                        type: 'success',

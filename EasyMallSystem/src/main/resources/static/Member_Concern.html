@@ -250,7 +250,7 @@
         </div>
         <div class="m_right" id="m_right">
             <el-table
-                    :data="page.list"
+                    :data="productList"
                     style="width: 100%;border: black"
                     max-height="1000">
                 <el-table-column
@@ -307,13 +307,13 @@
                 <span class="demonstration">完整功能</span>
                 <el-pagination
                         @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="page.pageNum"
+                        @current-change="getConcernList"
+                        :current-page="page.currentPageNo"
                         :page-sizes="[5, 8]"
                         :page-size="page.pageSize"
-                        :page-count="page.pages"
+                        :page-count="page.totalPageCount"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="page.total">
+                        :total="page.totalCount">
                 </el-pagination>
             </div>
         </div>
@@ -416,20 +416,24 @@
         methods: {
             handleSizeChange(val) {
                 this.page.pageSize=val;
-                this.getConcernList(this.page.pageSize);
-            },
-            handleCurrentChange(val) {
-                this.page.pageNum=val;
-                this.getConcernList(this.page.pageNum);
-            },
+                this.getConcernList(1);
+            }
+          ,
             getConcernList(currentPageNo){
+                this.page.currentPageNo=currentPageNo
                 axios.get("/getConcernPageList",{
                     params:{
-                        currentPageNo:currentPageNo,
+                        currentPageNo:this.page.currentPageNo,
+                        pageSize:this.page.pageSize
                     }
                 }).then((respones)=>{
                     console.log(respones)
-                    this.page = respones.data.data
+                    this.page.totalPageCount=respones.data.data.pages;
+                    this.page.currentPageNo = respones.data.data.pageNum;
+                    this.page.totalCount = respones.data.data.total;
+                    this.page.pageSize=respones.data.data.pageSize;
+                    this.productList=respones.data.data.list
+
 
                 })
             },
@@ -441,8 +445,12 @@
                 }).then((respones)=>{
                     console.log(respones)
                     if(respones.data.code=="200"){
-                        alert("删除成功")
-                        location.reload();
+                        this.$message({
+                            message: "删除成功",
+                            type: 'success',
+                            center: 'true',
+                        })
+                        this.getConcernList(1)
                     }else {
                         alert(respones.data.message)
                     }
@@ -457,7 +465,13 @@
         },
         data() {
             return {
-                page:{},
+                page:{
+                    totalCount:'',
+                    pageSize:5,
+                    currentPageNo: 1,
+                    totalPageCount:''
+                },
+                productList:[]
             }
         }
     })

@@ -60,6 +60,8 @@
         update easybuy_collections
         set quantity=#{quantity}
         where productId = #{productId}
+and userId=#{userId}
+and isDel=0
     </update>
     <update id="UpdateProductInCarById1">
         update easybuy_collections
@@ -72,9 +74,15 @@
         insert into easybuy_collections(userId, productId, isDel, createTime, quantity)
         values (#{userId}, #{productId}, 0, NOW(), #{quantity})
     </insert>
+    <insert id="addProductInCarById1">
+        insert into easybuy_collections(userId, productId, isDel, createTime, quantity)
+        values (#{userId}, #{productId}, 0, NOW(), #{quantity})
+    </insert>
+
+
     <select id="getProductAndQuantityById" resultType="Product">
         SELECT p.*,c.quantity,f.filePath FROM easybuy_collections c,easybuy_product p,easybuy_file f WHERE
-        c.productId=p.id AND f.id=p.fileId AND c.userId=#{userId}
+        c.productId=p.id AND f.id=p.fileId AND c.userId=#{userId} and c.isDel=0
         <foreach collection="ids" item="id" open="AND p.id IN (" close=")" separator=",">
             #{id}
         </foreach>
