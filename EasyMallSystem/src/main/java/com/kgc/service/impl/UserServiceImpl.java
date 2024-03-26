@@ -72,12 +72,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Message checkUserByLoginName(String loginName) {
+    public Message checkUserByLoginName(String loginName,String email) {
         logger.info("UserServiceImpl checkUserByName is start.......loginName " + loginName);
         logger.info("UserServiceImpl userDao checkUserByName is start.......loginName " + loginName);
         User user = userDao.checkUserByName(loginName);
         logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
         if (user != null && !user.getUserName().equals("")) {
+            if(!user.getEmail().equals(email)){
+                return Message.error("请与邮箱号匹配");
+            }
             return new Message("200", "用户可用", null);
         }
         return Message.error("不存在该用户");
@@ -92,7 +95,7 @@ public class UserServiceImpl implements UserService {
             return Message.error("用户名或密码错误");
         }
         String userString = JSON.toJSONString(user);
-//        stringRedisTemplate.opsForValue().set("userInFo",userString);
+        stringRedisTemplate.opsForValue().set("userInfo",userString);
         return Message.success("登录成功！");
     }
 

@@ -61,9 +61,20 @@
         set quantity=#{quantity}
         where productId = #{productId}
     </update>
+    <update id="UpdateProductInCarById1">
+        update easybuy_collections
+        set quantity = #{quantity}
+        where productId = #{productId}
+          AND userId = #{userId}
+          AND isDel = 0
+    </update>
     <insert id="addProductInCarById">
         insert into easybuy_collections(userId, productId, isDel, createTime, quantity)
-        values ('22', #{productId}, 0, NOW(), #{quantity})
+        values (22, #{productId}, 0, NOW(), #{quantity})
+    </insert>
+    <insert id="addProductInCarById1">
+        insert into easybuy_collections(userId, productId, isDel, createTime, quantity)
+        values (#{userId}, #{productId}, 0, NOW(), #{quantity})
     </insert>
     <select id="getProductAndQuantityById" resultType="Product">
         SELECT p.*,c.quantity,f.filePath FROM easybuy_collections c,easybuy_product p,easybuy_file f WHERE
@@ -71,6 +82,20 @@
         <foreach collection="ids" item="id" open="AND p.id IN (" close=")" separator=",">
             #{id}
         </foreach>
+    </select>
+    <select id="getConnectionOnlyById" resultType="Collections">
+        SELECT
+                id,
+                userId,
+                productId,
+                isDel,
+                createTime,
+                quantity,
+                count
+        FROM easybuy_collections
+        where userId = #{userId}
+        AND productId = #{productId}
+        AND isDel = 0
     </select>
 
 </mapper>

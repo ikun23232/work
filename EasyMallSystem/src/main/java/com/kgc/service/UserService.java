@@ -29,7 +29,7 @@ public interface UserService {
     /**
      *修改密码界面检查用户名存在
      */
-    public Message checkUserByLoginName(String loginName);
+    public Message checkUserByLoginName(String loginName,String email);
 
     /**
      * 用户登录检查密码是否正确

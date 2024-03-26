@@ -113,7 +113,7 @@
                             <td>
                                 <input type="password" class="ly_pwd" v-model="User.code"/>
                                 <!--              <input v-if="!sendMsgDisabled" type="button"  value="发送验证码" @click="count()">-->
-                                <button v-if="!sendMsgDisabled" @click="count()">发送验证码</button>
+                                <input type="button" v-if="!sendMsgDisabled" @click="count()" value="发送验证码"></input>
                                 <a v-if="sendMsgDisabled">{{time + '秒后获取'}}</a>
                             </td>
                         </tr>

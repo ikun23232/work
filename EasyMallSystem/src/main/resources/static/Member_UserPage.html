@@ -475,20 +475,22 @@
 
             },
             del(id,roleId){
-                axios.get("/delUser",{
-                    params:{
-                        id:id,
-                        roleId:roleId
-                    }
-                }).then((respones)=>{
-                    console.log(respones)
-                    if(respones.data.code=="200"){
-                        alert("删除成功")
-                        location.reload();
-                    }else {
-                        alert(respones.data.message)
-                    }
-                })
+                if(confirm("确定删除该用户吗？")) {
+                    axios.get("/delUser", {
+                        params: {
+                            id: id,
+                            roleId: roleId
+                        }
+                    }).then((respones) => {
+                        console.log(respones)
+                        if (respones.data.code == "200") {
+                            alert("删除成功")
+                            location.reload();
+                        } else {
+                            alert(respones.data.message)
+                        }
+                    })
+                }
             }
         },
         mounted(){

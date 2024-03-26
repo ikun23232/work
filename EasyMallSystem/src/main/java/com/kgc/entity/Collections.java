@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,4 +22,9 @@ public class Collections {
     private Integer userId;
     private List<Product> products;
     private Double sumPrice;
+    private int productId;
+    private int isDel;
+    private Date createTime;
+    private int quantity;
+    private int count;
 }

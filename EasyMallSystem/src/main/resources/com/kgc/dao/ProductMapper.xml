@@ -185,7 +185,7 @@
     </update>
 
 
-    <insert id="addProduct">
+    <insert id="addProduct" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO easybuy_product (name, price, description, stock, categoryLevelId,fileId,createTime, brandId)
         VALUES (#{name}, #{price}, #{description}, #{stock}, #{categoryLevelId},#{fileId},#{createTime}, #{brandId});
     </insert>
@@ -228,8 +228,9 @@
 
     <update id="updatefile">
         update easybuy_file
-        set productId = #{id}
-        where id = #{fileId}
+        set filePath = #{filePath}
+        where productId = #{id}
+        AND isDelete = 0
     </update>
 
 </mapper>

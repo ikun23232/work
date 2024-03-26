@@ -252,7 +252,8 @@
             <h2 style="font-weight: bolder">&nbsp;&nbsp;&nbsp;产品修改</h2>
             <div style="width: 50px;height: 30px"></div>
             <div style="width: 90%;height: 100%">
-                <el-form :model="product" :rules="rules" ref="product" id="product" label-width="100px" class="demo-ruleForm">
+                <el-form :model="product" :rules="rules" ref="product" id="product" label-width="100px"
+                         class="demo-ruleForm">
                     <el-form-item label="产品名称" prop="name">
                         <el-input v-model="product.name" name="name" style="width: 200px;"></el-input>
                         <input type="hidden" v-model="product.id" name="id" style="width: 200px;"></input>
@@ -262,7 +263,7 @@
                     </el-form-item>
                     <el-form-item label="产品品牌" prop="brandId">
                         <el-select v-model="product.brandId" name="brandId" placeholder="请选择" @change="blurFrist(1)">
-<!--                            <el-option label="&#45;&#45;请选择&#45;&#45;" :value="0"></el-option>-->
+                            <!--                            <el-option label="&#45;&#45;请选择&#45;&#45;" :value="0"></el-option>-->
                             <el-option
                                     v-for="item in brandList"
                                     :key="item.id"
@@ -271,7 +272,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="产品分类" prop="categoryId">
+                    <el-form-item label="产品分类" prop="categoryLevelId">
                         <p>
                             <label>一级分类</label>
                             <el-select v-model="fristValue" placeholder="请选择" @change="blurFrist(1)">
@@ -301,8 +302,9 @@
 
                         <p>
                             <label>三级分类</label>
-                            <el-select v-model="product.categoryLevelId" name="categoryLevelId" placeholder="请选择" :disabled="isDisabledThrid">
-<!--                                <el-option label="&#45;&#45;请选择&#45;&#45;" :value="0"></el-option>-->
+                            <el-select v-model="product.categoryLevelId" name="categoryLevelId" placeholder="请选择"
+                                       :disabled="isDisabledThrid">
+                                <!--                                <el-option label="&#45;&#45;请选择&#45;&#45;" :value="0"></el-option>-->
                                 <el-option
                                         v-for="item in thridCategoryList"
                                         :key="item.id"
@@ -313,7 +315,7 @@
                         </p>
                     </el-form-item>
                     <el-form-item label="产品库存" prop="stock">
-                        <el-input v-model="product.stock" name="stock"  style="width: 200px;"></el-input>
+                        <el-input v-model="product.stock" name="stock" style="width: 200px;"></el-input>
                     </el-form-item>
                     <el-form-item label="生产时间" required>
                         <el-col :span="11">
@@ -333,24 +335,23 @@
                     </el-form-item>
                     <el-form-item label="产品图片" prop="filePath">
                         <el-upload
-                                v-model="product.filePath"
+                                class="avatar-uploader"
                                 action="#"
-                                :auto-upload="false"
-                                list-type="picture-card"
-                                :on-preview="handlePictureCardPreview"
-                                :on-remove="handleRemove"
-                                :multiple=false
-                                show-file-list
-                                name="picPath"
+                                :show-file-list="false"
+                                :before-upload="beforeAvatarUpload"
+                                :http-request="handleHttpSubmit"
                         >
-                            <i class="el-icon-plus"></i>
+                            <img v-if="imageUrl" width="100px" height="80px" :src="imageUrl" class="avatar" alt=""/>
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            <img v-if="!imageUrl"  width="100px" height="80px" :src='doImg(product.filePath)' alt=""/>
+
                         </el-upload>
                         <el-dialog :visible.sync="dialogVisible">
                             <img width="100%" :src="product.filePath" alt="产品图片">
                         </el-dialog>
-<!--                        <div>-->
-<!--                            <img width="200px" height="200px" :src='doImg(product.filePath)' alt="产品图片">-->
-<!--                        </div>-->
+                        <!--                        <div>-->
+                        <!--                            <img width="200px" height="200px" :src='doImg(product.filePath)' alt="产品图片">-->
+                        <!--                        </div>-->
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm('product')">立即创建</el-button>
@@ -465,7 +466,7 @@
         el: "#m_right",
         data() {
             //表单校验begin
-            var checkname = (rule, value, callback) => {
+            var checkname = async (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入产品名'))
                 } else if (value.length > 10) {
@@ -473,8 +474,8 @@
                 } else if (2 > value.length) {
                     callback(new Error('长度在2-10之间'))
                 }
-                this.checkSameName();
-                if (this.falg.namefalg == false) {
+                await this.checkSameName();
+                if (this.flag.nameflag == false) {
                     callback(new Error("该产品名已存在！"))
                 } else {
                     callback();
@@ -490,38 +491,38 @@
                     callback(new Error("不能小于0！"))
                 } else if (value.length > 5) {
                     callback(new Error("不能超过五位数"))
-                }else {
+                } else {
                     callback()
                 }
             }
             var checkCategoryLevelId = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请选择！"))
-                } else if (value === '0') {
+                } else if (value === 0) {
                     callback(new Error("请选择好分类！"))
-                }else {
+                } else {
                     callback()
                 }
             }
             var checkBrandId = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请选择！"))
-                } else if (value === '0') {
+                } else if (value === 0) {
                     callback(new Error("请选择好品牌！"))
-                }else {
+                } else {
                     callback()
                 }
             }
             var checkfilePath = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请选择文件！"))
-                }else {
+                } else {
                     callback()
                 }
             }
             return {
                 product: {
-                    id:'',
+                    id: '',
                     name: '',
                     description: '',
                     createTime: '',
@@ -531,9 +532,11 @@
                     filePath: '',
                     brandId: ''
                 },
-                falg: {
-                    namefalg: false
+                flag: {
+                    nameflag: false
                 },
+                imageUrl: '',
+                picFile: null,
                 fristCategoryList: {},
                 fristValue: 0,
                 secondCategoryList: {},
@@ -541,7 +544,7 @@
                 thridCategoryList: {},
                 isDisabledThrid: false,
                 isDisabledSecond: false,
-                brandList:{},
+                brandList: {},
                 dialogVisible: false,
 
                 rules: {
@@ -565,7 +568,7 @@
                         {validator: checkCategoryLevelId, trigger: 'blur'},
                     ],
                     filePath: [
-                        // {validator: checkfilePath, trigger: 'blur'},
+                        {validator: checkfilePath, trigger: 'blur'},
                     ],
                     brandId: [
                         {validator: checkBrandId, trigger: 'blur'},
@@ -585,45 +588,54 @@
             this.getSecondIdByThrid(id)
         },
         methods: {
-            updateProduct(formdata){
-                axios.post('/updateProduct',formdata).then((respones)=>{
+
+            updateProduct(formdata) {
+                axios.post('/updateProduct', formdata).then((respones) => {
                     console.log(respones)
-                    if(respones.data.code=="200"){
+                    if (respones.data.code == "200") {
                         alert("修改成功！")
-                        window.location.href="/Member_Product.html"
-                    }else {
+                        window.location.href = "/Member_Product.html"
+                    } else {
                         alert("修改失败！")
                     }
                 })
             },
             submitForm(product) {
                 this.$refs[product].validate((valid) => {
-                    if(valid){
-                        const formdata = new FormData(document.getElementById("product"))
-                        console.log(formdata)
-                        formdata.set("categoryLevelId",this.product.categoryLevelId)
-                        formdata.set("brandId",this.product.brandId)
+                    if (valid) {
+                        let formdata = new FormData(document.getElementById("product"))
+                        // console.log(formdata)
+                        formdata.set("categoryLevelId", this.product.categoryLevelId)
+                        formdata.set("brandId", this.product.brandId)
+                        formdata.set("picPath", this.product.filePath)
+
                         this.updateProduct(formdata)
-                    }else{
+                    } else {
                         console.log("error submit!!")
                         return false;
                     }
                 })
             },
             checkSameName() {
-                axios.get("/checkSameNameUpdate", {
-                    params: {
-                        name: this.product.name,
-                        id:this.product.id
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    if (respones.data.code == "200") {
-                        this.falg.namefalg = true
-                    } else {
-                        this.falg.namefalg = false
-                    }
-                })
+                return new Promise((resolve, reject) => {
+                    axios.get("/checkSameNameUpdate", {
+                        params: {
+                            name: this.product.name,
+                            id: this.product.id
+                        }
+                    }).then((respones) => {
+                        console.log(respones)
+                        if (respones.data.code == "200") {
+                            this.flag.nameflag = true
+                        } else {
+                            this.flag.nameflag = false
+                        }
+                        resolve();
+                    }).catch((error) => {
+                        reject(error)
+                    })
+                });
+
             },
             doImg(filePath) {
                 return "doImg?filePath=" + filePath
@@ -690,13 +702,13 @@
                     this.thridCategoryList = respones.data.data
                 })
             },
-            getBrandList(){
-                axios.get("/getBrandList").then((respones)=>{
+            getBrandList() {
+                axios.get("/getBrandList").then((respones) => {
                     console.log(respones)
                     this.brandList = respones.data.data
                 })
             },
-            getProductById(id){
+            getProductById(id) {
                 axios.get("/getProductById", {
                     params: {
                         id: id
@@ -714,23 +726,23 @@
                     console.log(this.product)
                 })
             },
-            getFristIdByThrid(id){
-                axios.get("/getFristIdByThrid",{
-                    params:{
-                        id:id
+            getFristIdByThrid(id) {
+                axios.get("/getFristIdByThrid", {
+                    params: {
+                        id: id
                     }
-                }).then((respones)=>{
+                }).then((respones) => {
                     console.log(respones)
                     this.fristValue = respones.data.data
                     this.getSecondCategoryList(this.fristValue)
                 })
             },
-            getSecondIdByThrid(id){
-                axios.get("/getSecondIdByThrid",{
-                    params:{
-                        id:id
+            getSecondIdByThrid(id) {
+                axios.get("/getSecondIdByThrid", {
+                    params: {
+                        id: id
                     }
-                }).then((respones)=>{
+                }).then((respones) => {
                     console.log(respones)
                     this.secondValue = respones.data.data
                     this.getThridCategoryList(this.secondValue)
@@ -738,13 +750,25 @@
 
                 })
             },
-            handleRemove(file) {
-                console.log(file);
+            handleHttpSubmit(req) {
+                this.product.filePath = req.file
+                this.imageUrl = URL.createObjectURL(req.file);
             },
-            handlePictureCardPreview(file) {
-                this.product.filePath = file.url;
-                this.dialogVisible = true;
-            }
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === "image/jpeg";
+                const isPNG = file.type === "image/png";
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isJPG && !isPNG) {
+                    this.$message.error("上传头像图片只能是 JPG或png 格式!");
+                    return false;
+                }
+                if (!isLt2M) {
+                    this.$message.error("上传头像图片大小不能超过 2MB!");
+                    return false;
+                }
+                return isJPG || isPNG && isLt2M;
+            },
+
         }
     })
 </script>

@@ -18,4 +18,7 @@ public interface CollectionService {
     Message delProductInCarByIds(String ids);
 
     Message getProductListByIdStr(String ids);
+
+    public Message addtoCar(int userId,int productId,int quantity);
+
 }

@@ -36,13 +36,13 @@ public class CollectionController {
 
     @RequestMapping("/addProductInCarById")
     public Message addProductInCarById(int id, int quantity) {
-
         Message message = collectionService.addProductInCarById(id, quantity);
         return message;
     }
 
     @RequestMapping("/updateProductInCarById")
     public Message getConnectionById(int id, int quantity) {
+        int userId = 22;
         Message message = collectionService.UpdateProductInCarById(id, quantity);
         return message;
     }
@@ -99,6 +99,10 @@ public class CollectionController {
         return productById;
     }
 
-
-
+    @RequestMapping("/addtoCar")
+    public Message addtoCar(int id ,int quantity) {
+        int userId = 22;
+        Message productById = collectionService.addtoCar(userId,id,quantity);
+        return productById;
+    }
 }

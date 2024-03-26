@@ -60,10 +60,10 @@ public class UserController {
         return message;
     }
     @RequestMapping("/checkUserByLoginName")
-    public Message checkUserByLoginName(String loginName) {
+    public Message checkUserByLoginName(String loginName,String email) {
         logger.info("UserController addUser is start.....");
         logger.info("UserController userService addUser is start.....loginName" + loginName);
-        Message message = userService.checkUserByLoginName(loginName);
+        Message message = userService.checkUserByLoginName(loginName,email);
         logger.debug("UserController userService addUser is start.....loginName" + loginName + "message" + message);
         return message;
     }

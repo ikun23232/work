@@ -5,6 +5,7 @@ import com.kgc.dao.ProductDao;
 import com.kgc.entity.Collections;
 import com.kgc.entity.Message;
 import com.kgc.entity.Product;
+import com.kgc.entity.User;
 import com.kgc.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -72,7 +74,6 @@ public class CollectionServiceImpl implements CollectionService {
         int counts = productList.size();
         int sum = 0;
         for (int i = 0; i < productList.size(); i++) {
-
             Product product = productList.get(i);
             int updateRow = collectionDao.UpdateProductInCarById(product.getId(), product.getQuantity());
             if (updateRow > 0) {
@@ -133,6 +134,26 @@ public class CollectionServiceImpl implements CollectionService {
             }
         }
         return Message.success(productAndQuantityById);
+    }
+
+    @Override
+    public Message addtoCar(int userId, int productId,int quantity) {
+        List<Collections> connectionById = collectionDao.getConnectionOnlyById(userId, productId);
+        if(connectionById!=null){
+            for(Collections collections:connectionById){
+                if(collections.getProductId()==productId){
+                    int count = collections.getQuantity()+quantity;
+                    int i = collectionDao.UpdateProductInCarById1(userId,productId,count);
+                    if(i>0){
+                        return Message.success();
+                    }else {
+                        return Message.error();
+                    }
+                }
+            }
+        }
+        collectionDao.addProductInCarById1(userId,productId,quantity);
+        return Message.success();
     }
 
 
