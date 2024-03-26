@@ -271,7 +271,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="产品分类" prop="categoryId">
+                    <el-form-item label="产品分类" prop="categoryLevelId">
                         <p>
                             <label>一级分类</label>
                             <el-select v-model="fristValue" placeholder="请选择" @change="blurFrist(1)">
@@ -334,21 +334,31 @@
                     </el-form-item>
                     <el-form-item label="产品图片" prop="filePath">
                         <el-upload
-                                v-model="product.filePath"
+                                class="avatar-uploader"
                                 action="#"
-                                :auto-upload="false"
-                                list-type="picture-card"
-                                :on-preview="handlePictureCardPreview"
-                                :on-remove="handleRemove"
-                                :multiple=false
-                                show-file-list
-                                name="picPath"
+                                :show-file-list="false"
+                                :before-upload="beforeAvatarUpload"
+                                :http-request="handleHttpSubmit"
                         >
-                            <i class="el-icon-plus"></i>
+                            <img v-if="imageUrl" width="100px" height="80px" :src="imageUrl" class="avatar" alt=""/>
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+
                         </el-upload>
-                        <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="product.filePath" alt="产品图片">
-                        </el-dialog>
+<!--                        <el-upload-->
+<!--                                v-model="product.filePath"-->
+<!--                                action="#"-->
+<!--                                :auto-upload="false"-->
+<!--                                list-type="picture-card"-->
+<!--                                :on-preview="handlePictureCardPreview"-->
+<!--                                :on-remove="handleRemove"-->
+<!--                                :http-request="handleHttpSubmit"-->
+<!--                                show-file-list-->
+<!--                        >-->
+<!--                            <i class="el-icon-plus"></i>-->
+<!--                        </el-upload>-->
+<!--                        <el-dialog :visible.sync="dialogVisible">-->
+<!--                            <img width="100%" :src="product.filePath" alt="产品图片">-->
+<!--                        </el-dialog>-->
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm('product')">立即创建</el-button>
@@ -495,7 +505,7 @@
             var checkCategoryLevelId = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请选择！"))
-                } else if (value === '0') {
+                } else if (value === 0) {
                     callback(new Error("请选择好分类！"))
                 }else {
                     callback()
@@ -537,7 +547,7 @@
                 isDisabledSecond: false,
                 brandList: {},
                 dialogVisible: false,
-
+                imageUrl: '',
                 falg: {
                     namefalg: false
                 },
@@ -563,7 +573,7 @@
                         {validator: checkCategoryLevelId, trigger: 'blur'},
                     ],
                     filePath: [
-                        // {validator: checkfilePath, trigger: 'blur'},
+                        {validator: checkfilePath, trigger: 'blur'},
                     ],
                     brandId: [
                         {validator: checkBrandId, trigger: 'blur'},
@@ -594,6 +604,7 @@
                         console.log(formdata)
                         formdata.set("categoryLevelId", this.product.categoryLevelId)
                         formdata.set("brandId", this.product.brandId)
+                        formdata.set("picPath", this.product.filePath)
                         this.add(formdata)
                     } else {
                         console.log("error submit!!")
@@ -685,13 +696,31 @@
                     this.brandList = respones.data.data
                 })
             },
-            handleRemove(file) {
-                console.log(file);
+            // handleRemove(file) {
+            //     console.log(file);
+            // },
+            // handlePictureCardPreview(file) {
+            //     this.product.filePath = file.url;
+            //     this.dialogVisible = true;
+            // },
+            handleHttpSubmit(req) {
+                this.product.filePath = req.file
+                this.imageUrl = URL.createObjectURL(req.file);
             },
-            handlePictureCardPreview(file) {
-                this.product.filePath = file.url;
-                this.dialogVisible = true;
-            }
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === "image/jpeg";
+                const isPNG = file.type === "image/png";
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isJPG && !isPNG) {
+                    this.$message.error("上传头像图片只能是 JPG或png 格式!");
+                    return false;
+                }
+                if (!isLt2M) {
+                    this.$message.error("上传头像图片大小不能超过 2MB!");
+                    return false;
+                }
+                return isJPG || isPNG && isLt2M;
+            },
         }
     })
 </script>

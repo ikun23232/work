@@ -151,10 +151,10 @@
                       }
                   })
                     console.log(resp);
-                    if(resp.data.data.code=="201"){
-                        alert(resp.data.data.message);
+                    if(resp.data.code=="201"){
+                        alert("登陆失败");
                     }else {
-                        alert(resp.data.data.message);
+                        alert("登陆成功！");
                         window.location.href = "index.html"
 
                     }

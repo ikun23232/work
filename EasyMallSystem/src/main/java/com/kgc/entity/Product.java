@@ -57,8 +57,4 @@ public class Product {
     @Field(type = FieldType.Integer)
     private Integer categoryLevelId;
 
-
-
-
-
 }

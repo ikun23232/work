@@ -281,32 +281,46 @@
                             fixed
                             prop="id"
                             label="编号"
-                            width="120">
+                            width="120"
+                            align="center">
+                    </el-table-column>
+                    <el-table-column
+                            label="图片"
+                            width="130"
+                            align="center">
+                        <template slot-scope="scope">
+                            <img :src="doImg(scope.row.filePath)" style="max-width: 100px; max-height: 100px;" />
+                        </template>
                     </el-table-column>
                     <el-table-column
                             prop="name"
                             label="产品名称"
-                            width="120">
+                            width="130"
+                            align="center">
                     </el-table-column>
                     <el-table-column
                             prop="brandName"
                             label="品牌"
-                            width="70">
+                            width="130"
+                            align="center">
                     </el-table-column>
                     <el-table-column
                             prop="price"
                             label="价格/元"
-                            width="70">
+                            width="130"
+                            align="center">
                     </el-table-column>
                     <el-table-column
                             prop="createTime"
                             label="生产日期"
-                            width="100">
+                            width="100"
+                            align="center">
                     </el-table-column>
                     <el-table-column
                             fixed="right"
                             label="操作"
-                            width="200">
+                            width="200"
+                            align="center">
                         <template slot-scope="scope">
                             <p>
                                 <el-button type="primary" style="width: 80px" @click="toUpdata(scope.row)" icon="el-icon-edit" >修改</el-button>
@@ -466,21 +480,26 @@
             },
             del(rows){
                 console.log(rows)
-                axios.get("/delProduct",{
-                    params:{
-                        id:rows.id,
-                        fileId:rows.fileId
-                    }
-                }).then((respones)=>{
-                    console.log(respones)
-                    if(respones.data.code=="200"){
-                        alert("删除成功")
-                        location.reload();
-                    }else {
-                        alert("删除失败")
-                    }
-                })
-            }
+                if(confirm("确定删除该产品吗？")){
+                    axios.get("/delProduct",{
+                        params:{
+                            id:rows.id,
+                            fileId:rows.fileId
+                        }
+                    }).then((respones)=>{
+                        console.log(respones)
+                        if(respones.data.code=="200"){
+                            alert("删除成功")
+                            location.reload();
+                        }else {
+                            alert("删除失败")
+                        }
+                    })
+                }
+            },
+            doImg(filePath) {
+                return "doImg?filePath=" + filePath
+            },
         },
         mounted(){
             this.getBrandList()

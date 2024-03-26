@@ -121,20 +121,13 @@ public class ProductServiceImpl implements ProductService {
         nativeSearchQueryBuilder.withHighlightBuilder(highlightBuilder);
 
         ArrayList<Product> productList = new ArrayList<>();
-        //拿到登录的userid
-        int userId = 22;
-        List<Concern> concernPageList = concernDao.getConcernPageListES(userId);
+
 
         SearchHits<? extends Product> searchHits = elasticsearchRestTemplate.search(nativeSearchQueryBuilder.build(), product.getClass());
         for (
                 SearchHit<? extends Product> searchHit : searchHits) {
             Product productTemp = searchHit.getContent();
-            //遍历拿到concern
-            for (Concern concern : concernPageList) {
-                if (concern.getProductId()==productTemp.getId()){
-                    productTemp.setConcernFalg(true);
-                }
-            }
+
             List<String> pname = searchHit.getHighlightField("name");
             if (pname.size() > 0) {
                 productTemp.setName(pname.get(0));
@@ -234,10 +227,19 @@ public class ProductServiceImpl implements ProductService {
 
         //先拿出收藏表里面的
         ArrayList<Product> productList = new ArrayList<>();
+        //拿到登录的userid
+        int userId = 22;
+        List<Concern> concernPageList = concernDao.getConcernPageListES(userId);
+
         SearchHits<? extends Product> searchHits = elasticsearchRestTemplate.search(nativeSearchQueryBuilder.build(), product.getClass());
         for (SearchHit<? extends Product> searchHit : searchHits) {
             Product productTemp = searchHit.getContent();
-
+            //遍历拿到concern
+            for (Concern concern : concernPageList) {
+                if (concern.getProductId()==productTemp.getId()){
+                    productTemp.setConcernFalg(true);
+                }
+            }
 
             List<String> pname = searchHit.getHighlightField("name");
             if (pname.size() > 0) {
@@ -292,18 +294,9 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
-//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
             }
-
-//            if (!extsion.equalsIgnoreCase("jpg") && !extsion.equalsIgnoreCase("png")) {
-//                model.addAttribute("error", "文件格式有误只能上传jpg或者png");
-//                return "regsiter";
-//            }
-//            if (mFile.getSize() > 5 * 1024 * 1024) {
-//                model.addAttribute("error", "文件大小不能超过5MB");
-//                return "regsiter";
-//            }
 
             try {
                 picPath.transferTo(new File(Path));
@@ -316,6 +309,7 @@ public class ProductServiceImpl implements ProductService {
         product.setId(userId);
         int count = productDao.addfile(product);
         int i = productDao.addProduct(product);
+        int temp = productDao.upfile(product);
         return Message.success();
         }
 
@@ -346,7 +340,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Message updateProduct(Product product, MultipartFile picPath, Model model) {
+    public Message updateProduct(Product product,@RequestParam("picPath") MultipartFile picPath, Model model) {
         logger.info("ProductServiceImpl updateProduct is start....product:" + product);
         String extsion = null;
         String Path = null;
@@ -354,20 +348,9 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
-                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
-//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
             }
-
-//            if (!extsion.equalsIgnoreCase("jpg") && !extsion.equalsIgnoreCase("png")) {
-//                model.addAttribute("error", "文件格式有误只能上传jpg或者png");
-//                return "regsiter";
-//            }
-//            if (mFile.getSize() > 5 * 1024 * 1024) {
-//                model.addAttribute("error", "文件大小不能超过5MB");
-//                return "regsiter";
-//            }
-
             try {
                 picPath.transferTo(new File(Path));
             } catch (IOException e) {

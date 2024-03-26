@@ -136,6 +136,7 @@
             <artifactId>alipay-sdk-java</artifactId>
             <version>4.39.2.ALL</version>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

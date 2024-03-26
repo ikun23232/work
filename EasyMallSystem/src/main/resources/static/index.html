@@ -206,13 +206,14 @@
                                 <span class="n_img"><span></span><img src="images/nav1.png"/></span>
                                 <span class="fl">{{item.name}}</span>
                             </div>
-                            <div class="zj" >
+                            <div class="zj" v-for="(subItem, index) in categorySecondList" :key="index" @click.stop="toCategoryList(subItem.id)">
                                 <div class="zj_l">
-                                    <div class="zj_l_c" v-for="(subItem, index) in categorySecondList" :key="index" @click.stop="toCategoryList(subItem.id)">
+                                    <div class="zj_l_c">
                                         <h2>
                                             {{subItem.name}}
                                         </h2>
-                                        <a v-show="subItem.id==subItem1.parentId" v-for="(subItem1, index1) in categoryThridList" :key="index1" @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
+                                        <a v-for="(subItem1, index1) in categoryThridList"
+                                           :key="index1" @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
                                     </div>
                                 </div>
                                 <div class="zj_r">
@@ -348,7 +349,12 @@
                     <table border="0" style="width:205px; margin-top:10px;" cellspacing="0" cellpadding="0">
                         <tr height="35">
                             <td width="33">号码</td>
-                            <td><input type="text" value="" class="c_ipt" v-model="phoneNum"/></td>
+                            <td>
+                                <input  type="text" value="" class="c_ipt" v-model="phoneNum" @input="validatePhoneNumber($event)"/>
+                            </td>
+                            <td>
+                                <span v-if="!validPhoneNumber">请输入有效的手机号码</span>
+                            </td>
                         </tr>
                         <tr height="35">
                             <td>面值</td>
@@ -483,306 +489,58 @@
             </div>
         </div>
         <!--End 限时特卖 End-->
-        <div class="content mar_20">
-            <img src="images/mban_1.jpg" width="1200" height="110"/>
-        </div>
-        <!--Begin 进口 生鲜 Begin-->
-        <div class="i_t mar_10">
-            <span class="floor_num">1F</span>
-            <span class="fl">进口 <b>·</b> 生鲜</span>
-            <span class="i_mores fr"><a href="#">进口咖啡</a>&nbsp; &nbsp; &nbsp; <a href="#">进口酒</a>&nbsp; &nbsp; &nbsp; <a
-                    href="#">进口母婴</a>&nbsp; &nbsp; &nbsp; <a href="#">新鲜蔬菜</a>&nbsp; &nbsp; &nbsp; <a href="#">新鲜水果</a></span>
-        </div>
-        <div class="content">
-            <div class="fresh_left">
-                <div class="fre_ban">
-                    <div id="imgPlay1">
-                        <ul class="imgs" id="actor1">
-                            <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
-                        </ul>
-                        <div class="prevf">上一张</div>
-                        <div class="nextf">下一张</div>
-                    </div>
-                </div>
-                <div class="fresh_txt">
-                    <div class="fresh_txt_c">
-                        <a href="#">进口水果</a><a href="#">奇异果</a><a href="#">西柚</a><a href="#">海鲜水产</a><a
-                            href="#">品质牛肉</a><a href="#">奶粉</a><a href="#">鲜活禽蛋</a><a href="#">进口酒</a><a
-                            href="#">进口奶粉</a><a href="#">鲜活禽蛋</a>
-                    </div>
-                </div>
+        <div v-for="(frist,index) in categoryFristList" :key="index">
+            <div class="content mar_20">
+                <img src="images/mban_1.jpg" width="1200" height="110"/>
             </div>
-            <div class="fresh_mid">
-                <ul>
-                    <li v-cloak v-for="(product,index) in productFriList" :key="index"
-                        @click="toProductinit(product.id)">
-                        <div class="name"><a href="#">{{product.name}}</a></div>
-                        <div class="price">
-                            <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
+                <!--Begin 进口 生鲜 Begin-->
+                <div class="i_t mar_10">
+                    <span class="floor_num">{{index + 1}}F</span>
+                    <span class="fl">{{frist.name}}</span>
+                    <span class="i_mores fr">
+                    <a href="#" v-for="second in frist.secondCategoryList" :key="second.id">{{second.name}}</a>&nbsp; &nbsp; &nbsp
+                </span>
+                </div>
+                <div class="content">
+                    <div class="fresh_left">
+                        <div class="fre_ban">
+                            <div id="imgPlay1">
+                                <ul class="imgs" id="actor1">
+                                    <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
+                                    <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
+                                    <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
+                                </ul>
+                                <div class="prevf">上一张</div>
+                                <div class="nextf">下一张</div>
+                            </div>
                         </div>
-                        <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
-                                                          height="155"/></a></div>
-                    </li>
-                </ul>
-            </div>
-            <div class="fresh_right">
-                <ul>
-                    <li><a href="#"><img src="images/fre_b1.jpg" width="260" height="220"/></a></li>
-                    <li><a href="#"><img src="images/fre_b2.jpg" width="260" height="220"/></a></li>
-                </ul>
-            </div>
-        </div>
-        <!--End 进口 生鲜 End-->
-        <!--Begin 食品饮料 Begin-->
-        <div class="i_t mar_10">
-            <span class="floor_num">2F</span>
-            <span class="fl">食品饮料</span>
-            <span class="i_mores fr"><a href="#">咖啡</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">休闲零食</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">饼干糕点</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">冲饮谷物</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">营养保健</a></span>
-        </div>
-        <div class="content">
-            <div class="food_left">
-                <div class="food_ban">
-                    <div id="imgPlay2">
-                        <ul class="imgs" id="actor2">
-                            <li><a href="#"><img src="images/food_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/food_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/food_r.jpg" width="211" height="286"/></a></li>
-                        </ul>
-                        <div class="prev_f">上一张</div>
-                        <div class="next_f">下一张</div>
-                    </div>
-                </div>
-                <div class="fresh_txt">
-                    <div class="fresh_txt_c">
-                        <a href="#">饼干糕点</a><a href="#">休闲零食</a><a href="#">饮料果汁</a><a href="#">牛奶乳品</a><a
-                            href="#">冲饮谷物</a><a href="#">营养保健</a><a href="#">冲饮谷物</a><a href="#">营养保健</a>
-                    </div>
-                </div>
-            </div>
-            <div class="fresh_mid">
-                <ul>
-                    <li v-cloak v-for="(product,index) in productThList" :key="index"
-                        @click="toProductinit(product.id)">
-                        <div class="name"><a href="#">{{product.name}}</a></div>
-                        <div class="price">
-                            <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
+                        <div class="fresh_txt">
+                            <div class="fresh_txt_c">
+                                <a href="#" v-for="second in frist.secondCategoryList"
+                                   :key="second.id">{{second.name}}</a>
+                            </div>
                         </div>
-                        <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
-                                                          height="155"/></a></div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="fresh_right">
-                <ul>
-                    <li><a href="#"><img src="images/food_b1.jpg" width="260" height="220"/></a></li>
-                    <li><a href="#"><img src="images/food_b2.jpg" width="260" height="220"/></a></li>
-                </ul>
-            </div>
-        </div>
-        <!--End 食品饮料 End-->
-        <!--Begin 个人美妆 Begin-->
-        <div class="i_t mar_10">
-            <span class="floor_num">3F</span>
-            <span class="fl">个人美妆</span>
-            <span class="i_mores fr"><a href="#">洗发护发</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">面膜</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">洗面奶</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">香水</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">沐浴露</a></span>
-        </div>
-        <div class="content">
-            <div class="make_left">
-                <div class="make_ban">
-                    <div id="imgPlay3">
-                        <ul class="imgs" id="actor3">
-                            <li><a href="#"><img src="images/make_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/make_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/make_r.jpg" width="211" height="286"/></a></li>
+                    </div>
+                    <div class="fresh_mid">
+                        <ul>
+                            <li v-cloak v-for="product in frist.productList" :key="product.id"
+                                @click="toProductinit(product.id)">
+                                <div class="name"><a href="#">{{product.name}}</a></div>
+                                <div class="price">
+                                    <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
+                                </div>
+                                <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
+                                                                  height="155"/></a></div>
+                            </li>
                         </ul>
-                        <div class="prev_m">上一张</div>
-                        <div class="next_m">下一张</div>
                     </div>
-                </div>
-                <div class="fresh_txt">
-                    <div class="fresh_txt_c">
-                        <a href="#">洗发护发</a><a href="#">牙刷牙膏</a><a href="#">面膜</a><a href="#">补水面膜</a><a href="#">香水</a><a
-                            href="#">面霜</a><a href="#">洗面奶</a><a href="#">脱毛膏</a><a href="#">沐浴露</a>
-                    </div>
-                </div>
-            </div>
-            <div class="fresh_mid">
-                <ul>
-                    <li v-cloak v-for="(product,index) in productSecList" :key="index"
-                        @click="toProductinit(product.id)">
-                        <div class="name"><a href="#">{{product.name}}</a></div>
-                        <div class="price">
-                            <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
-                        </div>
-                        <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
-                                                          height="155"/></a></div>
-                    </li>
-                </ul>
-            </div>
-            <div class="fresh_right">
-                <ul>
-                    <li><a href="#"><img src="images/make_b1.jpg" width="260" height="220"/></a></li>
-                    <li><a href="#"><img src="images/make_b2.jpg" width="260" height="220"/></a></li>
-                </ul>
-            </div>
-        </div>
-        <!--End 个人美妆 End-->
-        <div class="content mar_20">
-            <img src="images/mban_1.jpg" width="1200" height="110"/>
-        </div>
-        <!--Begin 母婴玩具 Begin-->
-        <div class="i_t mar_10">
-            <span class="floor_num">4F</span>
-            <span class="fl">母婴玩具</span>
-            <span class="i_mores fr"><a href="#">营养品</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">孕妈背带裤</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">儿童玩具</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">婴儿床</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">喂奶器</a></span>
-        </div>
-        <div class="content">
-            <div class="baby_left">
-                <div class="baby_ban">
-                    <div id="imgPlay4">
-                        <ul class="imgs" id="actor4">
-                            <li><a href="#"><img src="images/baby_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/baby_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/baby_r.jpg" width="211" height="286"/></a></li>
+                    <div class="fresh_right">
+                        <ul>
+                            <li><a href="#"><img src="images/fre_b1.jpg" width="260" height="220"/></a></li>
+                            <li><a href="#"><img src="images/fre_b2.jpg" width="260" height="220"/></a></li>
                         </ul>
-                        <div class="prev_b">上一张</div>
-                        <div class="next_b">下一张</div>
                     </div>
                 </div>
-                <div class="fresh_txt">
-                    <div class="fresh_txt_c">
-                        <a href="#">孕妈必备</a><a href="#">儿童玩具</a><a href="#">重装童鞋</a><a href="#">辅助食品</a><a
-                            href="#">奶粉</a><a href="#">鲜活禽蛋</a><a href="#">维生素</a><a href="#">重装童鞋</a><a
-                            href="#">辅助食品</a>
-                    </div>
-                </div>
-            </div>
-            <div class="fresh_mid">
-                <ul>
-                    <li v-cloak v-for="(product,index) in productForList" :key="index"
-                        @click="toProductinit(product.id)">
-                        <div class="name"><a href="#">{{product.name}}</a></div>
-                        <div class="price">
-                            <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
-                        </div>
-                        <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
-                                                          height="155"/></a></div>
-                    </li>
-                </ul>
-            </div>
-            <div class="fresh_right">
-                <ul>
-                    <li><a href="#"><img src="images/baby_b1.jpg" width="260" height="220"/></a></li>
-                    <li><a href="#"><img src="images/baby_b2.jpg" width="260" height="220"/></a></li>
-                </ul>
-            </div>
-        </div>
-        <!--End 母婴玩具 End-->
-        <!--Begin 家居生活 Begin-->
-        <div class="i_t mar_10">
-            <span class="floor_num">5F</span>
-            <span class="fl">家居生活</span>
-            <span class="i_mores fr"><a href="#">床上用品</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">家纺布艺</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">餐具</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">沙发</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">汽车用品</a></span>
-        </div>
-        <div class="content">
-            <div class="home_left">
-                <div class="home_ban">
-                    <div id="imgPlay5">
-                        <ul class="imgs" id="actor5">
-                            <li><a href="#"><img src="images/home_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/home_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/home_r.jpg" width="211" height="286"/></a></li>
-                        </ul>
-                        <div class="prev_h">上一张</div>
-                        <div class="next_h">下一张</div>
-                    </div>
-                </div>
-                <div class="fresh_txt">
-                    <div class="fresh_txt_c">
-                        <a href="#">床上用品</a><a href="#">家纺布艺</a><a href="#">餐具水具</a><a href="#">锅具厨具</a><a
-                            href="#">沙发</a><a href="#">书柜</a><a href="#">狗粮</a><a href="#">家装建材</a><a href="#">汽车用品</a>
-                    </div>
-                </div>
-            </div>
-            <div class="fresh_mid">
-                <ul>
-                    <li v-cloak v-for="(product,index) in productFivList" :key="index"
-                        @click="toProductinit(product.id)">
-                        <div class="name"><a href="#">{{product.name}}</a></div>
-                        <div class="price">
-                            <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
-                        </div>
-                        <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
-                                                          height="155"/></a></div>
-                    </li>
-                </ul>
-            </div>
-            <div class="fresh_right">
-                <ul>
-                    <li><a href="#"><img src="images/home_b1.jpg" width="260" height="220"/></a></li>
-                    <li><a href="#"><img src="images/home_b2.jpg" width="260" height="220"/></a></li>
-                </ul>
-            </div>
-        </div>
-        <!--End 家居生活 End-->
-        <!--Begin 数码家电 Begin-->
-        <div class="i_t mar_10">
-            <span class="floor_num">6F</span>
-            <span class="fl">数码家电</span>
-            <span class="i_mores fr"><a href="#">手机</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">苹果</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">华为手机</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a href="#">洗衣机</a>&nbsp; &nbsp; | &nbsp; &nbsp;<a
-                    href="#">数码配件</a></span>
-        </div>
-        <div class="content">
-            <div class="tel_left">
-                <div class="tel_ban">
-                    <div id="imgPlay6">
-                        <ul class="imgs" id="actor6">
-                            <li><a href="#"><img src="images/tel_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/tel_r.jpg" width="211" height="286"/></a></li>
-                            <li><a href="#"><img src="images/tel_r.jpg" width="211" height="286"/></a></li>
-                        </ul>
-                        <div class="prev_t">上一张</div>
-                        <div class="next_t">下一张</div>
-                    </div>
-                </div>
-                <div class="fresh_txt">
-                    <div class="fresh_txt_c">
-                        <a href="#">手机</a><a href="#">平板电脑</a><a href="#">空调</a><a href="#">合约机</a><a href="#">电风扇</a><a
-                            href="#">数码配件</a><a href="#">洗衣机</a><a href="#">电视</a><a href="#">充电器</a><a href="#">耳线</a>
-                    </div>
-                </div>
-            </div>
-            <div class="fresh_mid">
-                <ul>
-                    <li v-cloak v-for="(product,index) in productSiList" :key="index"
-                        @click="toProductinit(product.id)">
-                        <div class="name"><a href="#">{{product.name}}</a></div>
-                        <div class="price">
-                            <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
-                        </div>
-                        <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
-                                                          height="155"/></a></div>
-                    </li>
-                </ul>
-            </div>
-            <div class="fresh_right">
-                <ul>
-                    <li><a href="#"><img src="images/tel_b1.jpg" width="260" height="220"/></a></li>
-                    <li><a href="#"><img src="images/tel_b2.jpg" width="260" height="220"/></a></li>
-                </ul>
-            </div>
         </div>
         <!--End 数码家电 End-->
         <!--Begin 猜你喜欢 Begin-->
@@ -1006,10 +764,10 @@
         <div class="car_t">购物车 [ <span>3</span> ]</div>
         <div class="car_bg">
             <!--Begin 购物车未登录 Begin-->
-        <template v-if="UserSession.name">
-                 <div class="un_login">还未登录！<a href="${ctx}/Login?action=toLogin" style="color:#ff4e00;">马上登录</a> 查看购物车1！
+            <c:if test="${sessionScope.loginUser==null}">
+                <div class="un_login">还未登录！<a href="${ctx}/Login?action=toLogin" style="color:#ff4e00;">马上登录</a> 查看购物车！
                 </div>
-         </template>
+            </c:if>
             <!--End 购物车未登录 End-->
             <!--Begin 购物车已登录 Begin-->
             <ul class="cars">
@@ -1049,22 +807,22 @@
                 categoryList: [],
                 categorySecondList: [],
                 categoryThridList: [],
-                productFriList: {},
-                productSecList: {},
-                productThList: {},
-                productForList: {},
-                productFivList: {},
-                productSiList: {},
+                categoryFristList: [],
                 productHotList: {},
                 phoneNum: '',
-                phonePay: '',
+                phonePay: '100',
                 productName: '',
                 carProducts: [],
                 totalPrice: 0,
                 UserSession:{
                     name:''
-                }
+                },
+                validPhoneNumber:true
             }
+        },
+        created() {
+            // 在 created 钩子函数中调用异步函数
+            this.fetchCategoryData();
         },
         methods: {
             doImg(filePath) {
@@ -1127,67 +885,60 @@
 
             //吴磊吴磊
             getPhoneChargesOrder() {
-                window.location.href = "/getOrder?amount=" + this.phonePay + "&orderName='话费充值'"
+                if(this.validPhoneNumber){
+                    window.location.href = "/getOrder?amount=" + this.phonePay + "&orderName='话费充值'"
+                }
             },
-            initProductFri(categoryName) {
-                axios.get("/getProductWithFileList", {
-                    params: {
-                        categoryName: categoryName
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    this.productFriList = respones.data.data;
-                })
+            validatePhoneNumber() {
+                this.phoneNum = this.phoneNum.replace(/\D/g, '');
+                if (this.phoneNum.length > 11) {
+                    this.phoneNum = this.phoneNum.slice(0, 11); // 如果超过11位，则截取前11位
+                }
+                const reg = /^1[3-9]\d{9}$/; // 手机号正则表达式
+                this.validPhoneNumber = reg.test(this.phoneNum); // 检查手机号格式是否有效
             },
-            initProductSec(categoryName) {
-                axios.get("/getProductWithFileList", {
-                    params: {
-                        categoryName: categoryName
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    this.productSecList = respones.data.data;
-                })
+            async fetchCategoryData() {
+                try {
+                    // if (!Array.isArray(this.categoryFristList)) {
+                    //     // 如果 this.categoryFristList 不是数组，可以进行处理，比如赋值为空数组
+                    //     this.categoryFristList = [];
+                    // }
+                    // 调用异步函数获取分类数据
+                    const response = await axios.get("/getCategoryList");
+
+                    console.log(response.data.data)
+                    this.categoryFristList = response.data.data.data;
+                    console.log("看我")
+                    console.log(this.categoryFristList)
+                    // 在获取数据后再调用获取二级分类数据的方法
+                    this.categoryFristList.forEach(async (frist) => {
+                        const secondCategoryData = await this.getSecondCategory(frist.id);
+                        const productData = await this.getProductListByFristName(frist.name);
+                        frist.secondCategoryList = secondCategoryData;
+                        frist.productList = productData;
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
             },
-            initProductTh(categoryName) {
-                axios.get("/getProductWithFileList", {
-                    params: {
-                        categoryName: categoryName
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    this.productThList = respones.data.data;
-                })
+            async getSecondCategory(id) {
+                try {
+                    const response = await axios.get("/getCategorySecond", {params: {id: id}});
+                    console.log(response.data.data)
+                    return response.data.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
             },
-            initProductFo(categoryName) {
-                axios.get("/getProductWithFileList", {
-                    params: {
-                        categoryName: categoryName
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    this.productForList = respones.data.data;
-                })
-            },
-            initProductFi(categoryName) {
-                axios.get("/getProductWithFileList", {
-                    params: {
-                        categoryName: categoryName
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    this.productFivList = respones.data.data;
-                })
-            },
-            initProductSi(categoryName) {
-                axios.get("/getProductWithFileList", {
-                    params: {
-                        categoryName: categoryName
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    this.productSiList = respones.data.data;
-                })
+            async getProductListByFristName(name) {
+                try {
+                    const response = await axios.get("/getProductWithFileList", {params: {categoryName: name}});
+                    return response.data.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
             },
             initproductHot() {
                 axios.get("/searchHotProduct").then((respones) => {
@@ -1196,16 +947,16 @@
                 })
             },
             toProductinit(id) {
-                axios.get("/addHistory",{
-                    params:{
-                        productId:id
+                axios.get("/addHistory", {
+                    params: {
+                        productId: id
                     }
-                }).then((respones)=>{
+                }).then((respones) => {
                     console.log(respones)
-                    if(respones.data.code=="201"){
+                    if (respones.data.code == "201") {
                         alert("访问失败！")
-                    }else {
-                        window.location.href="Product.html?id="+id
+                    } else {
+                        window.location.href = "Product.html?id=" + id
                     }
                 })
             },
@@ -1225,7 +976,7 @@
                     .reduce((acc, item) => acc + item, 0);
 
             },
-            toCategoryList(id){
+            toCategoryList(id) {
                 alert(id)
                 window.location.href="CategoryList.html?categoryId="+id
             },
@@ -1244,19 +995,10 @@
                 })
             }
         },
-        mounted() {
-            this.initNews();
-            this.initCategory();
-
-            //wulei
-            this.initProductFri("进口食品,生鲜");
-            this.initProductSec("化妆品");
-            this.initProductTh("保健食品");
-            this.initProductFo("箱包");
-            this.initProductFi("家用商品");
-            this.initProductSi("电子商品");
-            this.initproductHot();
-
+        mounted: async function () {
+            await this.initNews();
+            await this.initCategory();
+            await this.initproductHot();
             //购物车
             this.initCar()
             //获取用户信息

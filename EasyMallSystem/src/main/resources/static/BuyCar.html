@@ -511,7 +511,7 @@
                     <td class="car_th" width="150">购买数量</td>
                     <td class="car_th" width="130">小计</td>
                     <td class="car_th" width="140">返还积分</td>
-                    <td class="car_th" width="150">操作</td>
+                    <td class="car_th" width="170">操作</td>
                 </tr>
 
                 <tr :class="{'car_tr': index % 2 === 0}" v-for="(item,index) in productList" :key="item.id">
@@ -523,10 +523,14 @@
                     <td align="center">颜色：灰色</td>
                     <td align="center">
                         <div class="c_num">
-                            <input type="button" value="" @click="decrementQuantity(item)"
+<!--                            <input type="button" value="" @click="item.quantity&ndash;&gt;0===item.quantity&#45;&#45;"-->
+<!--                                   class="car_btn_1"/>-->
+<!--                            <input type="text" :value="item.quantity" name="" class="car_ipt"/>-->
+<!--                            <input type="button" value="" @click="item.quantity++" class="car_btn_2"/>-->
+                            <input type="button" value="" @click="decreaseNumber(item)"
                                    class="car_btn_1"/>
-                            <input type="text" v-model="item.quantity"  name=""  class="car_ipt"/>
-                            <input type="button" value="" @click="incrementQuantity(item)" class="car_btn_2"/>
+                            <div><input @input="changeAmount($event,item)" pattern="[0-9]*" maxlength="3"  type="text" :value="item.quantity"  name="" class="car_ipt"/></div>
+                            <input type="button" value="" @click="item.quantity++"  class="car_btn_2"/>
                         </div>
                     </td>
                     <td align="center" style="color:#ff4e00;"> {{itemTotalPrice[index]}}</td>
@@ -767,6 +771,28 @@
                     }
                 });
             },
+
+            ///wulei
+            changeAmount(event,item){
+                const inputValue = event.target.value;
+                // 只允许输入数字
+                if (/^\d*$/.test(inputValue)) {
+                    // 更新item.quantity
+                    item.quantity = inputValue.substring(0, 3);
+                } else {
+                    // 如果输入内容包含非数字，则不更新item.quantity
+                    // 这样就保持了原来的值不变
+                    event.target.value = item.quantity;
+                }
+            },
+            decreaseNumber(item) {
+                // 将输入值转换为数字并减少
+                if (!isNaN(item.quantity)) {
+                    item.quantity = Math.max(0, item.quantity - 1); // 确保不会小于0
+                }
+            },
+
+
             selectAll(event) {
                 if (event.target.checked) {
                     this.selectedItems = this.productList.map(item => item.id);

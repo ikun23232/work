@@ -80,12 +80,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Message checkUserByLoginName(String loginName) {
+    public Message checkUserByLoginName(String loginName,String email) {
         logger.info("UserServiceImpl checkUserByName is start.......loginName " + loginName);
         logger.info("UserServiceImpl userDao checkUserByName is start.......loginName " + loginName);
         User user = userDao.checkUserByName(loginName);
         logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
         if (user != null && !user.getUserName().equals("")) {
+            if(!user.getEmail().equals(email)){
+                return Message.error("请与邮箱号匹配");
+            }
             return new Message("200", "用户可用", null);
         }
         return Message.error("不存在该用户");
