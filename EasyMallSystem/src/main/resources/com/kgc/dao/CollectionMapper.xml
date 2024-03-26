@@ -63,11 +63,11 @@
     </update>
     <insert id="addProductInCarById">
         insert into easybuy_collections(userId, productId, isDel, createTime, quantity)
-        values ('22', #{productId}, 0, NOW(), #{quantity})
+        values (#{userId}, #{productId}, 0, NOW(), #{quantity})
     </insert>
     <select id="getProductAndQuantityById" resultType="Product">
         SELECT p.*,c.quantity,f.filePath FROM easybuy_collections c,easybuy_product p,easybuy_file f WHERE
-        c.productId=p.id AND f.id=p.fileId AND c.userId=22
+        c.productId=p.id AND f.id=p.fileId AND c.userId=#{userId}
         <foreach collection="ids" item="id" open="AND p.id IN (" close=")" separator=",">
             #{id}
         </foreach>

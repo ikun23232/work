@@ -6,6 +6,7 @@ import com.kgc.entity.Message;
 import com.kgc.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @create: 2024-03-19 09:04
  **/
 @Service
+@Transactional
 public class BrandServiceImpl implements BrandService {
     @Autowired
     private BrandDao brandDao;

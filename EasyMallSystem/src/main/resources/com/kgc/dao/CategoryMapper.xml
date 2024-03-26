@@ -55,7 +55,11 @@
             <if test="categoryName != null and categoryName != ''">
                 c1.name like concat('%',#{categoryName},'%')
             </if>
+        <if test="type>0">
+            and c1.type=#{type}
+        </if>
             and c1.isDel=0
+
         </where>
 
         ORDER BY c1.type

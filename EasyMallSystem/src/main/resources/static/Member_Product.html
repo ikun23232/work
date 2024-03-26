@@ -429,18 +429,19 @@
         methods: {
             handleSizeChange(val) {
                 this.page.pageSize=val;
-                this.getProductInit(this.page.pageSize);
+                this.getProductInit(1);
             },
             handleCurrentChange(val) {
-                this.page.pageNum=val;
-                this.getProductInit(this.page.pageNum);
+                this.page.pageSize=val;
+                this.getProductInit(this.page.pageSize);
             },
             getProductInit(currentPageNo){
                 axios.get("/getProductPageList",{
                     params:{
                         currentPageNo:currentPageNo,
                         brandId:this.brandValue,
-                        productName:this.input
+                        productName:this.input,
+                        pageSize:this.page.pageSize
                     }
                 }).then((respones)=>{
                     console.log(respones)
@@ -487,7 +488,10 @@
         },
         data() {
             return {
-                page:{},
+                page:{
+                    pageSize:5,
+                    currentPageNo: 1
+                },
                 input: '',
                 optionsBrand:[{}],
                 brandValue: 0,

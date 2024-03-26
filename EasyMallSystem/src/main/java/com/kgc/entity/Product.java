@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "productlstaa")
+@Document(indexName = "productlstaaa")
 public class Product {
     @Id
     private Integer id;

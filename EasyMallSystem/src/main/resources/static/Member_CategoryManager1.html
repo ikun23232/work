@@ -280,18 +280,38 @@
                 <h1>分类管理</h1>
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
-                        <el-input v-model="categoryName" placeholder="分类名称"></el-input>
-                        <div class="block">
-                            <span class="demonstration">单选可搜索</span>
-                            <el-cascader
-                                    placeholder="试试搜索：指南"
+                        <el-input v-model="categoryName" placeholder="分类名称" style="width: 200px" >分类名称</el-input>
+                        <el-select v-model="type" placeholder="请选择级别">
+                            <el-option
+                                    label="全部"
+                                    value="0"
+                            selected>
+                            </el-option>
+                            <el-option
+                                    label="一级分类"
+                                    value="1">
+                            </el-option>
+                            <el-option
+                                    label="二级分类"
+                                    value="2">
+                            </el-option>
+                            <el-option
+                                    label="三级分类"
+                                   value="3">
+                            </el-option>
+                        </el-select>
+
+<!--                            <span class="demonstration"></span>-->
+                            预览<el-cascader
+                                    placeholder="请选择分类"
                                     :options="categoryLists"
+                                    v-model="categoryId"
                                     :props="{value:'id',label:'name',checkStrictly: true,expandTrigger: 'hover' }"
-
+                                    @change="handleCascaderChange"
                                     :show-all-levels="false"
-
                                     filterable></el-cascader>
-                        </div>
+
+
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="initCategoryId()">查询</el-button>
@@ -463,6 +483,9 @@
                     pageSize:10
                 },
                 categoryLists:[],
+                categoryId:''  ,
+                type:'0'
+
 
             }
 
@@ -524,7 +547,8 @@
                 this.page.currentPageNo=currentPageNo;
                 let resp=await request.post("/getCategoryListByALL", {
                     page:this.page,
-                    categoryName:this.categoryName
+                    categoryName:this.categoryName,
+                    type:this.type
                 })
                 console.log(resp)
                 this.categoryList=resp.data.list;
@@ -593,6 +617,16 @@
 
                }
                )
+            },
+            handleCascaderChange(value) {
+                if (value.length > 0) {
+
+                    const lastValue = value[value.length - 1];
+                    console.log(lastValue)
+                    this.selectedId = lastValue;
+                } else {
+                    this.selectedId = '';
+                }
             }
         }
     })

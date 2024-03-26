@@ -1,9 +1,11 @@
 package com.kgc.controller;
 
+import com.kgc.constant.UserConstant;
 import com.kgc.entity.Message;
 import com.kgc.entity.User;
 import com.kgc.service.UserService;
 import com.kgc.utils.EmaiCodelUtil;
+import com.kgc.utils.RedisUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import static com.kgc.constant.UserConstant.USER_SESSION;
+
 /**
  * @author: 欧洋宏
  * @create: 2024-03-17 19:17
@@ -24,6 +28,8 @@ public class UserController {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @RequestMapping("test")
     public String test() {
@@ -98,6 +104,18 @@ public class UserController {
         return message;
     }
 
+    @RequestMapping("/loginOut")
+    public Message loginOut(){
+        boolean Falg = redisUtil.removeKey(USER_SESSION);
+        if (!Falg){
+            return Message.error("注销失败");
+        }
+        USER_SESSION=null;
+        return Message.success();
+    }
+
+
+
     @RequestMapping("/updatePassword")
     public Message updatePassword(String loginName,String password){
         logger.info("UserController loginTo is start......loginName:"+loginName+"password:"+password);
@@ -106,9 +124,9 @@ public class UserController {
     }
 
     @RequestMapping("/getUserPage")
-    public Message getUserPage(String userName,int roleId,int currentPageNo){
+    public Message getUserPage(String userName,int roleId,int currentPageNo,int pageSize){
         logger.info("UserController loginTo is start......userName:"+userName+"roleId:"+roleId);
-        Message message = userService.getUserPage(userName,roleId,currentPageNo,5);
+        Message message = userService.getUserPage(userName,roleId,currentPageNo,pageSize);
         return message;
     }
 
@@ -164,6 +182,23 @@ public class UserController {
     public Message checkEmail(String email,int id){
         logger.info("UserController loginTo is start......mobile:"+email+"id"+id);
         Message message = userService.checkEmail(email,id);
+        return message;
+    }
+    @RequestMapping("/checkMobile")
+    public Message checkMobile(String email,int id){
+        Message message = userService.checkMobile(email,id);
+        return message;
+    }
+    @RequestMapping("/checkUserByEmail")
+    public Message checkEmail(String email){
+        logger.info("UserController loginTo is start......email:"+email);
+        Message message = userService.checkUserByEmail(email);
+        return message;
+    }
+    @RequestMapping("/checkUserPhone")
+    public Message checkUserPhone(String mobile){
+        logger.info("UserController loginTo is start......mobile:"+mobile);
+        Message message = userService.checkUserByMobile(mobile);
         return message;
     }
 

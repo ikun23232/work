@@ -8,13 +8,18 @@ import com.kgc.entity.Message;
 import com.kgc.entity.Product;
 import com.kgc.entity.User;
 import com.kgc.service.UserService;
+import com.kgc.utils.RedisUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import static com.kgc.constant.UserConstant.USER_SESSION;
 
 
 /**
@@ -22,12 +27,15 @@ import java.util.List;
  * @create: 2024-03-17 19:22
  **/
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired
     private UserDao userDao;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private RedisUtil redisUtil;
 
 
     @Override
@@ -91,8 +99,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return Message.error("用户名或密码错误");
         }
-        String userString = JSON.toJSONString(user);
-//        stringRedisTemplate.opsForValue().set("userInFo",userString);
+        String userInfo = JSON.toJSONString(user);
+        //设置30分钟失效
+        USER_SESSION=UUID.randomUUID().toString();
+        redisUtil.setKey(USER_SESSION,userInfo,30);
         return Message.success("登录成功！");
     }
 
@@ -210,9 +220,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Message getUser() {
         //此出通过redis拿到信息
-        int id = 22;
-        User userById = userDao.getUserById(id);
-        return Message.success(userById);
+        String valueByKey = redisUtil.getValueByKey(USER_SESSION);
+        if (valueByKey==null){
+            return Message.error("无登录信息");
+        }
+        User user = JSON.parseObject(valueByKey, User.class);
+        return Message.success(user);
     }
 
     @Override
@@ -223,6 +236,22 @@ public class UserServiceImpl implements UserService {
         }else {
             return Message.error();
         }
+    }
+
+    @Override
+    public Message checkMobile(String mobile, int id) {
+        logger.info("UserServiceImpl checkUserByName is start.......mobile " + mobile);
+        logger.info("UserServiceImpl userDao checkUserByName is start.......mobile " + mobile);
+        User user = userDao.checkUserByMobile(mobile);
+        User userById = userDao.getUserById(id);
+        logger.debug("UserServiceImpl userDao checkUserByName is start.......user " + user);
+        if (user != null && !user.getUserName().equals("")) {
+            if(userById.getMobile().equals(mobile)){
+                return Message.success();
+            }
+            return Message.error("手机已被注册");
+        }
+        return Message.success(user);
     }
 
 

@@ -8,6 +8,7 @@ import com.kgc.dao.ProductDao;
 import com.kgc.entity.*;
 import com.kgc.service.OrderService;
 import com.kgc.utils.TimedtasksUtil;
+import com.kgc.utils.UserSessionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.*;
  * @create: 2024-03-20 10:27
  **/
 @Service
-
+@Transactional
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDao orderDao;
@@ -52,13 +53,15 @@ public class OrderServiceImpl implements OrderService {
                 return Message.error(product.getName() + "的库存不够呐.....");
             }
         }
+        int userId = UserSessionUtil.getUserId();
 
         Order order = new Order();
         order.setUserAddress(address.getAddress());
         order.setCost(count);
-        order.setUserId(22);
+        order.setUserId(userId);
         order.setLoginName("add");
         order.setSerialNumber(UUID.randomUUID().toString());
+        order.setId(address.getId());
         int orderId = orderDao.addOrder(order);
 
         //拿到orderId后添加order_Temp表
@@ -95,11 +98,11 @@ public class OrderServiceImpl implements OrderService {
                 return Message.error(product.getName() + "的库存不够呐.....");
             }
         }
-
+        int userId = UserSessionUtil.getUserId();
         Order order = new Order();
         order.setUserAddress(address.getAddress());
         order.setCost(count);
-        order.setUserId(22);
+        order.setUserId(userId);
         order.setLoginName("add");
         order.setSerialNumber(UUID.randomUUID().toString());
         int orderId = orderDao.addOrder(order);
@@ -128,12 +131,47 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * 根据权限查看全部人的
+     * @param page
+     * @return
+     */
     @Override
     public Message getOrderList(Page page) {
+        User user = UserSessionUtil.getUser();
+        if (user==null||user.getRoleId()<0){
+            return Message.error("请登录");
+        }
+        if (user.getRoleId()<=2){
+            PageHelper.startPage(page.getCurrentPageNo(), page.getPageSize());
+            List<Order> orderList = orderDao.getOrderListByALL(user.getRoleId());
+            PageInfo pageInfo=new PageInfo<>(orderList);
+            return Message.success(pageInfo);
+        }
         PageHelper.startPage(page.getCurrentPageNo(), page.getPageSize());
-        List<Order> orderList = orderDao.getOrderList();
+        List<Order> orderList = orderDao.getOrderListByUserId(user.getId());
         PageInfo pageInfo=new PageInfo<>(orderList);
         return Message.success(pageInfo);
+    }
+
+    /**
+     * 普通用户版本只能看自己的
+     * @param page
+     * @return 没用
+     */
+    @Override
+    public Message getOrderListByUserId(Page page) {
+        int userId = UserSessionUtil.getUserId();
+        PageHelper.startPage(page.getCurrentPageNo(), page.getPageSize());
+        List<Order> orderList = orderDao.getOrderListByUserId(userId);
+        PageInfo pageInfo=new PageInfo<>(orderList);
+        return Message.success(pageInfo);
+    }
+
+    @Override
+    public Order getOrderById(int id) {
+        Order orderById = orderDao.getOrderById(id);
+        return orderById;
     }
 
     @Override
@@ -155,9 +193,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Message getOrderListInPay(int userId) {
-
-        List<Order> orderListInPay = orderDao.getOrderListInPay(userId);
+    public Message getOrderListInPay() {
+        User user = UserSessionUtil.getUser();
+        if (user.getRoleId()<=2){
+            List<Order> orderListInPayByALL = orderDao.getOrderListInPayByALL(user.getRoleId());
+            return Message.success(orderListInPayByALL);
+        }
+        List<Order> orderListInPay = orderDao.getOrderListInPay(user.getId());
         return Message.success(orderListInPay);
     }
 
@@ -233,5 +275,8 @@ public class OrderServiceImpl implements OrderService {
 
         return Message.success();
     }
+
+
+
 
 }

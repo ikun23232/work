@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.kgc.entity.Message;
 import com.kgc.entity.Product;
 import com.kgc.service.CollectionService;
+import com.kgc.utils.UserSessionUtil;
 import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class CollectionController {
     @RequestMapping("/getConnectionById")
     public Message getConnectionById() {
         //从redis用户信息拿id
-        int id = 22;
-        Message message = collectionService.getConnectionById(id);
+        int userId = UserSessionUtil.getUserId();
+        Message message = collectionService.getConnectionById(userId);
         return message;
     }
 

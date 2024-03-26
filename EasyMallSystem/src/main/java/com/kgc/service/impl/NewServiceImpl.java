@@ -10,6 +10,7 @@ import com.kgc.service.NewService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @create: 2024-03-18 13:55
  **/
 @Service
+@Transactional
 public class NewServiceImpl implements NewService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired

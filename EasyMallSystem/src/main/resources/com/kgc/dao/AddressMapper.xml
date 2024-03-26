@@ -48,6 +48,9 @@ where id=#{id}
         from easybuy_user_address
         where userId = #{userId}
         and isDel=0
+<if test="addressDetail!=null and addressDetail!=''">
+    and address like concat('%',#{addressDetail},'%')
+</if>
     </select>
     <select id="getAddressByid" resultType="Address">
         SELECT id, userId, address, createTime, isDefault, remark, isDel, email, name, phone

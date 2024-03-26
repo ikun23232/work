@@ -12,6 +12,7 @@ import com.kgc.service.ConcernService;
 import com.kgc.service.ProductService;
 import com.kgc.utils.ElsearchUtil;
 import com.kgc.utils.ReplayUtil;
+import com.kgc.utils.UserSessionUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -27,6 +28,7 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +46,7 @@ import java.util.UUID;
  * @create: 2024-03-18 15:50
  **/
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired
@@ -170,30 +173,45 @@ public class ProductServiceImpl implements ProductService {
             queryBuilder.must(QueryBuilders.matchQuery("brandName", product.getBrandName()));
         }
         //新加的产品
+        List<Integer> categoryIds = new ArrayList<>();
+// 将三级分类的 ID 添加到 categoryIds 列表中
+
+
+
+
         if (product != null && product.getCategoryId()!=null) {
             int typeById = categoryDao.getTypeById(product.getCategoryId());
             if (typeById==1){
                 List<Category> threeCategoryBycategoryId = categoryDao.getThreeCategoryBycategoryId(product.getCategoryId());
-                if (threeCategoryBycategoryId==null){
-                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", product.getCategoryId())));
+                if (threeCategoryBycategoryId==null&&threeCategoryBycategoryId.size()>0){
+                    categoryIds.add(product.getCategoryId());
                 }
                 for (Category category : threeCategoryBycategoryId) {
-                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", category.getId())));
+                    categoryIds.add(category.getId());
                 }
             }else if (typeById==2){
                 List<Category> threeCategoryBycategoryIdByTwo = categoryDao.getThreeCategoryBycategoryIdByTwo(product.getCategoryId());
-                if (threeCategoryBycategoryIdByTwo==null){
-                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", product.getCategoryId())));
+                if (threeCategoryBycategoryIdByTwo==null&&threeCategoryBycategoryIdByTwo.size()>0){
+                    categoryIds.add(product.getCategoryId());
                 }
                 for (Category category : threeCategoryBycategoryIdByTwo) {
-                    queryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("categoryId", category.getId())));
+                    categoryIds.add(category.getId());
                 }
             }else {
-                queryBuilder.must(QueryBuilders.matchQuery("categoryId", product.getCategoryId()));
+                categoryIds.add(product.getCategoryId());
             }
+            if (!categoryIds.isEmpty()) {
+                queryBuilder.must(QueryBuilders.termsQuery("categoryId", categoryIds));
+            }else {
+                queryBuilder.must(QueryBuilders.matchQuery("categoryId", product.getCategoryId()));
 
+            }
         }
         //
+        if (categoryIds.isEmpty()&&product.getCategoryId()!=null) {
+            queryBuilder.must(QueryBuilders.termsQuery("categoryId", categoryIds));
+
+        }
 
 
         //
@@ -294,6 +312,8 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         product.setFilePath(Path);
+        int userId = UserSessionUtil.getUserId();
+        product.setId(userId);
         int count = productDao.addfile(product);
         int i = productDao.addProduct(product);
         return Message.success();

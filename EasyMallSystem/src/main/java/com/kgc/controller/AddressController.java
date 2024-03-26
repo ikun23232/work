@@ -1,14 +1,19 @@
 package com.kgc.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.kgc.entity.Address;
 import com.kgc.entity.Message;
 import com.kgc.entity.Page;
 import com.kgc.service.AddressService;
+import com.kgc.utils.UserSessionUtil;
 import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: 欧洋宏
@@ -21,31 +26,36 @@ public class AddressController {
 
 
     /**
-     * 查默认的地址
+     * 查登录用户的默认的地址
+     * 公共
      * @return
      */
     @RequestMapping("getAddressById")
     public Message getAddressById(){
         //写死
-        int userId=22;
+        int userId = UserSessionUtil.getUserId();
         Message addressById = addressService.getAddressById(userId);
         return addressById;
     }
 
     /**
-     * 查询所有
+     * 查询当前用户所有地址
+     * 公共
      * @return
      */
     @RequestMapping("/getAddresssList")
+    public Message getAddresssList(@RequestBody Map map){
 
-    public Message getAddresssList(@RequestBody Page page){
-        int userId=22;
-        Message addresssList = addressService.getAddresssList(userId,page);
+        Page page = JSON.parseObject(JSON.toJSONString(map.get("page")), Page.class);
+        String addressDetail = JSON.parseObject(JSON.toJSONString(map.get("addressDetail")), String.class);
+
+        int userId = UserSessionUtil.getUserId();
+        Message addresssList = addressService.getAddresssList(userId,page,addressDetail);
         return addresssList;
     }
 
     /**
-     * 设置默认地址
+     * 用户设置默认地址
      * @param id
      * @return
      */
@@ -58,7 +68,9 @@ public class AddressController {
 
 
     /**
+     * 用户删除地址
      * 删除地址
+     * 公共
      * @param id
      * @return
      */
@@ -69,7 +81,8 @@ public class AddressController {
     }
 
     /**
-     * 修改地址
+     * 用户修改自己地址
+     * 公共
      * @param address
      * @return
      */
@@ -80,7 +93,8 @@ public class AddressController {
     }
 
     /**
-     * 添加地址
+     * 用户添加地址
+     * 公共
      * @param address
      * @return
      */

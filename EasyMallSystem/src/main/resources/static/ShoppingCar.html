@@ -1,0 +1,62 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="./js/axious.js"></script>
+<script src="./js/vue.js"></script>
+<body>
+<div class="i_car">
+    <div class="car_t">购物车 [ <span>{{carProducts.length}}</span> ]</div>
+    <div class="car_bg">
+        <!--Begin 购物车未登录 Begin-->
+        <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
+        <!--End 购物车未登录 End-->
+        <!--Begin 购物车已登录 Begin-->
+        <ul class="cars" @mouseover="caclPrice()">
+            <li v-for="item in carProducts" :key="item.id">
+                <div class="img"><a href="#"><img :src="doImg(item.filePath)" width="58" height="58"/></a></div>
+                <div class="name"><a href="#">{{item.name}}</a></div>
+                <div class="price"><font color="#ff4e00">￥{{item.price}}</font> X{{item.quantity}}</div>
+            </li>
+        </ul>
+        <div class="price_sum">共计&nbsp; <font color="#ff4e00">￥</font><span>{{totalPrice}}</span></div>
+        <div class="price_a"><a href="BuyCar.html">去购物车结算</a></div>
+        <!--End 购物车已登录 End-->
+    </div>
+</div>
+<script>
+    new Vue({
+        el: ".i_car",
+        data() {
+            return {
+
+                carProducts: [],
+                totalPrice: 0,
+                UserSession: {
+                    name: ''
+                }
+            }
+        },
+        methods:{
+            //购物车,
+            async initCar() {
+                let respones = await axios.get("/getConnectionById")
+                console.log(respones)
+                this.carProducts = respones.data.data;
+
+                this.totalPrice = this.carProducts
+                    .map(item => item.price * item.quantity)
+                    .reduce((acc, item) => acc + item, 0);
+            },
+            caclPrice() {
+                this.totalPrice = this.carProducts
+                    .map(item => item.price * item.quantity)
+                    .reduce((acc, item) => acc + item, 0);
+
+            }
+        },
+        mounted(){
+            this.initCar();
+        }
+    })
+</script>
+</body>
+</html>

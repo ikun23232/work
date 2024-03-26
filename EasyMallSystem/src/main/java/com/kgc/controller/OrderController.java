@@ -3,6 +3,7 @@ package com.kgc.controller;
 import com.alibaba.fastjson.JSON;
 import com.kgc.entity.*;
 import com.kgc.service.OrderService;
+import com.kgc.utils.UserSessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +26,8 @@ public class OrderController {
     @RequestMapping("/getOrderProductByUserId")
     public Message getOrderProductByUserId() {
         //写死
-        int id = 22;
-        Message orderProductByUserId = orderService.getOrderProductByUserId(id);
+        int userId = UserSessionUtil.getUserId();
+        Message orderProductByUserId = orderService.getOrderProductByUserId(userId);
         return orderProductByUserId;
     }
 
@@ -51,6 +52,13 @@ public class OrderController {
         return orderProductByUserId;
     }
 
+
+
+    @RequestMapping("/delOrderById")
+    public Message getOrderProductByUserId(int id) {
+        Message orderProductByUserId = orderService.delOrderById(id);
+        return orderProductByUserId;
+    }
     @RequestMapping("/getOrderList")
     public Message getOrderProductByUserId(@RequestBody Map map) {
         Page page = JSON.parseObject(JSON.toJSONString(map.get("page")), Page.class);
@@ -58,16 +66,9 @@ public class OrderController {
         return orderProductByUserId;
     }
 
-    @RequestMapping("/delOrderById")
-    public Message getOrderProductByUserId(int id) {
-        Message orderProductByUserId = orderService.delOrderById(id);
-        return orderProductByUserId;
-    }
-
     @RequestMapping("/getOrderListInPay")
     public Message getOrderListInPay() {
-        int userId=22;
-        Message orderProductByUserId = orderService.getOrderListInPay(userId);
+        Message orderProductByUserId = orderService.getOrderListInPay();
         return orderProductByUserId;
     }
     @RequestMapping("/combineOrders")

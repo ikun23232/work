@@ -7,10 +7,12 @@ import com.kgc.entity.Address;
 import com.kgc.entity.Message;
 import com.kgc.entity.Page;
 import com.kgc.service.AddressService;
+import com.kgc.utils.UserSessionUtil;
 import com.sun.org.apache.bcel.internal.generic.I2F;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ import java.util.List;
  * @create: 2024-03-24 12:25
  **/
 @Service
+@Transactional
 public class AddressServiceImpl implements AddressService {
     @Autowired
     private AddressDao addressDao;
@@ -33,9 +36,9 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Message getAddresssList(int userId,Page page) {
+    public Message getAddresssList(int userId,Page page,String addressDetail) {
         PageHelper.startPage(page.getCurrentPageNo(),page.getPageSize());
-        List<Address> addresssList = addressDao.getAddresssList(userId);
+        List<Address> addresssList = addressDao.getAddresssList(userId,addressDetail);
         PageInfo pageInfo=new PageInfo<>(addresssList);
         return Message.success(pageInfo);
     }
@@ -43,7 +46,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Message setAddressDefault(int id) {
         //用户
-        int userId=22;
+        int userId = UserSessionUtil.getUserId();
         int i = addressDao.updateAddressIsDefaultAll(userId);
         int i1 = addressDao.setAddressDefault(id);
 
@@ -72,7 +75,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Message addAddress(Address address) {
-        address.setUserId(22);
+        int userId = UserSessionUtil.getUserId();
+        address.setUserId(userId);
         int updateRow = addressDao.addAddress(address);
         if (updateRow<=0){
             return Message.error("添加失败");

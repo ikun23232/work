@@ -115,7 +115,7 @@
         </span>
             <!--End 所在收货地区 End-->
             <span class="fr">
-        	<span class="fl">你好，请<a href="Login.html">登录</a>&nbsp; <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a
+        	<span  class="fl">你好，{{UserSession.name}}<a v-if="!this.UserSession.name" href="Login.html">登录</a>&nbsp; <a v-if="this.UserSession.name" href="Regist.html" @click="loginOut()" style="color:#ff4e00;">注销</a> <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a
                     href="#">我的订单</a>&nbsp;|</span>
         	<span class="ss">
             	<div class="ss_list">
@@ -173,10 +173,10 @@
                     href="#">日用品</a><a href="#">连衣裙</a></span>
         </div>
         <div class="i_car">
-            <div class="car_t">购物车 [ <span>3</span> ]</div>
+            <div class="car_t">购物车 [ <span>{{carProducts.length}}</span> ]</div>
             <div class="car_bg">
                 <!--Begin 购物车未登录 Begin-->
-                <div class="un_login">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
+                <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
                 <!--End 购物车未登录 End-->
                 <!--Begin 购物车已登录 Begin-->
                 <ul class="cars" @mouseover="caclPrice()">
@@ -206,14 +206,13 @@
                                 <span class="n_img"><span></span><img src="images/nav1.png"/></span>
                                 <span class="fl">{{item.name}}</span>
                             </div>
-                            <div class="zj" v-for="(subItem, index) in categorySecondList" :key="index" @click.stop="toCategoryList(subItem.id)">
+                            <div class="zj" >
                                 <div class="zj_l">
-                                    <div class="zj_l_c">
+                                    <div class="zj_l_c" v-for="(subItem, index) in categorySecondList" :key="index" @click.stop="toCategoryList(subItem.id)">
                                         <h2>
                                             {{subItem.name}}
                                         </h2>
-                                        <a v-for="(subItem1, index1) in categoryThridList"
-                                           :key="index1" @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
+                                        <a v-show="subItem.id==subItem1.parentId" v-for="(subItem1, index1) in categoryThridList" :key="index1" @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
                                     </div>
                                 </div>
                                 <div class="zj_r">
@@ -1007,10 +1006,10 @@
         <div class="car_t">购物车 [ <span>3</span> ]</div>
         <div class="car_bg">
             <!--Begin 购物车未登录 Begin-->
-            <c:if test="${sessionScope.loginUser==null}">
-                <div class="un_login">还未登录！<a href="${ctx}/Login?action=toLogin" style="color:#ff4e00;">马上登录</a> 查看购物车！
+        <template v-if="UserSession.name">
+                 <div class="un_login">还未登录！<a href="${ctx}/Login?action=toLogin" style="color:#ff4e00;">马上登录</a> 查看购物车1！
                 </div>
-            </c:if>
+         </template>
             <!--End 购物车未登录 End-->
             <!--Begin 购物车已登录 Begin-->
             <ul class="cars">
@@ -1061,7 +1060,10 @@
                 phonePay: '',
                 productName: '',
                 carProducts: [],
-                totalPrice: 0
+                totalPrice: 0,
+                UserSession:{
+                    name:''
+                }
             }
         },
         methods: {
@@ -1226,6 +1228,20 @@
             toCategoryList(id){
                 alert(id)
                 window.location.href="CategoryList.html?categoryId="+id
+            },
+            getUser(){
+                axios.post("/getUser").then((resp)=>{
+                    console.log(resp)
+                 this.UserSession.name=resp.data.data.userName;
+                })
+                },
+            loginOut(){
+                axios.post("/loginOut").then((resp)=>{
+                    console.log(resp)
+               if (resp.data.code=="200"){
+                   window.location.reload();
+               }
+                })
             }
         },
         mounted() {
@@ -1243,6 +1259,8 @@
 
             //购物车
             this.initCar()
+            //获取用户信息
+            this.getUser()
 
         }
     })

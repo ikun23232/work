@@ -44,17 +44,21 @@
     </select>
 
     <select id="checkUserByNamePwd" resultType="User">
-        select id,
+
+        select u.id,
                loginName,
                userName,
                password,
                sex,
                identityCode,
                email,
-               mobile
-        from easybuy_user
-        where loginName = #{loginName}
-        and password = #{password}
+               mobile,
+               roleId,
+               roleName
+        from easybuy_user u,easybuy_role r
+        WHERE r.id=u.roleId
+            and loginName = #{loginName}
+          and password = #{password}
     </select>
 
     <update id="updataePasswordByName">

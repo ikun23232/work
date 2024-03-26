@@ -3,6 +3,7 @@ package com.kgc.controller;
 import com.kgc.entity.Message;
 import com.kgc.entity.Page;
 import com.kgc.service.HistoryService;
+import com.kgc.utils.UserSessionUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,9 @@ public class HistoryController {
     public Message getHistoryList(){
         logger.info("HistoryController getHistoryList is start...");
         //从redis拿id
-        int id = 22;
+        int userId = UserSessionUtil.getUserId();
 //        page.setPageSize(5);
-        Message message = historyService.getHistoryList(id);
+        Message message = historyService.getHistoryList(userId);
 //        Object pageDTO = message.getData();
         return message;
     }
@@ -36,8 +37,9 @@ public class HistoryController {
     public Message addHistory(int productId){
         logger.info("HistoryController getHistoryList is start...");
         //从redis拿id
-        int id = 22;
-        Message message = historyService.addHistory(id,productId);
+        int userId = UserSessionUtil.getUserId();
+
+        Message message = historyService.addHistory(userId,productId);
         return message;
     }
 }

@@ -17,7 +17,7 @@ public interface AddressService {
      * 查询所有
      * @return
      */
-    public Message getAddresssList(int userId,Page page);
+    public Message getAddresssList(int userId,Page page,String addressDetail);
 
     /**
      * 设置默认地址

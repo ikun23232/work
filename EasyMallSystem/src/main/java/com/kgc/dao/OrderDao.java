@@ -16,7 +16,7 @@ public interface OrderDao {
 
 public int addOrder(Order order);
 
-    public List<Order> getOrderList();
+    public List<Order> getOrderListByALL(int roleId);
 
     public int delOrder(int id);
     /**
@@ -28,7 +28,7 @@ public int addOrder(Order order);
     public int updateStatusById(String serialNumber);
 
     /**
-     * 拿到所有以及支付的订单
+     * 拿到所有以及支付用户的订单
      */
     public List<Order> getOrderListInPay(@Param("userId") int userId);
 
@@ -37,7 +37,7 @@ public int addOrder(Order order);
      * @param serialNumber
      * @return
      */
-    public List<Product> getProductListByserialNumber(String serialNumber);
+    public List<Product> getProductListByserialNumber(@Param("serialNumber")String serialNumber,@Param("userId")int userId);
 
 
     /**
@@ -58,4 +58,7 @@ public int addOrder(Order order);
      */
     public List<Order> getOrderByUserIdByStaus(int userId);
 
+    List<Order> getOrderListByUserId(int userId);
+
+    List<Order>  getOrderListInPayByALL(int roleId);
 }

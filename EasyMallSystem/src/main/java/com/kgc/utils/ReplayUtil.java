@@ -24,7 +24,6 @@ public class ReplayUtil {
 
     private final List<String> randomList = new ArrayList<>(); // 待使用的随机数
 
-    private final Map<String, String> useRandomMap = new HashMap<>(); // 使用的随机数
 
     /**
      * 将随机数加载至maxRandom的数量
@@ -70,7 +69,6 @@ public class ReplayUtil {
     public String getRandom() {
         int index = randomList.size() - 1;
         String random = randomList.get(index);
-        useRandomMap.put(random, String.valueOf(new Date(new Date().getTime() + 60 * 60 * 1000)));
         randomList.remove(index);
         return random;
     }
@@ -82,7 +80,6 @@ public class ReplayUtil {
      */
     public void removeRandom(String random) {
         stringRedisTemplate.delete(random);
-        useRandomMap.remove(random);
         createOneUUIDToRedis();
     }
 

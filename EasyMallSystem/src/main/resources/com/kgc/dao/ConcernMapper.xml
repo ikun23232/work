@@ -30,7 +30,7 @@
         WHERE c.productId = p.id
           AND p.brandId = b.id
           AND f.id = p.fileId
-          AND c.userId = 22
+          AND c.userId = #{userId}
           AND c.isDel = 0
         ORDER BY p.createTime
     </select>

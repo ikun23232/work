@@ -242,9 +242,9 @@
                     </el-form-item>
                     <el-form-item label="父级分类" prop="parentId">
                         <div class="block">
-                            <span class="demonstration">单选可搜索</span>
+                            <span class="demonstration"></span>
                             <el-cascader
-                                    placeholder="试试搜索：指南"
+                                    placeholder="请选择分类"
                                     :options="categoryLists"
                                     :props="{value:'id',label:'name',checkStrictly: true,expandTrigger: 'hover' }"
                                    v-model="category.parentId"
@@ -431,7 +431,7 @@
                         type: 'success',
                         center: 'true',
                     })
-                    window.location.href='Member_CategoryManager.html';
+                    window.location.href='Member_CategoryManager1.html';
                 }else {
                     this.$message({
                         message: resp.msg,

@@ -173,31 +173,24 @@
         </div>
         <div class="i_car">
             <div class="car_t">购物车 [ <span>3</span> ]</div>
-            <div class="car_bg">
-                <!--Begin 购物车未登录 Begin-->
-                <div class="un_login">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
-                <!--End 购物车未登录 End-->
-                <!--Begin 购物车已登录 Begin-->
-                <ul class="cars">
-                    <li>
-                        <div class="img"><a href="#"><img src="images/car1.jpg" width="58" height="58"/></a></div>
-                        <div class="name"><a href="#">法颂浪漫梦境50ML 香水女士持久清新淡香 送2ML小样3只</a></div>
-                        <div class="price"><font color="#ff4e00">￥399</font> X1</div>
-                    </li>
-                    <li>
-                        <div class="img"><a href="#"><img src="images/car2.jpg" width="58" height="58"/></a></div>
-                        <div class="name"><a href="#">香奈儿（Chanel）邂逅活力淡香水50ml</a></div>
-                        <div class="price"><font color="#ff4e00">￥399</font> X1</div>
-                    </li>
-                    <li>
-                        <div class="img"><a href="#"><img src="images/car2.jpg" width="58" height="58"/></a></div>
-                        <div class="name"><a href="#">香奈儿（Chanel）邂逅活力淡香水50ml</a></div>
-                        <div class="price"><font color="#ff4e00">￥399</font> X1</div>
-                    </li>
-                </ul>
-                <div class="price_sum">共计&nbsp; <font color="#ff4e00">￥</font><span>1058</span></div>
-                <div class="price_a"><a href="#">去购物车结算</a></div>
-                <!--End 购物车已登录 End-->
+            <div class="i_car">
+                <div class="car_t">购物车 [ <span>3</span> ]</div>
+<!--                <div class="car_bg">-->
+<!--                    &lt;!&ndash;Begin 购物车未登录 Begin&ndash;&gt;-->
+<!--                    <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>-->
+<!--                    &lt;!&ndash;End 购物车未登录 End&ndash;&gt;-->
+<!--                    &lt;!&ndash;Begin 购物车已登录 Begin&ndash;&gt;-->
+<!--                    <ul class="cars" @mouseover="caclPrice()">-->
+<!--                        <li v-for="item in carProducts" :key="item.id">-->
+<!--                            <div class="img"><a href="#"><img :src="doImg(item.filePath)" width="58" height="58"/></a></div>-->
+<!--                            <div class="name"><a href="#">{{item.name}}</a></div>-->
+<!--                            <div class="price"><font color="#ff4e00">￥{{item.price}}</font> X{{item.quantity}}</div>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                    <div class="price_sum">共计&nbsp; <font color="#ff4e00">￥</font><span>{{totalPrice}}</span></div>-->
+<!--                    <div class="price_a"><a href="BuyCar.html">去购物车结算</a></div>-->
+<!--                    &lt;!&ndash;End 购物车已登录 End&ndash;&gt;-->
+<!--                </div>-->
             </div>
         </div>
     </div>
@@ -518,7 +511,7 @@
                     <tr v-for="item in productList">
                         <td>
                             <div class="c_s_img"><img :src="doImg(item.filePath)" width="73" height="73"/></div>
-                            Rio 锐澳 水蜜桃味白兰地鸡尾酒（预调酒） 275ml
+                            {{item.name}}
                         </td>
                         <td align="center">颜色：灰色</td>
                         <td align="center">{{item.quantity}}</td>
@@ -534,7 +527,7 @@
                 </table>
 
                 <div class="two_t">
-                    <span class="fr"><a href="#">修改</a></span>收货人信息
+                    <span class="fr"><a href="#" @click.prevent="toSelectAddress()">修改</a></span>收货人信息
                 </div>
                 <table border="0" class="peo_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
                     <tr>
@@ -916,6 +909,7 @@
                 })
             },
             initProductList1() {
+
                 axios.get("/getProductListByIdStrE", {
                     params: {
                         ids: ids
@@ -967,6 +961,11 @@
                     })
                     this.initProductList();
                 })
+            },
+            toSelectAddress(){
+
+                sessionStorage.setItem('previousPage', window.location.href);
+                window.location.href='Member_Address.html'
             }
         },
         computed: {
@@ -984,10 +983,10 @@
         mounted() {
             if (amount==null){
                 this.initProductList1(ids);
-
             }
             this.initProductList2(ids,amount)
             this.initAddress()
+
         }
     })
 </script>

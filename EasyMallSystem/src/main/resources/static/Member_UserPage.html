@@ -318,7 +318,7 @@
                 <span class="demonstration">完整功能</span>
                 <el-pagination
                         @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
+                        @current-change="getUserPage"
                         :current-page="page.pageNum"
                         :page-sizes="[5, 8]"
                         :page-size="page.pageSize"
@@ -427,18 +427,19 @@
         methods: {
             handleSizeChange(val) {
                 this.page.pageSize=val;
-                this.getUserPage(this.page.pageSize);
+                this.getUserPage(1);
             },
             handleCurrentChange(val) {
-                this.page.pageNum=val;
-                this.getUserPage(this.page.pageNum);
+                this.page.pageSize=val;
+                this.getUserPage(this.page.pageSize);
             },
             getUserPage(currentPageNo){
                 axios.get("/getUserPage",{
                     params:{
                         currentPageNo:currentPageNo,
                         roleId:this.roleValue,
-                        userName:this.input
+                        userName:this.input,
+                        pageSize:this.page.pageSize
                     }
                 }).then((respones)=>{
                     console.log(respones)
@@ -497,7 +498,9 @@
         },
         data() {
             return {
-                page:{},
+                page:{
+                    pageSize:5
+                },
                 input: '',
                 optionsRole:[],
                 roleValue: 0,

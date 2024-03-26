@@ -1,6 +1,7 @@
 package com.kgc.dao;
 
 import com.kgc.entity.Address;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface AddressDao {
      * 查询所有
      * @return
      */
-    public List<Address> getAddresssList(int userId);
+    public List<Address> getAddresssList(@Param("userId") int userId,@Param("addressDetail") String addressDetail);
 
     /**
      * 设置默认地址

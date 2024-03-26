@@ -17,7 +17,14 @@ public interface OrderService {
      * 拿到所有支付过的订单集合
      * @return
      */
-    public Message getOrderListInPay(int userId);
+    public Message getOrderListInPay();
 
     Message combineOrders(int masterOrder, int childOrder);
+
+    public Message getOrderListByUserId(Page page);
+
+
+    public Order getOrderById(int id);
+
+
 }

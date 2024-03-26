@@ -161,7 +161,7 @@
         <div class="search">
             <form>
                 <input type="text" value="" v-model="product.name" class="s_ipt"/>
-                <input type="button" value="搜索" class="s_btn" @click="searchBrandList(1)"/>
+                <input type="button" value="搜索" class="s_btn" @click="searchBrandListByName()"/>
             </form>
             <span class="fl"><a href="#">咖啡</a><a href="#">iphone 6S</a><a href="#">新鲜美食</a><a href="#">蛋糕</a><a
                     href="#">日用品</a><a href="#">连衣裙</a></span>
@@ -587,7 +587,9 @@
                                     <a  class="j_car" @click="getToCar(item.id)">加入购物车</a>
                                 </template>
                             </div>
-                        </li>    <div class="tips" v-if="productList">
+                        </li>
+                    </ul>
+                        <div class="tips" v-if="productList">
                         暂无匹配的商品详情,请重新筛选哦!
                     </div>
                     <div class="block">
@@ -868,15 +870,17 @@
                     }
                 })
             },
+            searchBrandListByName(){
+                this.product.categoryId='';
+                this.searchBrandList(1);
+            }
         },
         mounted() {
             console.log(productName)
             if (productName) {
                 this.product.name = productName;
             }
-            if (categoryId){
-                this.searchBrandList(1,categoryId);
-            }
+            this.searchBrandList(1,categoryId);
             this.initBrandList();
             // this.searchBrandList();
             this.getHistoryList();

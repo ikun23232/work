@@ -16,6 +16,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +28,7 @@ import java.util.UUID;
  * @Description
  */
 @Service
+@Transactional
 public class AlipayServiceImpl implements AlipayService {
 
     private Logger logger = Logger.getLogger(AlipayServiceImpl.class);

@@ -255,8 +255,8 @@
             <div style="width: 50px;height: 30px"></div>
             <div style="width: 90%;height: 100%">
                 <el-form :model="User" :rules="rules" ref="User" id="User" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="登录用户名" prop="loginName">
-                        <el-input v-model="User.loginName" name="loginName" style="width: 200px;"></el-input>
+                    <el-form-item label="登录用户名" prop="loginName" >
+                        <el-input v-model="User.loginName" name="loginName" style="width: 200px;" readonly></el-input>
                         <input type="hidden" v-model="User.id" name="id" style="width: 200px;"></input>
                     </el-form-item>
                     <el-form-item label="用户名" prop="userName">
@@ -504,31 +504,34 @@
                     { id: 2, name: '女' }
                 ],
                 rules: {
-                    loginName:[
-                        {validator: checkname, trigger: 'blur'},
-                    ],
-                    userName: [
-                        // {validator: checkname, trigger: 'blur'},
-                    ],
-                    password: [
-                        // {required: true, message: '请填写商品描述', trigger: 'blur'}
-                    ],
-                    sex: [
-                        // {validator: checkTime, trigger: 'blur'},
-                        // {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
-                    ],
-                    identityCode: [
-                        // {validator: checkprice, trigger: 'blur'},
-                    ],
-                    email: [
-                        // {validator: checkprice, trigger: 'blur'},
-                    ],
-                    mobile: [
-                        // {validator: checkCategoryLevelId, trigger: 'blur'},
-                    ],
-                    roleId: [
-                        // {validator: checkfilePath, trigger: 'blur'},
-                    ]
+                        userName: [
+                            { required: true, message: '请输入用户名', trigger: 'blur' },
+                        ],
+                        password: [
+                            { required: true, message: '请输入密码', trigger: 'blur' },
+                        ],
+                        roleId: [
+                            { required: true, message: '请选择角色', trigger: 'change' },
+                        ],
+                        sex: [
+                            { required: true, message: '请选择性别', trigger: 'change' },
+                        ],
+                        email: [
+                            { required: true, message: '请输入邮箱', trigger: 'blur' },
+                            { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] },
+                            {
+                                validator: this.checkEmailUnique,
+                                trigger: 'blur'
+                            }
+                        ],
+                        mobile: [
+                            { required: true, message: '请输入电话号码', trigger: 'blur' },
+                            { pattern: /^1[0-9]{10}$/, message: '请输入正确的手机号码', trigger: ['blur', 'change'] },
+                            {
+                                validator: this.checkMobileUnique,
+                                trigger: 'blur'
+                            }
+                        ]
                 }
             };
         },
@@ -544,6 +547,64 @@
             }
         },
         methods: {
+            async checkEmailUnique(rule, value, callback) {
+                // 这里是您的异步检查逻辑，例如调用后端接口检查邮箱是否唯一
+                try {
+                    // 模拟异步请求
+                  await this.checkemail()
+                    if (this.falg.emailfalg) {
+                        callback(); // 邮箱唯一，验证通过
+                    } else {
+                        callback(new Error('该邮箱已被使用')); // 邮箱重复，验证不通过
+                    }
+                } catch (error) {
+                    callback(new Error('验证失败，请重试')); // 验证出错
+                }
+            },
+            async checkMobileUnique(rule, value, callback) {
+                // 类似地，编写用于检查手机号码唯一性的异步函数
+                try {
+                    // 模拟异步请求
+                    await this.checkmobile()
+                    if (this.falg.mobilefalg) {
+                        callback(); // 邮箱唯一，验证通过
+                    } else {
+                        callback(new Error('该邮箱已被使用')); // 邮箱重复，验证不通过
+                    }
+                } catch (error) {
+                    callback(new Error('验证失败，请重试')); // 验证出错
+                }
+            },
+            checkemail(){
+                axios.get('/checkEmail',{
+                    params:{
+                        id:this.User.id,
+                        email:this.User.email
+                    }
+                }).then((resp)=>{
+                   if (resp.data.code=="200"){
+                       this.falg.emailfalg=true;
+
+                   }else {
+                       this.falg.emailfalg=false;
+                   }
+                })
+            },
+            checkmobile(){
+                axios.get('/checkMobile',{
+                    params:{
+                        id:this.User.id,
+                        mobile:this.User.mobile
+                    }
+                }).then((resp)=>{
+                    if (resp.data.code=="200"){
+                        this.falg.mobilefalg=true;
+
+                    }else {
+                        this.falg.mobilefalg=false;
+                    }
+                })
+            },
             updateUser(formdata){
                 axios.post('/updateUser',formdata).then((respones)=>{
                     console.log(respones)

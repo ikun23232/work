@@ -10,9 +10,11 @@ import com.kgc.entity.User;
 import com.kgc.service.ConcernService;
 import com.kgc.service.ProductService;
 import com.kgc.utils.ReplayUtil;
+import com.kgc.utils.UserSessionUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
  * @Description
  */
 @Service
+@Transactional
 public class ConcernServiceImpl  implements ConcernService {
     private Logger logger = Logger.getLogger(ConcernServiceImpl.class);
 
@@ -36,7 +39,7 @@ public class ConcernServiceImpl  implements ConcernService {
     @Override
     public Message getConcernPageList(int currentPageNo, int pageSize) {
         //此处拿到登录的用户的权限
-        int userId = 22;
+        int userId = UserSessionUtil.getUserId();
         List<Product> products = new ArrayList<>();
         PageHelper.startPage(currentPageNo, pageSize);
         List<Product> productList = concernDao.getConcernPageList(userId);
@@ -62,7 +65,7 @@ public class ConcernServiceImpl  implements ConcernService {
     @Override
     public Message addCercon(int productId) {
         //拿到登录的userid
-        int userId = 22;
+        int userId = UserSessionUtil.getUserId();
         Concern concern = new Concern();
         concern.setUserId(userId);
         concern.setProductId(productId);

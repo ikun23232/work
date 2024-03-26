@@ -108,4 +108,5 @@ public interface UserService {
      */
     public Message updateUser(User user);
 
+    Message checkMobile(String mobile, int id);
 }

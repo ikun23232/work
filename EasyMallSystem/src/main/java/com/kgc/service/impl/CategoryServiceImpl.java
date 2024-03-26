@@ -11,7 +11,9 @@ import com.kgc.service.CategoryService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
  * @create: 2024-03-18 14:58
  **/
 @Service
-
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired
@@ -60,10 +62,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Message getCategoryListByALL(String name, Page page) {
+    public Message getCategoryListByALL(String name,int type, Page page) {
 
         PageHelper.startPage(page.getCurrentPageNo(),page.getPageSize());
-        List<Category> categoryList = categoryDao.getCategoryListByALL(name);
+        List<Category> categoryList = categoryDao.getCategoryListByALL(name,type);
         PageInfo<Category> pageInfo = new PageInfo<>(categoryList);
         return Message.success(pageInfo);
     }
@@ -168,4 +170,29 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryDao.getSecondCategoryIdByThrid(id);
         return Message.success(category.getParentId());
     }
+
+    @Override
+    public Message CheckUpdateCategoryName(String categoryName, int id) {
+        //根据id返回CategoryId对象
+        Category categoryById = categoryDao.getCategoryById(id);
+        if (categoryName.equals(categoryById.getName())){
+            return Message.success();
+        }
+        Category category = categoryDao.CheckCategoryName(categoryName);
+        if (category==null&&category.getCategoryName().equals("")){
+            return Message.success();
+        }
+        return Message.error();
+    }
+
+//    @Override
+//    public Message getCategoryListById(int id) {
+//        int typeById = categoryDao.getTypeById(id);
+//        ArrayList<Category> categories = new ArrayList<>();
+//        if(typeById==1){
+//            List<Category> threeCategoryBycategoryId = categoryDao.getThreeCategoryBycategoryId(id);
+//            categoryDao.getThreeCategoryBycategoryId()
+//        }
+//        return null;
+//    }
 }

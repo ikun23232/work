@@ -98,9 +98,9 @@ public class ProductController {
     }
 
     @RequestMapping("/getProductPageList")
-    public Message getProductPageList(int currentPageNo,String productName,int brandId) {
+    public Message getProductPageList(int currentPageNo,String productName,int brandId,int pageSize) {
         logger.info("ProductController getProductPageList is start.........");
-        Message productListAll = productService.getProductPageList(currentPageNo,8,productName,brandId);
+        Message productListAll = productService.getProductPageList(currentPageNo,pageSize,productName,brandId);
         logger.info("ProductController getProductPageList is start.........Message" + productListAll);
         return productListAll;
 

@@ -55,8 +55,12 @@ public class CategoryController {
         logger.info("CategoryServiceImpl getCategorySecond is start....");
         Page page = JSON.parseObject(JSON.toJSONString(map.get("page")), Page.class);
         String categoryName = JSON.parseObject(JSON.toJSONString(map.get("categoryName")), String.class);
-        String name = categoryName;
-        Message message = categoryService.getCategoryListByALL(name, page);
+        String type = JSON.parseObject(JSON.toJSONString(map.get("type")), String.class);
+        int typeTemp=0;
+        if (type!=null){
+            typeTemp= Integer.parseInt(type);
+        }
+        Message message = categoryService.getCategoryListByALL(categoryName, typeTemp,page);
         logger.info("CategoryServiceImpl getCategorySecond is start....message" + message);
         return message;
     }
@@ -136,5 +140,10 @@ public class CategoryController {
         return message;
     }
 
+    @RequestMapping("CheckUpdateCategoryName")
+    public Message CheckUpdateCategoryName(String categoryName,int id) {
+        Message message = categoryService.CheckUpdateCategoryName(categoryName,id);
+        return message;
+    }
 
 }

@@ -6,8 +6,11 @@ import com.kgc.entity.Collections;
 import com.kgc.entity.Message;
 import com.kgc.entity.Product;
 import com.kgc.service.CollectionService;
+import com.kgc.utils.RedisUtil;
+import com.kgc.utils.UserSessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -19,6 +22,7 @@ import java.util.List;
  * @create: 2024-03-19 15:07
  **/
 @Service
+@Transactional
 public class CollectionServiceImpl implements CollectionService {
     @Autowired
     private CollectionDao collectionDao;
@@ -60,7 +64,8 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Message addProductInCarById(int id, int quantity) {
-        int updateRow = collectionDao.addProductInCarById(id, quantity);
+        int userId = UserSessionUtil.getUserId();
+        int updateRow = collectionDao.addProductInCarById(id, quantity,userId);
         if (updateRow > 0) {
             return Message.success();
         }
@@ -121,7 +126,8 @@ public class CollectionServiceImpl implements CollectionService {
         for (int i = 0; i < idStr.length; i++) {
             idS[i]= Integer.parseInt(idStr[i]);
         }
-        List<Product> productAndQuantityById = collectionDao.getProductAndQuantityById(idS);
+        int userId = UserSessionUtil.getUserId();
+        List<Product> productAndQuantityById = collectionDao.getProductAndQuantityById(idS,userId);
         if (productAndQuantityById==null&&productAndQuantityById.size()>0){
             return Message.error("无数据");
         }

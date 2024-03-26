@@ -192,7 +192,7 @@
 
     <insert id="addfile" useGeneratedKeys="true" keyProperty="fileId">
         INSERT INTO easybuy_file (filePath, userId, createTime)
-        VALUES (#{filePath},22,now());
+        VALUES (#{filePath},#{id},now());
     </insert>
 
     <update id="addStockById">

@@ -28,7 +28,7 @@ public interface CategoryDao {
      */
     public List<Category> getThreeCategoryBycategoryIdByTwo(int categoryId);
 
-    public List<Category> getCategoryListByALL(@Param("categoryName") String categoryName);
+    public List<Category> getCategoryListByALL(@Param("categoryName") String categoryName,@Param("type") int type);
 
     /**
      * 直接查全部不带分页版和模糊查询版

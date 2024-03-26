@@ -25,7 +25,7 @@ public interface CategoryService {
      * @param name
      * @return
      */
-    public Message getCategoryListByALL(String name, Page page);
+    public Message getCategoryListByALL(String name,int type, Page page);
 
 
     /**
@@ -82,4 +82,12 @@ public interface CategoryService {
      * 拿二级类id 通过三级id
      */
     public Message getSecondCategoryIdByThrid(int id);
+
+    Message CheckUpdateCategoryName(String categoryName, int id);
+
+//    /**
+//     * 查询指定分类下包括该类及其子类
+//     * @return
+//     */
+//    Message getCategoryListById(int id);
 }

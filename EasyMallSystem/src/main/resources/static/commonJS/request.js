@@ -19,6 +19,6 @@ instance.interceptors.request.use(async (request) => {
 });
 
 // 添加响应拦截器
-instance.interceptors.response.use(request => request.data, error => Promise.reject(error))
+instance.interceptors.response.use(request => request, error => Promise.reject(error))
 
 export default instance
