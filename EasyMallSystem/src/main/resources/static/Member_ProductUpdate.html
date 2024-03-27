@@ -461,7 +461,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el: "#m_right",
         data() {
@@ -590,7 +591,7 @@
         methods: {
 
             updateProduct(formdata) {
-                axios.post('/updateProduct', formdata).then((respones) => {
+                request.post('/updateProduct', formdata).then((respones) => {
                     console.log(respones)
                     if (respones.data.code == "200") {
                         alert("修改成功！")
@@ -618,7 +619,7 @@
             },
             checkSameName() {
                 return new Promise((resolve, reject) => {
-                    axios.get("/checkSameNameUpdate", {
+                    request.get("/checkSameNameUpdate", {
                         params: {
                             name: this.product.name,
                             id: this.product.id
@@ -644,7 +645,7 @@
                 this.$refs[product].resetFields();
             },
             getFristCategoryList() {
-                axios.get("/getCategoryList").then((respones) => {
+                request.get("/getCategoryList").then((respones) => {
                     console.log(respones)
                     this.fristCategoryList = respones.data.data.data
                 })
@@ -683,7 +684,7 @@
                 this.product.categoryLevelId = 0
             },
             getSecondCategoryList(id) {
-                axios.get("/getCategorySecond", {
+                request.get("/getCategorySecond", {
                     params: {
                         id: id
                     }
@@ -693,7 +694,7 @@
                 })
             },
             getThridCategoryList(id) {
-                axios.get("/getCategoryThrid", {
+                request.get("/getCategoryThrid", {
                     params: {
                         id: id
                     }
@@ -703,13 +704,13 @@
                 })
             },
             getBrandList() {
-                axios.get("/getBrandList").then((respones) => {
+                request.get("/getBrandList").then((respones) => {
                     console.log(respones)
                     this.brandList = respones.data.data
                 })
             },
             getProductById(id) {
-                axios.get("/getProductById", {
+                request.get("/getProductById", {
                     params: {
                         id: id
                     }
@@ -727,7 +728,7 @@
                 })
             },
             getFristIdByThrid(id) {
-                axios.get("/getFristIdByThrid", {
+                request.get("/getFristIdByThrid", {
                     params: {
                         id: id
                     }
@@ -738,7 +739,7 @@
                 })
             },
             getSecondIdByThrid(id) {
-                axios.get("/getSecondIdByThrid", {
+                request.get("/getSecondIdByThrid", {
                     params: {
                         id: id
                     }

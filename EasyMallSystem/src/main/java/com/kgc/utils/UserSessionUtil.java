@@ -23,23 +23,33 @@ import javax.servlet.http.HttpSession;
 public class UserSessionUtil implements ApplicationContextAware {
     @Autowired
     private static RedisUtil redisUtil;
-    public static User getUser(){
+    public static User getUser() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
-        String loginName =(String) session.getAttribute("userInfo");
+        User user = null;
+        if (session.getAttribute("userInfo") != null) {
+            String loginName = (String) session.getAttribute("userInfo");
 
-        String valueByKey = redisUtil.getValueByKey(loginName);
-        User user = JSON.parseObject(valueByKey, User.class);
+            String valueByKey = redisUtil.getValueByKey(loginName);
+            user = JSON.parseObject(valueByKey, User.class);
+        }
+
         return user;
     }
 
     public static int getUserId(){
-        User user = getUser();
-        return user.getId();
+        if (getUser()!=null){
+            User user = getUser();
+            return user.getId();
+        }
+       return 0;
     }
     public static String getLoginName(){
-        User user = getUser();
-        return user.getLoginName();
+        if (getUser()!=null){
+            User user = getUser();
+            return user.getLoginName();
+        }
+        return null;
     }
 
     @Override

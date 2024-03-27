@@ -700,7 +700,8 @@
 </style>
 </body>
 
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     // 获取当前页面的 URL 查询参数
     let searchParams = new URLSearchParams(window.location.search);
 
@@ -743,7 +744,7 @@
         },
         methods: {
             initBrandList() {
-                axios.post("/getBrandList",).then((resp) => {
+                request.post("/getBrandList",).then((resp) => {
                     console.log(resp)
                     this.brandList = resp.data.data;
                 })
@@ -774,7 +775,7 @@
                 if (productName){
                     this.product.productName=productName
                 }
-                axios.post("/getProductByProductMap", {
+                request.post("/getProductByProductMap", {
                     product: this.product,
                     page: this.page,
                     minPrice: this.minPrice,
@@ -816,7 +817,7 @@
 
             //wuleiwulei
             toProductinit(id) {
-                axios.get("/addHistory", {
+                request.get("/addHistory", {
                     params: {
                         productId: id
                     }
@@ -830,7 +831,7 @@
                 })
             },
             getHistoryList() {
-                axios.get("/getHistoryList").then((respones) => {
+                request.get("/getHistoryList").then((respones) => {
                     console.log(respones)
                     this.historyList = respones.data.data
                 }).catch((err)=>{
@@ -870,7 +871,7 @@
                 })
             },
             addCercon(id){
-                axios.get("/addCercon",{
+                request.get("/addCercon",{
                     params:{
                         productId:id
                     }
@@ -882,7 +883,7 @@
                 })
             },
             delConcern(index){
-                axios.get("delConcern",{
+                request.get("delConcern",{
                     params:{
                         id:index
                     }
@@ -894,7 +895,7 @@
                 })
             },
             getToCar(id) {
-                axios.get("/addtoCar", {
+                request.get("/addtoCar", {
                     params: {
                         quantity:1,
                         id:id

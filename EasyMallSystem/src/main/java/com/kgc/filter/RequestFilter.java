@@ -25,7 +25,7 @@ import java.util.Date;
  * @create: 2024-03-18 22:59
  * 解决重放攻击
  **/
-//@Component
+@Component
 @WebFilter(urlPatterns = {"/*"})
 public class RequestFilter implements Filter {
     private Logger logger = Logger.getLogger(getClass());
@@ -43,7 +43,8 @@ public class RequestFilter implements Filter {
     "/checkUserByName","/checkUserByLoginName","/sendEmailCode","/loginto","/loginOut"
     ,"/updatePassword","/getUser","/checkUserByUpdateName","/checkUserByUpdateMobile","/checkEmail",
     "/checkMobile","/checkUserByEmail","/checkUserPhone","/doImg","/getNewsList","/getCategoryList",
-    "/getCategorySecond","/getCategoryThrid","/getFristIdByThrid","/getSecondIdByThrid"};
+    "/getCategorySecond","/getCategoryThrid","/getFristIdByThrid","/getSecondIdByThrid","/getProductWithFileList","/searchHotProduct",
+    "/getUser"};
 
 //第二层特殊的要处理的
     private String[] specialStr={};
@@ -58,9 +59,17 @@ public class RequestFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest  request=(HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+//
+//
+
+        String requestUri = request.getRequestURI();
+        if (requestUri.equals("/")){
+            filterChain.doFilter(request, servletResponse);
+            return;
+        }
 
         //放行静态公共资源
-        String requestUri = request.getRequestURI();
+
         for (int i = 0; i < urlStr.length; i++) {
             if (requestUri.contains(urlStr[i])) {
                 filterChain.doFilter(request, servletResponse);
@@ -68,6 +77,18 @@ public class RequestFilter implements Filter {
             }
         }
 
+
+        boolean userLoggedIn = isUserLoggedIn();
+        if (!userLoggedIn){
+            //登录失败 重定向到login.html
+            System.out.println("123");
+//            request.getRequestDispatcher("/Login.html").forward(request,response);
+
+            response.sendRedirect("/Login.html");
+            return;
+        }
+
+        //公共静态资源页面放行\
         //验签
         if (!requestUri.contains("html")){
             boolean checkSign=CheckSign(request);
@@ -77,16 +98,7 @@ public class RequestFilter implements Filter {
             }
         }
 
-        //公共静态资源页面放行
-        boolean userLoggedIn = isUserLoggedIn();
-        if (!userLoggedIn){
-            //登录失败 重定向到login.html
-            response.sendRedirect("/login.html");
-        }
-
-
-
-        filterChain.doFilter(request, servletResponse);
+        filterChain.doFilter(request, response);
 
     }
 
@@ -130,10 +142,12 @@ public class RequestFilter implements Filter {
      */
     private boolean isUserLoggedIn() {
         String loginName = UserSessionUtil.getLoginName();
-        String valueByKey = redisUtil.getValueByKey(loginName);
-        User user = JSON.parseObject(valueByKey, User.class);
-        if (user!=null&&user.getUserName()!=null){
-            return true;
+        if (loginName!=null){
+            String valueByKey = redisUtil.getValueByKey(loginName);
+            User user = JSON.parseObject(valueByKey, User.class);
+            if (user!=null&&user.getUserName()!=null){
+                return true;
+            }
         }
         return false;
     }

@@ -682,6 +682,7 @@
 </div>
 </div>
 <script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el: "#app",
         data() {
@@ -695,7 +696,7 @@
         },
         methods: {
             initProductList() {
-                axios.get("/getConnectionById", {}).then((resp) => {
+                request.get("/getConnectionById", {}).then((resp) => {
                     console.log(resp)
                     this.productList = resp.data.data;
                 })
@@ -707,7 +708,7 @@
                 this.quantity = item.quantity + 1
             },
             updateProductInCarById() {
-                axios.post("/updateProductInCarByList", {
+                request.post("/updateProductInCarByList", {
                     productList: this.productList
                 }).then((resp) => {
                     console.log(resp)
@@ -723,7 +724,7 @@
                 if (!confirm("您确定要把该商品移除购物车吗?")) {
                     return;
                 }
-                axios.get("/delProductInCarById", {
+                request.get("/delProductInCarById", {
                     params: {
                         id: id
                     }
@@ -751,7 +752,7 @@
                     return;
                 }
 
-                axios.get('/delProductInCarByIds', {
+                request.get('/delProductInCarByIds', {
                     params: {
                         ids: this.selectedItems.toString()
                     },

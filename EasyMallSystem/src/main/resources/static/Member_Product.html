@@ -161,32 +161,22 @@
             </form>                      
             <span class="fl"><a href="#">咖啡</a><a href="#">iphone 6S</a><a href="#">新鲜美食</a><a href="#">蛋糕</a><a href="#">日用品</a><a href="#">连衣裙</a></span>
         </div>
-        <div class="i_car">
-            <div class="car_t">购物车 [ <span>3</span> ]</div>
+        <div class="i_car" @mouseenter="initCar()">
+            <div class="car_t">购物车 [ <span>{{carProducts.length}}</span> ]</div>
             <div class="car_bg">
                 <!--Begin 购物车未登录 Begin-->
-                <div class="un_login">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
+                <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
                 <!--End 购物车未登录 End-->
                 <!--Begin 购物车已登录 Begin-->
-                <ul class="cars">
-                    <li>
-                        <div class="img"><a href="#"><img src="images/car1.jpg" width="58" height="58" /></a></div>
-                        <div class="name"><a href="#">法颂浪漫梦境50ML 香水女士持久清新淡香 送2ML小样3只</a></div>
-                        <div class="price"><font color="#ff4e00">￥399</font> X1</div>
-                    </li>
-                    <li>
-                        <div class="img"><a href="#"><img src="images/car2.jpg" width="58" height="58" /></a></div>
-                        <div class="name"><a href="#">香奈儿（Chanel）邂逅活力淡香水50ml</a></div>
-                        <div class="price"><font color="#ff4e00">￥399</font> X1</div>
-                    </li>
-                    <li>
-                        <div class="img"><a href="#"><img src="images/car2.jpg" width="58" height="58" /></a></div>
-                        <div class="name"><a href="#">香奈儿（Chanel）邂逅活力淡香水50ml</a></div>
-                        <div class="price"><font color="#ff4e00">￥399</font> X1</div>
+                <ul class="cars" @mouseover="caclPrice()">
+                    <li v-for="item in carProducts" :key="item.id">
+                        <div class="img"><a href="#"><img :src="doImg(item.filePath)" width="58" height="58"/></a></div>
+                        <div class="name"><a href="#">{{item.name}}</a></div>
+                        <div class="price"><font color="#ff4e00">￥{{item.price}}</font> X{{item.quantity}}</div>
                     </li>
                 </ul>
-                <div class="price_sum">共计&nbsp; <font color="#ff4e00">￥</font><span>1058</span></div>
-                <div class="price_a"><a href="#">去购物车结算</a></div>
+                <div class="price_sum">共计&nbsp; <font color="#ff4e00">￥</font><span>{{totalPrice}}</span></div>
+                <div class="price_a"><a href="BuyCar.html">去购物车结算</a></div>
                 <!--End 购物车已登录 End-->
             </div>
         </div>
@@ -437,7 +427,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el:"#m_right",
         methods: {
@@ -450,7 +441,7 @@
                 this.getProductInit(this.page.pageSize);
             },
             getProductInit(currentPageNo){
-                axios.get("/getProductPageList",{
+                request.get("/getProductPageList",{
                     params:{
                         currentPageNo:currentPageNo,
                         brandId:this.brandValue,
@@ -464,7 +455,7 @@
                 })
             },
             getBrandList(){
-                axios.get("/getBrandList",).then((respones)=>{
+                request.get("/getBrandList",).then((respones)=>{
                     console.log(respones)
                     this.optionsBrand = respones.data.data
                 })
@@ -481,7 +472,7 @@
             del(rows){
                 console.log(rows)
                 if(confirm("确定删除该产品吗？")){
-                    axios.get("/delProduct",{
+                    request.get("/delProduct",{
                         params:{
                             id:rows.id,
                             fileId:rows.fileId
@@ -509,7 +500,7 @@
                 return "doImg?filePath=" + filePath
             },
             toProductinit(id) {
-                axios.get("/addHistory", {
+                request.get("/addHistory", {
                     params: {
                         productId: id
                     }
@@ -521,11 +512,30 @@
                         window.location.href = "Product.html?id=" + id
                     }
                 })
+            },
+            async initCar() {
+                let respones = await axios.get("/getConnectionById")
+                console.log(respones)
+                this.carProducts = respones.data.data;
+
+                this.totalPrice = this.carProducts
+                    .map(item => item.price * item.quantity)
+                    .reduce((acc, item) => acc + item, 0);
+            },
+            caclPrice() {
+                this.totalPrice = this.carProducts
+                    .map(item => item.price * item.quantity)
+                    .reduce((acc, item) => acc + item, 0);
+
             }
         },
-        mounted(){
+       async mounted(){
             this.getBrandList()
             this.getProductInit(1)
+            await  this.getUser()
+            if (this.UserSession.name!=''){
+                this.initCar();
+            }
         },
         data() {
             return {
@@ -537,7 +547,12 @@
                 optionsBrand:[{}],
                 brandValue: 0,
                 optionsCategory:[{}],
-                categoryValue: ''
+                categoryValue: '',
+                carProducts: [],
+                UserSession: {
+                    name: ''
+                },
+                totalPrice: 0
             }
         }
     })

@@ -410,7 +410,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el:"#m_right",
         methods: {
@@ -421,7 +422,7 @@
           ,
             getConcernList(currentPageNo){
                 this.page.currentPageNo=currentPageNo
-                axios.get("/getConcernPageList",{
+                request.get("/getConcernPageList",{
                     params:{
                         currentPageNo:this.page.currentPageNo,
                         pageSize:this.page.pageSize
@@ -438,7 +439,7 @@
                 })
             },
             del(id){
-                axios.get("/delConcern",{
+                request.get("/delConcern",{
                     params:{
                         id:id
                     }
