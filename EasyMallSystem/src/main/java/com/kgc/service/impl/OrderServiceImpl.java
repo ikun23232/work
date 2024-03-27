@@ -79,8 +79,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //订单创建成功开启我的定时任务30分钟未支付自动删除改订单
-
-        timedtasksUtil.startOrderTimeoutTask(String.valueOf(order.getId()),System.currentTimeMillis());
+        int userId1 = UserSessionUtil.getUserId();
+        timedtasksUtil.startOrderTimeoutTask(String.valueOf(order.getId()),System.currentTimeMillis(),userId1);
 
         //回调支付宝
         return Message.success(order.getSerialNumber());
@@ -122,8 +122,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //订单创建成功开启我的定时任务30分钟未支付自动删除改订单
-
-        timedtasksUtil.startOrderTimeoutTask(String.valueOf(order.getId()),System.currentTimeMillis());
+        int userId1 = UserSessionUtil.getUserId();
+        timedtasksUtil.startOrderTimeoutTask(String.valueOf(order.getId()),System.currentTimeMillis(),userId1);
 
         //回调支付宝
         return Message.success(order.getSerialNumber());
@@ -182,6 +182,21 @@ public class OrderServiceImpl implements OrderService {
         //先拿我订单的商品集合
         System.out.println(UserSessionUtil.getUserId());
         int userId = UserSessionUtil.getUserId();
+        List<Product> productListByOrderId = orderDao.getProductListByOrderId(id,userId);
+        for (Product product : productListByOrderId) {
+            int stock=product.getQuantity();
+            //分别加库存
+            productDao.addStockById(product.getId(),stock);
+        }
+        int order = orderDao.delOrder(id);
+        if (order<=0){
+            return Message.error("删除失败");
+        }
+        return Message.success("订单删除成功");
+    }
+
+    @Override
+    public Message delOrderByIdAndUserId(int id, int userId) {
         List<Product> productListByOrderId = orderDao.getProductListByOrderId(id,userId);
         for (Product product : productListByOrderId) {
             int stock=product.getQuantity();

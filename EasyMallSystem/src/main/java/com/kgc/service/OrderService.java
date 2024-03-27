@@ -12,6 +12,7 @@ public interface OrderService {
     public Message getOrderList(Page page);
 
     public Message delOrderById(int id);
+    public Message delOrderByIdAndUserId(int id,int userId);
 
     /**
      * 拿到所有支付过的订单集合
