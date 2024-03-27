@@ -149,7 +149,8 @@
 <!--End Footer End -->
 
 </body>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
 
     new Vue({
         el: '#app',
@@ -224,7 +225,7 @@
                     }
                 }, 1000)
                 this.TempEmail=this.User.email
-                axios.get("/sendEmailCode", {
+                request.get("/sendEmailCode", {
                     params: {
                         email: this.User.email
                     }
@@ -241,7 +242,7 @@
                 } else {
                     this.Cue.loginNameCue = "√"
                 }
-                axios.get('checkUserByName', {params: {loginName: this.User.loginName}}).then((resp) => {
+                request.get('checkUserByName', {params: {loginName: this.User.loginName}}).then((resp) => {
                     console.log(resp)
                     this.Falg.addFalg = resp.data.code === "200";
                     if (resp.data.code === "200") {
@@ -291,7 +292,7 @@
                 } else {
                     this.Cue.emailCue = "√"
                 }
-                axios.get('checkUserByEmail', {params: {email: this.User.email}}).then((resp) => {
+                request.get('checkUserByEmail', {params: {email: this.User.email}}).then((resp) => {
                     console.log(resp)
                     this.Falg.emailFalg = resp.data.code === "200";
                     if (resp.data.code=="200"){
@@ -315,7 +316,7 @@
                 } else {
                     this.Cue.mobileCue = "√"
                 }
-                axios.get('checkUserPhone', {params: {mobile: this.User.mobile}}).then((resp) => {
+                request.get('checkUserPhone', {params: {mobile: this.User.mobile}}).then((resp) => {
                     console.log(resp)
                     this.Falg.mobileFalg = resp.data.code === "200";
                     if (resp.data.code=="200"){
@@ -376,7 +377,7 @@
                     return;
                 }
                 if (this.Falg.addFalg) {
-                    axios.post('/addUser', this.User).then((resp) => {
+                    request.post('/addUser', this.User).then((resp) => {
                         console.log(resp)
                         if (resp.data.code === "200") {
                             this.$message({

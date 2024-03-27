@@ -836,7 +836,8 @@
 </div>
 
 </body>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     const searchParams = new URLSearchParams(window.location.search);
     const ids = searchParams.get('ids');
     const amount = searchParams.get('amount');
@@ -857,7 +858,7 @@
         },
         methods: {
           async  addOrder() {
-            let resp= await  axios.post("/addOrder", {
+            let resp= await  request.post("/addOrder", {
                     productList: this.productList,
                     address: this.address,
                     cost: this.totalPrice,
@@ -882,12 +883,12 @@
                 }
 
             }, async initAddress() {
-                let resp= await  axios.get("/getAddressById")
+                let resp= await  request.get("/getAddressById")
                 console.log(resp)
               this.address=resp.data.data
             },
            async creatOrder() {
-                let resp= await  axios.get("/getOrder", {
+                let resp= await  request.get("/getOrder", {
                     params:{
                         amount:this.totalPrice,
                         orderName:'购物车购买',
@@ -898,7 +899,7 @@
                document.write(resp.data)
             },
             initProductList2(ids,amount) {
-                axios.get("/getProductListByIdStr", {
+                request.get("/getProductListByIdStr", {
                     params: {
                         idStr: ids,
                         count:amount
@@ -910,7 +911,7 @@
             },
             initProductList1() {
 
-                axios.get("/getProductListByIdStrE", {
+                request.get("/getProductListByIdStrE", {
                     params: {
                         ids: ids
                     }
@@ -920,7 +921,7 @@
                 })
             },
             initProductList() {
-                axios.get("/getConnectionById", {}).then((resp) => {
+                request.get("/getConnectionById", {}).then((resp) => {
                     console.log(resp)
                     this.productList = resp.data.data;
                 })
@@ -931,7 +932,7 @@
                 this.quantity = item.quantity + 1
             },
             updateProductInCarById() {
-                axios.post("/updateProductInCarByList", {
+                request.post("/updateProductInCarByList", {
                     productList: this.productList
                 }).then((resp) => {
                     console.log(resp)
@@ -947,7 +948,7 @@
                 if (!confirm("您确定要把该商品移除购物车吗?")) {
                     return;
                 }
-                axios.get("/delProductInCarById", {
+                request.get("/delProductInCarById", {
                     params: {
                         id: id
                     }

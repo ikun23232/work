@@ -421,7 +421,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el:"#m_right",
         methods: {
@@ -432,7 +433,7 @@
 
             getUserPage(currentPageNo){
                 this.page.currentPageNo=currentPageNo;
-                axios.get("/getUserPage",{
+                request.get("/getUserPage",{
                     params:{
                         currentPageNo:this.page.currentPageNo,
                         roleId:this.roleValue,
@@ -446,7 +447,7 @@
                 })
             },
             getRoleList(){
-                axios.get("/getRoleList",).then((respones)=>{
+                request.get("/getRoleList",).then((respones)=>{
                     console.log(respones)
                     this.optionsRole = respones.data.data
                 })
@@ -457,7 +458,7 @@
                 this.getUserPage(1)
             },
             toUpdata(id,roleId){
-                axios.get("/checkUserUpdate",{
+                request.get("/checkUserUpdate",{
                     params:{
                         id:id,
                         roleId:roleId
@@ -475,7 +476,7 @@
             },
             del(id,roleId){
                 if(confirm("确定删除该用户吗？")) {
-                    axios.get("/delUser", {
+                    request.get("/delUser", {
                         params: {
                             id: id,
                             roleId: roleId

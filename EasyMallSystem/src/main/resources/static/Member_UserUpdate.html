@@ -393,7 +393,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el: "#m_right",
         data() {
@@ -574,7 +575,7 @@
                 }
             },
             checkemail(){
-                axios.get('/checkEmail',{
+                request.get('/checkEmail',{
                     params:{
                         id:this.User.id,
                         email:this.User.email
@@ -589,7 +590,7 @@
                 })
             },
             checkmobile(){
-                axios.get('/checkMobile',{
+                request.get('/checkMobile',{
                     params:{
                         id:this.User.id,
                         mobile:this.User.mobile
@@ -605,7 +606,7 @@
                 })
             },
             updateUser(formdata){
-                axios.post('/updateUser',formdata).then((respones)=>{
+                request.post('/updateUser',formdata).then((respones)=>{
                     console.log(respones)
                     if(respones.data.code=="200"){
                         alert("修改成功！")
@@ -630,7 +631,7 @@
                 })
             },
             checkEmail() {
-                axios.get("/checkEmail", {
+                request.get("/checkEmail", {
                     params: {
                         email: this.User.email,
                         id:this.User.id
@@ -645,7 +646,7 @@
                 })
             },
             checkSameName() {
-                axios.get("/checkUserByUpdateName", {
+                request.get("/checkUserByUpdateName", {
                     params: {
                         name: this.User.loginName,
                         id:this.User.id
@@ -660,7 +661,7 @@
                 })
             },
             checkMobile(){
-                axios.get("/checkUserByUpdateMobile", {
+                request.get("/checkUserByUpdateMobile", {
                     params: {
                         mobile: this.User.mobile,
                         id:this.User.id
@@ -678,13 +679,13 @@
                 this.$refs[User].resetFields();
             },
             getRoleList() {
-                axios.get("/getRoleList").then((respones) => {
+                request.get("/getRoleList").then((respones) => {
                     console.log(respones)
                     this.roleList = respones.data.data
                 })
             },
             getUserById(id){
-                axios.get("/getUserById", {
+                request.get("/getUserById", {
                     params: {
                         id: id
                     }

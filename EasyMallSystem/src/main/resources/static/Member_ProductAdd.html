@@ -468,7 +468,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el: "#m_right",
         data() {
@@ -587,7 +588,7 @@
         },
         methods: {
             add(formdata) {
-                axios.post('/addProduct', formdata).then((respones) => {
+                request.post('/addProduct', formdata).then((respones) => {
                     console.log(respones)
                     if (respones.data.code == "200") {
                         alert("添加成功！")
@@ -613,7 +614,7 @@
                 })
             },
             checkSameName() {
-                axios.get("/checkSameName", {
+                request.get("/checkSameName", {
                     params: {
                         name: this.product.name
                     }
@@ -630,7 +631,7 @@
                 this.$refs[product].resetFields();
             },
             getFristCategoryList() {
-                axios.get("/getCategoryList").then((respones) => {
+                request.get("/getCategoryList").then((respones) => {
                     console.log(respones)
                     this.fristCategoryList = respones.data.data.data
                 })
@@ -671,7 +672,7 @@
                 this.thridValue = 0
             },
             getSecondCategoryList(id) {
-                axios.get("/getCategorySecond", {
+                request.get("/getCategorySecond", {
                     params: {
                         id: id
                     }
@@ -681,7 +682,7 @@
                 })
             },
             getThridCategoryList(id) {
-                axios.get("/getCategoryThrid", {
+                request.get("/getCategoryThrid", {
                     params: {
                         id: id
                     }
@@ -691,7 +692,7 @@
                 })
             },
             getBrandList() {
-                axios.get("/getBrandList").then((respones) => {
+                request.get("/getBrandList").then((respones) => {
                     console.log(respones)
                     this.brandList = respones.data.data
                 })

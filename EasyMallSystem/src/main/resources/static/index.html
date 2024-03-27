@@ -115,7 +115,9 @@
         </span>
             <!--End 所在收货地区 End-->
             <span class="fr">
-        	<span  class="fl">你好，{{UserSession.name}}<a v-if="!this.UserSession.name" href="Login.html">登录</a>&nbsp; <a v-if="this.UserSession.name" href="Regist.html" @click="loginOut()" style="color:#ff4e00;">注销</a> <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a
+        	<span class="fl">你好，{{UserSession.name}}<a v-if="!this.UserSession.name" href="Login.html">登录</a>&nbsp; <a
+                    v-if="this.UserSession.name" href="Regist.html" @click="loginOut()" style="color:#ff4e00;">注销</a> <a
+                    href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a
                     href="#">我的订单</a>&nbsp;|</span>
         	<span class="ss">
             	<div class="ss_list">
@@ -176,7 +178,9 @@
             <div class="car_t">购物车 [ <span>{{carProducts.length}}</span> ]</div>
             <div class="car_bg">
                 <!--Begin 购物车未登录 Begin-->
-                <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
+                <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a>
+                    查看购物车！
+                </div>
                 <!--End 购物车未登录 End-->
                 <!--Begin 购物车已登录 Begin-->
                 <ul class="cars" @mouseover="caclPrice()">
@@ -201,18 +205,22 @@
                 <div class="nav_t">全部商品分类</div>
                 <div class="leftNav">
                     <ul>
-                        <li v-for="item in categoryList" :key="item.id" @mouseenter="initCategoryByIda(item.id)" @click.stop="toCategoryList(item.id)">
+                        <li v-for="item in categoryList" :key="item.id" @mouseenter="initCategoryByIda(item.id)"
+                            @click.stop="toCategoryList(item.id)">
                             <div class="fj">
                                 <span class="n_img"><span></span><img src="images/nav1.png"/></span>
                                 <span class="fl">{{item.name}}</span>
                             </div>
-                            <div class="zj" >
+                            <div class="zj">
                                 <div class="zj_l">
-                                    <div class="zj_l_c" v-for="(subItem, index) in categorySecondList" :key="index" @click.stop="toCategoryList(subItem.id)">
+                                    <div class="zj_l_c" v-for="(subItem, index) in categorySecondList" :key="index"
+                                         @click.stop="toCategoryList(subItem.id)">
                                         <h2>
                                             {{subItem.name}}
                                         </h2>
-                                        <a v-show="subItem.id==subItem1.parentId" v-for="(subItem1, index1) in categoryThridList" :key="index1" @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
+                                        <a v-show="subItem.id==subItem1.parentId"
+                                           v-for="(subItem1, index1) in categoryThridList" :key="index1"
+                                           @click.stop="toCategoryList(subItem1.id)">{{subItem1.name}} | </a>|
                                     </div>
                                 </div>
                                 <div class="zj_r">
@@ -349,7 +357,8 @@
                         <tr height="35">
                             <td width="33">号码</td>
                             <td>
-                                <input  type="text" value="" class="c_ipt" v-model="phoneNum" @input="validatePhoneNumber($event)"/>
+                                <input type="text" value="" class="c_ipt" v-model="phoneNum"
+                                       @input="validatePhoneNumber($event)"/>
                             </td>
                             <td>
                                 <span v-if="!validPhoneNumber" style="position: absolute;right:165px; top:510px">请输入有效的手机号码</span>
@@ -492,54 +501,55 @@
             <div class="content mar_20" @click="toCategoryList(frist.id)">
                 <img src="images/mban_1.jpg" width="1200" height="110"/>
             </div>
-                <!--Begin 进口 生鲜 Begin-->
-                <div class="i_t mar_10">
-                    <span class="floor_num">{{index + 1}}F</span>
-                    <span class="fl">{{frist.name}}</span>
-                    <span class="i_mores fr">
-                    <a href="#" @click.prevent="toCategoryList(second.id)" v-for="second in frist.secondCategoryList" :key="second.id">{{second.name}}</a>&nbsp; &nbsp; &nbsp
+            <!--Begin 进口 生鲜 Begin-->
+            <div class="i_t mar_10">
+                <span class="floor_num">{{index + 1}}F</span>
+                <span class="fl">{{frist.name}}</span>
+                <span class="i_mores fr">
+                    <a href="#" @click.prevent="toCategoryList(second.id)" v-for="second in frist.secondCategoryList"
+                       :key="second.id">{{second.name}}</a>&nbsp; &nbsp; &nbsp
                 </span>
-                </div>
-                <div class="content">
-                    <div class="fresh_left">
-                        <div class="fre_ban">
-                            <div id="imgPlay1">
-                                <ul class="imgs" id="actor1">
-                                    <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
-                                    <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
-                                    <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
-                                </ul>
-                                <div class="prevf">上一张</div>
-                                <div class="nextf">下一张</div>
-                            </div>
-                        </div>
-                        <div class="fresh_txt">
-                            <div class="fresh_txt_c">
-                                <a href="#" v-for="second in frist.secondCategoryList"
-                                   :key="second.id" @click.prevent="toCategoryList(second.id)">{{second.name}}</a>
-                            </div>
+            </div>
+            <div class="content">
+                <div class="fresh_left">
+                    <div class="fre_ban">
+                        <div id="imgPlay1">
+                            <ul class="imgs" id="actor1">
+                                <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
+                                <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
+                                <li><a href="#"><img src="images/fre_r.jpg" width="211" height="286"/></a></li>
+                            </ul>
+                            <div class="prevf">上一张</div>
+                            <div class="nextf">下一张</div>
                         </div>
                     </div>
-                    <div class="fresh_mid">
-                        <ul>
-                            <li v-cloak v-for="product in frist.productList" :key="product.id"
-                                @click="toProductinit(product.id)">
-                                <div class="name"><a href="#">{{product.name}}</a></div>
-                                <div class="price">
-                                    <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
-                                </div>
-                                <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
-                                                                  height="155"/></a></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="fresh_right">
-                        <ul>
-                            <li><a href="#"><img src="images/fre_b1.jpg" width="260" height="220"/></a></li>
-                            <li><a href="#"><img src="images/fre_b2.jpg" width="260" height="220"/></a></li>
-                        </ul>
+                    <div class="fresh_txt">
+                        <div class="fresh_txt_c">
+                            <a href="#" v-for="second in frist.secondCategoryList"
+                               :key="second.id" @click.prevent="toCategoryList(second.id)">{{second.name}}</a>
+                        </div>
                     </div>
                 </div>
+                <div class="fresh_mid">
+                    <ul>
+                        <li v-cloak v-for="product in frist.productList" :key="product.id"
+                            @click="toProductinit(product.id)">
+                            <div class="name"><a href="#">{{product.name}}</a></div>
+                            <div class="price">
+                                <font>￥<span>{{product.price}}</span></font> &nbsp; 26R
+                            </div>
+                            <div class="img"><a href="#"><img :src='doImg(product.filePath)' width="185"
+                                                              height="155"/></a></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="fresh_right">
+                    <ul>
+                        <li><a href="#"><img src="images/fre_b1.jpg" width="260" height="220"/></a></li>
+                        <li><a href="#"><img src="images/fre_b2.jpg" width="260" height="220"/></a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <!--End 数码家电 End-->
         <!--Begin 猜你喜欢 Begin-->
@@ -813,14 +823,15 @@
                 productName: '',
                 carProducts: [],
                 totalPrice: 0,
-                UserSession:{
-                    name:''
+                UserSession: {
+                    name: ''
                 },
-                validPhoneNumber:true
+                validPhoneNumber: true
             }
         },
-        created() {
+        async created() {
             // 在 created 钩子函数中调用异步函数
+
             this.fetchCategoryData();
         },
         methods: {
@@ -857,11 +868,11 @@
                 });
             },
             async initCategoryByIda(id) {
-             await this.initCategorySecond(id);
-                // if (this.categorySecondList&&this.categorySecondList.length > 0) {
-                //     alert(1)
-                    await this.initCategoryThrid(this.categorySecondList[0].id);
-                // }
+                await this.initCategorySecond(id);
+                if (this.categorySecondList.length > 0) {
+                    this.initCategoryThrid(this.categorySecondList[0].id);
+                }
+
             },
             initCategoryThrid(id) {
                 return new Promise((resolve, reject) => {
@@ -884,7 +895,7 @@
 
             //吴磊吴磊
             getPhoneChargesOrder() {
-                if(this.validPhoneNumber){
+                if (this.validPhoneNumber) {
                     window.location.href = "/getOrder?amount=" + this.phonePay + "&orderName='话费充值'"
                 }
             },
@@ -977,32 +988,38 @@
             },
             toCategoryList(id) {
                 alert(id)
-                window.location.href="CategoryList.html?categoryId="+id
+                window.location.href = "CategoryList.html?categoryId=" + id
             },
-            getUser(){
-                axios.post("/getUser").then((resp)=>{
+            getUser() {
+                axios.post("/getUser").then((resp) => {
                     console.log(resp)
-                 this.UserSession.name=resp.data.data.userName;
+                    this.UserSession.name = resp.data.data.userName;
                 })
-                },
-            loginOut(){
-                axios.post("/loginOut").then((resp)=>{
+            },
+            loginOut() {
+                axios.post("/loginOut").then((resp) => {
                     console.log(resp)
-               if (resp.data.code=="200"){
-                   window.location.reload();
-               }
+                    if (resp.data.code == "200") {
+                        window.location.reload();
+                    }
                 })
             }
         },
-        mounted: async function () {
-            await this.initNews();
+        async mounted () {
             await this.initCategory();
-            await this.initproductHot();
-            //购物车
-            this.initCar()
-            //获取用户信息
-            this.getUser()
-
+           await this.initCategoryByIda(1);
+            await this.initNews();
+           await this.initproductHot();
+            await this.getUser();
+            // alert(1)
+            // // //购物车
+            // this.initCar()
+            // alert(2)
+            // //获取用户信息
+          await  this.getUser()
+            if (this.UserSession.name!=''){
+                this.initCar();
+            }
         }
     })
 </script>

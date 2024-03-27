@@ -437,7 +437,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el:"#m_right",
         methods: {
@@ -450,7 +451,7 @@
                 this.getProductInit(this.page.pageSize);
             },
             getProductInit(currentPageNo){
-                axios.get("/getProductPageList",{
+                request.get("/getProductPageList",{
                     params:{
                         currentPageNo:currentPageNo,
                         brandId:this.brandValue,
@@ -464,7 +465,7 @@
                 })
             },
             getBrandList(){
-                axios.get("/getBrandList",).then((respones)=>{
+                request.get("/getBrandList",).then((respones)=>{
                     console.log(respones)
                     this.optionsBrand = respones.data.data
                 })
@@ -481,7 +482,7 @@
             del(rows){
                 console.log(rows)
                 if(confirm("确定删除该产品吗？")){
-                    axios.get("/delProduct",{
+                    request.get("/delProduct",{
                         params:{
                             id:rows.id,
                             fileId:rows.fileId
@@ -501,7 +502,7 @@
                 return "doImg?filePath=" + filePath
             },
             toProductinit(id) {
-                axios.get("/addHistory", {
+                request.get("/addHistory", {
                     params: {
                         productId: id
                     }

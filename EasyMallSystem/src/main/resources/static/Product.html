@@ -1023,7 +1023,8 @@
 <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 </html>
-<script>
+<script type="module">
+    import request from "./commonJS/request.js";
     new Vue({
         el: "#i_bg",
         data() {
@@ -1057,7 +1058,7 @@
         },
         methods: {
             getProductById(id) {
-                axios.get("/getProductById", {
+                request.get("/getProductById", {
                     params: {
                         id: id
                     }
@@ -1079,7 +1080,7 @@
                 return "doImg?filePath=" + filePath
             },
             showRecommend(id) {
-                axios.get("/getSameFriCategoryProduct", {
+                request.get("/getSameFriCategoryProduct", {
                     params: {
                         id: id
                     }
@@ -1142,7 +1143,7 @@
                 }
             },
             getToCar() {
-                axios.get("/addtoCar", {
+                request.get("/addtoCar", {
                     params: {
                         quantity: this.amount,
                         id: this.product.id
@@ -1157,7 +1158,7 @@
                 })
             },
             toProductinit(id) {
-                axios.get("/addHistory", {
+                request.get("/addHistory", {
                     params: {
                         productId: id
                     }
