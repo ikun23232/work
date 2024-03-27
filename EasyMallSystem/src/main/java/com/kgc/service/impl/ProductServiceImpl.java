@@ -167,11 +167,7 @@ public class ProductServiceImpl implements ProductService {
         }
         //新加的产品
         List<Integer> categoryIds = new ArrayList<>();
-// 将三级分类的 ID 添加到 categoryIds 列表中
-
-
-
-
+        // 将三级分类的 ID 添加到 categoryIds 列表中
         if (product != null && product.getCategoryId()!=null) {
             int typeById = categoryDao.getTypeById(product.getCategoryId());
             if (typeById==1){
@@ -277,6 +273,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Message delProductById(int id) {
         logger.info("ProductServiceImpl delProductById is start....id:" + id);
+        Product productById = productDao.getProductById(id);
+        elasticsearchRestTemplate.delete(productById);
         int i = productDao.delProductById(id);
         if (i > 0) {
             return Message.success();
@@ -294,8 +292,8 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
-//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
             }
 
             try {
@@ -310,6 +308,7 @@ public class ProductServiceImpl implements ProductService {
         int count = productDao.addfile(product);
         int i = productDao.addProduct(product);
         int temp = productDao.upfile(product);
+        elsearchUtil.save(product);
         return Message.success();
         }
 
@@ -348,8 +347,8 @@ public class ProductServiceImpl implements ProductService {
             if (!picPath.isEmpty()) {
                 String originalFilename = picPath.getOriginalFilename();
                 extsion = FilenameUtils.getExtension(originalFilename);
-//                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
-                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
+                Path = "E:\\MyFile\\filepath" + File.separator + UUID.randomUUID() + "." + extsion;
+//                Path = "C:\\IMG" + File.separator + UUID.randomUUID() + "." + extsion;
             }
             try {
                 picPath.transferTo(new File(Path));
@@ -361,6 +360,9 @@ public class ProductServiceImpl implements ProductService {
         product.setFilePath(Path);
         product.setFileId(productfileId.getFileId());
         int count = productDao.updateProduct(product);
+        Product productById = productDao.getProductById(product.getId());
+        elsearchUtil.save(productById);
+//        elasticsearchRestTemplate.save(productById);
         if (Path!=null){
             int i = productDao.updatefile(product);
 

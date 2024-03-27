@@ -212,6 +212,7 @@
                brandId
         FROM easybuy_product
         WHERE name = #{name}
+        AND isDel = 0
     </select>
 
     <update id="updateProduct">

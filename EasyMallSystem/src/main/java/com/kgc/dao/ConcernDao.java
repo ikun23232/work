@@ -18,5 +18,7 @@ public interface ConcernDao {
 
     public int delConcern(int id);
 
+    public int getConcernById(int id);
+
 
 }

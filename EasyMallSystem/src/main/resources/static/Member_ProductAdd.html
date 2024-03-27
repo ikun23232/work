@@ -344,21 +344,21 @@
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
                         </el-upload>
-<!--                        <el-upload-->
-<!--                                v-model="product.filePath"-->
-<!--                                action="#"-->
-<!--                                :auto-upload="false"-->
-<!--                                list-type="picture-card"-->
-<!--                                :on-preview="handlePictureCardPreview"-->
-<!--                                :on-remove="handleRemove"-->
-<!--                                :http-request="handleHttpSubmit"-->
-<!--                                show-file-list-->
-<!--                        >-->
-<!--                            <i class="el-icon-plus"></i>-->
-<!--                        </el-upload>-->
-<!--                        <el-dialog :visible.sync="dialogVisible">-->
-<!--                            <img width="100%" :src="product.filePath" alt="产品图片">-->
-<!--                        </el-dialog>-->
+                        <!--                        <el-upload-->
+                        <!--                                v-model="product.filePath"-->
+                        <!--                                action="#"-->
+                        <!--                                :auto-upload="false"-->
+                        <!--                                list-type="picture-card"-->
+                        <!--                                :on-preview="handlePictureCardPreview"-->
+                        <!--                                :on-remove="handleRemove"-->
+                        <!--                                :http-request="handleHttpSubmit"-->
+                        <!--                                show-file-list-->
+                        <!--                        >-->
+                        <!--                            <i class="el-icon-plus"></i>-->
+                        <!--                        </el-upload>-->
+                        <!--                        <el-dialog :visible.sync="dialogVisible">-->
+                        <!--                            <img width="100%" :src="product.filePath" alt="产品图片">-->
+                        <!--                        </el-dialog>-->
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm('product')">立即创建</el-button>
@@ -476,9 +476,11 @@
             var checkname = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入产品名'))
-                } else if (value.length > 10) {
+                }
+                if (value.length > 10) {
                     callback(new Error('长度在2-10之间'))
-                } else if (2 > value.length) {
+                }
+                if (2 > value.length) {
                     callback(new Error('长度在2-10之间'))
                 }
                 this.checkSameName();
@@ -492,38 +494,43 @@
             var checkprice = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请输入价格！"))
-                } else if (isNaN(value)) {
+                }
+                if (isNaN(value)) {
                     callback(new Error("请输入数字！"))
-                } else if (0 > value) {
+                }
+                if (0 > value) {
                     callback(new Error("不能小于0！"))
-                } else if (value.length > 5) {
+                }
+                if (value.length > 5) {
                     callback(new Error("不能超过五位数"))
-                }else {
+                } else {
                     callback()
                 }
             }
             var checkCategoryLevelId = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请选择！"))
-                } else if (value === 0) {
+                }
+                if (value === 0) {
                     callback(new Error("请选择好分类！"))
-                }else {
+                } else {
                     callback()
                 }
             }
             var checkBrandId = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请选择！"))
-                } else if (value === '0') {
+                }
+                if (value === '0') {
                     callback(new Error("请选择好品牌！"))
-                }else {
+                } else {
                     callback()
                 }
             }
             var checkfilePath = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error("请选择文件！"))
-                }else {
+                } else {
                     callback()
                 }
             }
@@ -591,7 +598,7 @@
                     console.log(respones)
                     if (respones.data.code == "200") {
                         alert("添加成功！")
-                        window.location.href="/Member_Product.html"
+                        window.location.href = "/Member_Product.html"
                     } else {
                         alert("添加失败！")
                     }
@@ -613,18 +620,21 @@
                 })
             },
             checkSameName() {
-                axios.get("/checkSameName", {
-                    params: {
-                        name: this.product.name
-                    }
-                }).then((respones) => {
-                    console.log(respones)
-                    if (respones.data.code == "200") {
-                        this.falg.namefalg = true
-                    } else {
-                        this.falg.namefalg = false
-                    }
-                })
+                return new Promise((resolve, reject) => {
+                    axios.get("/checkSameName", {
+                        params: {
+                            name: this.product.name
+                        }
+                    }).then((respones) => {
+                        console.log(respones)
+                        if (respones.data.code == "200") {
+                            this.falg.namefalg = true
+                        } else {
+                            this.falg.namefalg = false
+                        }
+                        resolve();
+                    })
+                });
             },
             resetForm(product) {
                 this.$refs[product].resetFields();
