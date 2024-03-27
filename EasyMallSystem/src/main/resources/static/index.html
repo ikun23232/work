@@ -175,7 +175,9 @@
             <div class="car_t">购物车 [ <span>{{carProducts.length}}</span> ]</div>
             <div class="car_bg">
                 <!--Begin 购物车未登录 Begin-->
-                <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
+                <div class="un_login" v-if="!UserSession.name">还未登录！<a href="Login.html" style="color:#ff4e00;">马上登录</a>
+                    查看购物车！
+                </div>
                 <!--End 购物车未登录 End-->
                 <!--Begin 购物车已登录 Begin-->
                 <ul class="cars" @mouseover="caclPrice()">
@@ -967,8 +969,10 @@
             },
             //购物车,
             async initCar() {
+
                 let respones = await axios.get("/getConnectionById")
                 console.log(respones)
+                alert(1)
                 this.carProducts = respones.data.data;
 
                 this.totalPrice = this.carProducts
@@ -1005,16 +1009,11 @@
            await this.initCategoryByIda(1);
             await this.initNews();
            await this.initproductHot();
-            await this.getUser();
-            // alert(1)
-            // // //购物车
-            // this.initCar()
-            // alert(2)
-            // //获取用户信息
-          await  this.getUser()
-            if (this.UserSession.name!=''){
-                this.initCar();
-            }
+           await this.getUser();
+
+                await  this.initCar();
+
+
         }
     })
 </script>
