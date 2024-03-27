@@ -47,4 +47,16 @@
         set isDel = 1
         where id = #{id}
     </update>
+    <select id="getConcernById" resultType="Concern">
+        SELECT id,
+               userId,
+               productId,
+               createTime,
+               isDel
+        FROM easybuy_concern c
+        WHERE c.id = #{id}
+        AND isDel = 0
+    </select>
+
+
 </mapper>

@@ -38,7 +38,6 @@ public class HistoryController {
         logger.info("HistoryController getHistoryList is start...");
         //从redis拿id
         int userId = UserSessionUtil.getUserId();
-
         Message message = historyService.addHistory(userId,productId);
         return message;
     }
