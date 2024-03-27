@@ -55,6 +55,10 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Message delAddressById(int id) {
+        Address addressByid = addressDao.getAddressByid(id);
+        if(addressByid.getIsDefault()==1){
+            return Message.error("删除失败,默认地址不能删除！");
+        }
         int updateRow = addressDao.delAddressById(id);
         if (updateRow<=0){
             return Message.error("删除失败");
@@ -77,9 +81,17 @@ public class AddressServiceImpl implements AddressService {
     public Message addAddress(Address address) {
         int userId = UserSessionUtil.getUserId();
         address.setUserId(userId);
-        int updateRow = addressDao.addAddress(address);
-        if (updateRow<=0){
-            return Message.error("添加失败");
+        Address addressById = addressDao.getAddressById(userId);
+        if(addressById==null){
+            int updateRow = addressDao.addFristAddress(address);
+            if (updateRow<=0){
+                return Message.error("添加失败");
+            }
+        }else {
+            int updateRow = addressDao.addAddress(address);
+            if (updateRow<=0){
+                return Message.error("添加失败");
+            }
         }
         return Message.success("添加成功");
     }

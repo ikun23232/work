@@ -33,7 +33,18 @@ where id=#{id}
         from easybuy_user_address
         where userId = #{userId}
           AND isDefault = 1
+          AND isDel = 0
     </select>
+
+
+    <insert id="addFristAddress">
+        insert into easybuy_user_address(userId, address, createTime, isDefault, remark, isDel, email, name, phone)
+        values (#{userId},#{address},now(),1,#{remark},0,#{email},#{name},#{phone})
+    </insert>
+
+
+
+
     <select id="getAddresssList" resultType="Address">
         select id,
                userId,

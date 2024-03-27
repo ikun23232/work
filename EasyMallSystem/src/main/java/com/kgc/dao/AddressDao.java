@@ -49,4 +49,12 @@ public interface AddressDao {
     public int updateAddressIsDefaultAll(int userId);
     public Address getAddressByid(int id);
 
+    /**
+     * 添加首条地址
+     * @param address
+     * @return
+     */
+    public int addFristAddress(Address address);
+
+
 }

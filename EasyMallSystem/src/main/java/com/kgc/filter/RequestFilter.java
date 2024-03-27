@@ -44,7 +44,7 @@ public class RequestFilter implements Filter {
     ,"/updatePassword","/getUser","/checkUserByUpdateName","/checkUserByUpdateMobile","/checkEmail",
     "/checkMobile","/checkUserByEmail","/checkUserPhone","/doImg","/getNewsList","/getCategoryList",
     "/getCategorySecond","/getCategoryThrid","/getFristIdByThrid","/getSecondIdByThrid","/getProductWithFileList","/searchHotProduct",
-    "/getUser"};
+    "/getUser","/getConnectionById"};
 
 //第二层特殊的要处理的
     private String[] specialStr={};

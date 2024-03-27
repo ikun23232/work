@@ -300,6 +300,10 @@
                                     label="三级分类"
                                    value="3">
                             </el-option>
+                            <el-option
+                                    label="四级分类"
+                                    value="4">
+                            </el-option>
                         </el-select>
 
 <!--                            <span class="demonstration"></span>-->
@@ -345,7 +349,7 @@
                             label="分类等级"
                     >
                         <template slot-scope="scope">
-                            {{scope.row.type==1?'一级分类':(scope.row.type==2?'二级分类':'三级分类')}}
+                            {{ scope.row.type === 1 ? '一级分类' : (scope.row.type === 2 ? '二级分类' : (scope.row.type === 3 ? '三级分类' : '四级分类')) }}
                         </template>
                     </el-table-column>
                     <el-table-column

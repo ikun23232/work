@@ -507,22 +507,18 @@
                         id: parseInt(val)
                     }
                 });
+                console.log("3"+item.id)
+                if (item.id==val){
+                    if (resp.data.data!=null){
+                        this.$set(item, 'children', resp.data.data);
 
-
-
-
-
-
+                    }
+                }
                 // item.forEach((item, index) =>{
                 //     console.log('33打印次数'+index);
                 //     console.log('33打印次数'+item.id);
                 //
                 // })
-            }
-
-            ,
-            toUpdate(id){
-                window.location.href="Member_CategoryUpdate.html?id="+id
             },
             async initCategoryId(currentPageNo){
                 // if (this.categoryName){
@@ -532,7 +528,8 @@
                 this.page.currentPageNo=currentPageNo;
                 let resp=await request.post("/getCategoryListByALL", {
                     page:this.page,
-                    categoryName:this.categoryName
+                    categoryName:this.categoryName,
+                    type:this.type
                 })
                 console.log(resp)
                 this.categoryList=resp.data.data.list;
@@ -540,6 +537,9 @@
                 this.page.pageSize=resp.data.data.pageSize
                 this.page.totalPageCount=resp.data.data.pages;
 
+            },
+            toUpdate(id){
+                window.location.href="Member_CategoryUpdate.html?id="+id
             },
             handleSizeChange(val) {
                 this.page.pageSize = val;

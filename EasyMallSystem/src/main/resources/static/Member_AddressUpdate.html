@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="./commonJS/element-china-area-data.iife.js"></script>
 
     <title>尤洪</title>
 </head>
@@ -239,12 +240,19 @@
             <div class="m_right">
                 <div>
                     <h1>修改地址</h1>
-                    <el-form ref="address" label-width="80px" :model="address" :rules="rules">
-                        <el-form-item label="地址编号" prop="id">
+                    <el-form ref="address" label-width="80px" :model="address" :rules="rules" >
+                        <el-form-item label="地址编号" prop="id" >
                             <el-input v-model="address.id" maxlength="6" readonly></el-input>
                         </el-form-item>
-                        <el-form-item label="地址" prop="address">
-                            <el-input v-model="address.address" maxlength="6"></el-input>
+                        <el-form-item style="width: 500px;margin-left: 0px" label="地址" prop="addressList">
+                            <el-cascader style="float: left;"
+                                         size="large"
+                                         :options="pcTextArr"
+                                         v-model="address.addressList">
+                            </el-cascader>
+                        </el-form-item>
+                        <el-form-item style="width: 500px;margin-left: 0px" label="详细地址" prop="addressList">
+                            <el-input v-model="address.name" size="large"></el-input>
                         </el-form-item>
                         <el-form-item label="姓名" prop="name">
                             <el-input v-model="address.name" size="large"></el-input>
@@ -366,6 +374,10 @@
     let id = strings[1];
     new Vue({
         el: "#app",
+        created() {
+            // 在 created 钩子函数中给 pcTextArr 赋值
+            this.pcTextArr = elementChinaAreaData.pcaTextArr;
+        },
         data() {
             // var validatePass = async (rule, value, callback) => {
             //     if (!value) {
@@ -398,6 +410,10 @@
             // }
             return {
                 address: {
+                    id:id,
+                    addressList:'',
+                    detailAddress:'',
+                    recipient:'',
                     address: '',
                     isDefault: 0,
                     remark: '',
@@ -408,6 +424,7 @@
                 UserSession:{
                     name:''
                 },
+                pcTextArr:[],
                 rules: {
                     id: [
                         { required: true, message: '请输入地址编号', trigger: 'blur' }
@@ -439,6 +456,8 @@
         mounted() {
             this.getUser()
             this.initAddress(id);
+
+
         },
         methods: {
             getUser(){
@@ -461,6 +480,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        this.address.address = this.address.addressList.join('/')+'/'+ this.address.detailAddress;
                         this.update()
                     } else {
                         console.log('error submit!!');
@@ -475,7 +495,21 @@
                     }
                 })
                 console.log(resp.data)
-                this.address = resp.data.data.data;
+                const tempList = resp.data.data.data.address.split('/');
+                var addList = [];
+                for (let i = 0; i < tempList.length; i++) {
+                    if(i < 3) {
+                        addList.push(tempList[i]);
+                    }else{
+                        this.address.detailAddress = tempList[i];
+                    }
+                }
+                this.address.addressList = addList;
+                // this.address.recipient = result.data.recipient;
+                this.address.phone = resp.data.data.data.phone;
+                this.address.email = resp.data.data.data.email;
+                this.address.remark = resp.data.data.data.remark;
+                this.address.name = resp.data.data.data.name;
             },
             async update() {
                 if (!confirm("您确定要修改该地址吗?")) {
